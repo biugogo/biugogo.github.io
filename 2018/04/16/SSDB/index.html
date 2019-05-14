@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842973836.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>SSDB从零开始</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="SSDB简单了解和配置-java简单接入"><a href="#SSDB简单了解和配置-java简单接入" class="headerlink" title="SSDB简单了解和配置+java简单接入"></a>SSDB简单了解和配置+java简单接入</h1><hr>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>一个高性能的支持丰富数据结构的 NoSQL 数据库, 用于替代 Redis.</p>
+<hr>
+<h3 id="安装与配置"><a href="#安装与配置" class="headerlink" title="安装与配置"></a>安装与配置</h3><p>因为是调研，我就在window上搭了一个主从模型。官方的强制建议是，window下，只适用于开发：</p>
+<blockquote>
+<p>强烈推荐你把 SSDB 部署在 Linux 操作系统上.不要在生产环境中使用 Windows 操作系统来运行 SSDB 服务器. 如果你确实必须使用 Windows 操作系统, 请在上面运行一个 Linux 虚拟机, 然后再让 SSDB 运行于这个虚拟机之中.</p>
+</blockquote>
+<h4 id="window下安装"><a href="#window下安装" class="headerlink" title="window下安装"></a>window下安装</h4><ol>
+<li>clone ssdb window下<a href="https://github.com/ideawu/ssdb-bin" target="_blank" rel="noopener">github仓库地址</a></li>
+<li>cd 到 clone路径</li>
+<li>D:\ssdb\ssdb-bin&gt; ssdb-server-1.9.4.exe  ssdb.conf -s start</li>
+</ol>
+<p>启动图：<br><img src="https://github.com/apollochen123/image/blob/master/SSDB/%E5%90%AF%E5%8A%A8%E5%9B%BE.png?raw=true" alt="启动图"></p>
+<h4 id="linux下安装"><a href="#linux下安装" class="headerlink" title="linux下安装"></a>linux下安装</h4><p>参见：<br><a href="http://ssdb.io/docs/zh_cn/install.html" target="_blank" rel="noopener">http://ssdb.io/docs/zh_cn/install.html</a></p>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>SSDB的配置信息主要集中在其目录下 ssdb.conf 文件中<br>官方配置参考：<a href="http://ssdb.io/docs/zh_cn/config.html" target="_blank" rel="noopener">http://ssdb.io/docs/zh_cn/config.html</a><br>主从，主主，多主配置方案：<a href="http://ssdb.io/docs/zh_cn/replication.html" target="_blank" rel="noopener">http://ssdb.io/docs/zh_cn/replication.html</a></p>
+<p><strong>注意：</strong> SSDB 的配置文件使用一个 TAB 来表示一级缩进, 不要使用空格来缩进, 无论你用1个, 2个, 3个, 4个, 5个, 6个, 7个, 8个或者无数个空格都不行!</p>
+<pre><code># ssdb-server config
+# MUST indent by TAB!
+# relative to path of this file, directory must exists
+
+# 这个目录下，有两个文件夹，一个是data，一个是meta.数据存放在var/data目录下
+work_dir = ./var
+pidfile = ./var/ssdb.pid
+
+server:
+    ip: 127.0.0.1
+    port: 9002
+    #只读模式
+    #readonly: yes|no
+    # bind to public ip
+    #ip: 0.0.0.0
+
+    #配置黑名单，白名单iptable
+    # format: allow|deny: all|ip_prefix
+    # multiple allows or denys is supported
+    #deny: all
+    #allow: 127.0.0.1
+    #allow: 192.168
+
+#使用主从，主主，多主的配置
+replication:
+    slaveof:
+        # to identify a master even if it moved(ip, port changed)
+        # if set to empty or not defined, ip:port will be used.
+        #id: svc_2
+        # sync|mirror, default is sync
+        #type: sync
+        #ip: 127.0.0.1
+        #port: 8889
+
+#日志输出配置
+logger:
+    level: debug
+    output: log.txt
+    rotate:
+        size: 1000000000
+
+leveldb:
+    # in MB
+    cache_size: 500
+    # in KB
+    block_size: 32
+    # in MB
+    write_buffer_size: 64
+    # in MB
+    compaction_speed: 1000
+    # yes|no
+    compression: no
+</code></pre><h3 id="主从配置："><a href="#主从配置：" class="headerlink" title="主从配置："></a>主从配置：</h3><p>主配置：不必更改<br>从配置: 只需修改replication下slaveof配置</p>
+<pre><code>```
+replication:
+   slaveof:
+    # to identify a master even if it moved(ip, port changed)
+    # if set to empty or not defined, ip:port will be used.
+    id: svc_2
+    # sync|mirror, default is sync
+    type: sync
+    #主库host
+    ip: 127.0.0.1
+    #主库ip
+    port: 9001
+
+```
+</code></pre><h3 id="java使用ssdb4j原生接入"><a href="#java使用ssdb4j原生接入" class="headerlink" title="java使用ssdb4j原生接入"></a>java使用ssdb4j原生接入</h3><p>官方对java支持不怎么友好，简陋的java客户端驱动—在maven仓库里都没有库，官方给出说法：<br><img src="https://github.com/apollochen123/image/blob/master/SSDB/%E5%AE%98%E6%96%B9javaMaven%E8%A7%A3%E7%AD%94.png?raw=true" alt="官方jar说法"></p>
+<p>所以选择目前使用最多的，但是也很简陋（稍微好一点）的ssdb4j.maven依赖如下</p>
+<pre><code>&lt;dependency&gt;
+  &lt;groupId&gt;org.nutz&lt;/groupId&gt;
+  &lt;artifactId&gt;ssdb4j&lt;/artifactId&gt;
+  &lt;version&gt;10.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre><p>java代码：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>nutz<span class="token punctuation">.</span>ssdb4j<span class="token punctuation">.</span>SSDBs<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>nutz<span class="token punctuation">.</span>ssdb4j<span class="token punctuation">.</span>spi<span class="token punctuation">.</span>Response<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>nutz<span class="token punctuation">.</span>ssdb4j<span class="token punctuation">.</span>spi<span class="token punctuation">.</span>SSDB<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Simple</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
+        SSDB a <span class="token operator">=</span> SSDBs<span class="token punctuation">.</span><span class="token function">replication</span><span class="token punctuation">(</span><span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span> <span class="token number">9001</span><span class="token punctuation">,</span> <span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span> <span class="token number">9002</span><span class="token punctuation">,</span> <span class="token number">10000</span><span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        a<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"Key1116"</span><span class="token punctuation">,</span> <span class="token string">"1116"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Response response <span class="token operator">=</span> a<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"Key1116"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>response<span class="token punctuation">.</span><span class="token function">asString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        a<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一个简单的主写，从读模型。这里window的主从有个问题，等我set值过后，得重启从server才能拿到刚刚set到主的数据。可能是window下的问题。<br>结果：</p>
+<pre><code>1116
+</code></pre><h3 id="java使用jedis接入"><a href="#java使用jedis接入" class="headerlink" title="java使用jedis接入"></a>java使用jedis接入</h3><p>可以使用jedis接入，虽然还不知道具体兼容问题，但是大致能用.按照官方的使用方式，应该问题不大。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">;</span>
+<span class="token keyword">import</span> redis<span class="token punctuation">.</span>clients<span class="token punctuation">.</span>jedis<span class="token punctuation">.</span>Jedis<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">JedisTest</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Jedis jedis <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Jedis</span><span class="token punctuation">(</span><span class="token string">"127.0.0.1"</span><span class="token punctuation">,</span><span class="token number">9002</span><span class="token punctuation">,</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        jedis<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token string">"Jedis1"</span><span class="token punctuation">,</span> <span class="token string">"I am jedis"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>jedis<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"Jedis1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        jedis<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果：</p>
+<pre><code>I am jedis
+</code></pre><hr>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol>
+<li>便宜，便宜，便宜。重要的事说3次</li>
+<li>SSDB 拥有 Redis 的主要优点 - 高性能, 丰富数据结构, 并且拥有 Redis 所不具备的能力 - 大数据存储能力. SSDB 服务器的单机存储能力是 Redis 的 100 倍! 因为 SSDB 能将数据存储在硬盘中.</li>
+<li>持久化的队列服务</li>
+</ol>
+<h3 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h3><ol>
+<li>社区不够活跃。资料较少.</li>
+<li><blockquote>
+<p>ssdb的主从复制效率很低。binlog和数据是分开存储的，日志冗余较多，由于ssdb本身要在多线程条件下才能发挥出更好的性能，为了使多个线程在写入binlog时能保证操作顺序和原子性，ssdb的binlog数据结构上用了一把全局锁，可想而知，这里的锁竞争会很影响性能。<br>作者：李竟成<br>链接：<a href="https://www.zhihu.com/question/40733101/answer/270737849" target="_blank" rel="noopener">https://www.zhihu.com/question/40733101/answer/270737849</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>前面回答里提到的zrevrange 和 zrevrangebyscore慢，而zrange 和 zrangebyscore 还能接受，其实就是说逆序遍历比顺序遍历慢得多，其根本原因就在于逆序遍历的时候，会多一个“记录头部”定位的过程，需要不断尝试去定位到两条记录的“分界点”，而顺序遍历的时候则不需要，因为读完一条记录直接就到了下一条记录的“分界点”，并且像rocksdb之类的存储引擎都会把数据长度保存在记录的元信息里，只需要按长度读取数据就可以了。redis则不存在类似问题，因为它是完全基于指针和偏移量在内存中进行寻址来读取数据的，寻址效率高了好多个数量级。<br>作者：李竟成<br>链接：<a href="https://www.zhihu.com/question/40733101/answer/270737849" target="_blank" rel="noopener">https://www.zhihu.com/question/40733101/answer/270737849</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+</li>
+<li>不支持Sentinel模式<br><img src="https://github.com/apollochen123/image/blob/master/SSDB/%E4%B8%8D%E6%94%AF%E6%8C%81sentinel.png?raw=true" alt="不支持哨兵"></li>
+<li>官方和ssdb4j的jar包，都没有提供容错机制，如主从切换。 ssdb4j支持java端主从访问，但是不能支持主主，多主方式访问。</li>
+<li>目前用于redis的sentinel可能无法使用。得研究新的接入方案。</li>
+</ol>
+<h3 id="关于性能"><a href="#关于性能" class="headerlink" title="关于性能"></a>关于性能</h3><p>整理了一些别人性能的测试</p>
+<p><a href="https://www.cnblogs.com/smark/p/3909291.html" target="_blank" rel="noopener">https://www.cnblogs.com/smark/p/3909291.html</a><br>从测试结果看来差距还是非常明显,并不象官网那样说得这么理想.虽然SSDB效率上不如REDIS,但其基于磁盘存储有着其最大的优势,毕竟很多业务数据远超过服务器内存的容量.<br>SSDB的测试结果不理想也许是硬件环境受限,如果有个SSD硬盘的测试环境估计也得到一个更好的结果,但在测试过程中发现一个问题就是SSDB占用的CPU资源也是非常大的,在以上测试过程SSDB的并发效率比不上REDIS,同时CPU损耗上基本要比REDIS高出一倍的样子.<br>以上测试结果紧紧是是一些情况下的性能测试对比,不能完全表述出两者在应用的差距的结果,如果需要用到这些产品的同学不防在实施前进行一些测试为实施选择提供一个更可靠的结果.</p>
+<p><a href="https://www.cnblogs.com/python3-study/p/7244401.html" target="_blank" rel="noopener">https://www.cnblogs.com/python3-study/p/7244401.html</a><br>从官方数据看，SSDB的性能很突出，与Redis基本相当了，Redis是内存型，容量问题是弱项，并且内存成本太高，SSDB针对这个弱点，使用硬盘存储，使用Google高性能的存储引擎LevelDB，适合大数据量处理并把性能优化到Redis级别，具有Redis的数据结构、兼容Redis客户端，还给出了从Redis迁移到SSDB的方案。<br>那么接下来我在一台测试服务器上分别对Redis与SSDB做性能测试，但是结果是SSDB比Redis差了很多，与SSDB官网上显示的对比数据相差较大<br>预料到SSDB会弱于Redis，但没想到差这么多，可能是测试数量不同，或者是我的服务器硬件配置不利于SSDB等原因导致的</p>
+<p><a href="https://my.oschina.net/fuckphp/blog/270938" target="_blank" rel="noopener">https://my.oschina.net/fuckphp/blog/270938</a></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/04/16/SSDB/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/04/16/SSDB/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

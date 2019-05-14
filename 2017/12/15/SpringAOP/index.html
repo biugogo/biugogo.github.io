@@ -1,0 +1,518 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842933602.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Spring AOP</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="spring-AOP"><a href="#spring-AOP" class="headerlink" title="spring AOP"></a><strong>spring AOP</strong></h1><p>This page just is written for a reference when forget. I won’t tell you what is AOP.</p>
+<h3 id="Attention-To"><a href="#Attention-To" class="headerlink" title="Attention To"></a>Attention To</h3><p>&emsp;&emsp;spring AOP is based on JVM dynamic proxy, so only class implements interface can be proxied. And if there is no interface of class ,spring AOP will use CGLIB(Code Generation Library) to write a proxy subclass.<br>&emsp;&emsp;so we can get a conclusion that spring AOP can’t proxy private method.(subclass can get private method and interface also can’t have private method)</p>
+<font color="#gray" size="5" face="黑体">spring AOP无法拦截private的方法</font>
+
+<hr>
+<h3 id="Keyword"><a href="#Keyword" class="headerlink" title="Keyword"></a>Keyword</h3><ol>
+<li><strong>Aspect</strong>: An aspect is a class that implements enterprise application concerns that cut across multiple classes, such as transaction management. Aspects can be a normal class configured through Spring XML configuration or we can use Spring AspectJ integration to define a class as Aspect using @Aspect annotation.</li>
+<li><strong>Join Point</strong>: A join point is the specific point in the application such as method execution, exception handling, changing object variable values etc. In Spring AOP a join points is always the execution of a method.</li>
+<li><strong>Advice</strong>: Advices are actions taken for a particular join point. In terms of programming, they are methods that gets executed when a certain join point with matching pointcut is reached in the application. You can think of Advices as Struts2 interceptors or Servlet Filters.</li>
+<li><strong>Pointcut</strong>: Pointcut are expressions that is matched with join points to determine whether advice needs to be executed or not. Pointcut uses different kinds of expressions that are matched with the join points and Spring framework uses the AspectJ pointcut expression language.<br>Target Object: They are the object on which advices are applied. Spring AOP is implemented using runtime proxies so this object is always a proxied object. What is means is that a subclass is created at runtime where the target method is overridden and advices are included based on their configuration.</li>
+<li><strong>AOP proxy</strong>: Spring AOP implementation uses JDK dynamic proxy to create the Proxy classes with target classes and advice invocations, these are called AOP proxy classes. We can also use CGLIB proxy by adding it as the dependency in the Spring AOP project.</li>
+<li><strong>Weaving</strong>: It is the process of linking aspects with other objects to create the advised proxy objects. This can be done at compile time, load time or at runtime. Spring AOP performs weaving at the runtime.</li>
+</ol>
+<h3 id="AOP-Advice-Types："><a href="#AOP-Advice-Types：" class="headerlink" title="AOP Advice Types："></a>AOP Advice Types：</h3><ul>
+<li><strong>Before Advice</strong>: These advices runs before the execution of join point methods. We can use @Before annotation to mark an advice type as Before advice.</li>
+<li><strong>After (finally) Advice</strong>: An advice that gets executed after the join point method finishes executing, whether normally or by throwing an exception. We can create after advice using @After annotation.</li>
+<li><strong>After Returning Advice</strong>: Sometimes we want advice methods to execute only if the join point method executes normally. We can use @AfterReturning annotation to mark a method as after returning advice.</li>
+<li><strong>After Throwing Advice</strong>: This advice gets executed only when join point method throws exception, we can use it to rollback the transaction declaratively. We use @AfterThrowing annotation for this type of advice.</li>
+<li><strong>Around Advice</strong>: This is the most important and powerful advice. This advice surrounds the join point method and we can also choose whether to execute the join point method or not. We can write advice code that gets executed before and after the execution of the join point method. It is the responsibility of around advice to invoke the join point method and return values if the method is returning something. We use @Around annotation to create around advice methods.</li>
+</ul>
+<p>做个总结（个人意见）：Before主要是进入方法前增强；After主要是用在方法结束后增强；After returning主要是对方法正常返回值进行处理，比如改变返回值的值；After Throwing主要是对方法异常进行处理。Around是可以对前四个方式进行组合，是最强的。</p>
+<hr>
+<h3 id="Pointcut"><a href="#Pointcut" class="headerlink" title="Pointcut"></a>Pointcut</h3><h4 id="Declaring-Pointcut"><a href="#Declaring-Pointcut" class="headerlink" title="Declaring Pointcut"></a>Declaring Pointcut</h4><p>There is three ways to declare Pointcut, two methods is based on annotation and the last is based on XML.</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token comment" spellcheck="true">//method 1：</span>
+<span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"execution(public String com.chen.eureka.producer.service.ProducerServiceImpl.*(..))"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">pointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"pointCut()"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Order</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">beforeAspect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"this is before Aspect 1 !"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">//method 2:</span>
+<span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"execution(* com.chen.eureka.producer.service.ProducerService.*(..))"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Order</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">beforeAspect2</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"this is before Aspect 2 !"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">//method 3：</span>
+
+<span class="token comment" spellcheck="true">/**
+ * &lt;aop:config>
+ * &lt;aop:pointcut id="anyMethod" expression="@target(org.springframework.stereotype.Repository)" order="1"/>
+ * &lt;/aop:config>
+ */</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="Nine-types-of-pointcut"><a href="#Nine-types-of-pointcut" class="headerlink" title="Nine types of pointcut"></a>Nine types of pointcut</h4><ol>
+<li><strong>execution</strong> - for matching method execution join points, this is the primary pointcut designator you will use when working with Spring AOP<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"execution(String com.chen.eureka.producer.service.ProducerService.getTest(String))"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">executionPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于com.chen.eureka.producer.service包的ProducerService接口的getTest（）的方法，方法返回值为String.class，参数也只能是一个String.class。the frist String means return string ，the second String means the args is String.class.<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"execution(* com.chen.eureka.producer.service.ProducerService.*2(..))"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">executionPointCut2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于com.chen.eureka.producer.service包ProducerService接口，匹配所有结尾为2的方法，如getTest2（）.第一个<em>代表所有返回值，第二个</em>代表ProducerService的所有方法，（..）代表不管什么参数。</li>
+<li><strong>within</strong> - limits matching to join points within certain types (simply the execution of a method declared within a matching type when using Spring AOP)<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"within(com.chen.eureka.producer.service.ProducerService)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">withinPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于com.chen.eureka.producer.service包ProducerService接口下，所有方法。<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"within(com.chen.eureka.producer..*)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">withinPointCut2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于com.chen.eureka.producer包下和其子包下所有类的所有方法。</li>
+<li><strong>this</strong> - limits matching to join points (the execution of methods when using Spring AOP) where the bean reference (Spring AOP proxy) is an instance of the given type<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"this(com.chen.eureka.producer.service.ProducerServiceImpl)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">thisPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+this的情景用于没有实现任何接口的类。</li>
+<li><strong>target</strong> - limits matching to join points (the execution of methods when using Spring AOP) where the target object (application object being proxied) is an instance of the given type<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"target(com.chen.eureka.producer.service.ProducerService)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">targetPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于实现ProducerService接口的所有类。</li>
+<li><strong>args</strong> - limits matching to join points (the execution of methods when using Spring AOP) where the arguments are instances of the given types<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"execution(* ong.customer.bo.CustomerBo.addCustomer(String)), &amp;&amp; args(inputString)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">logBefore2</span><span class="token punctuation">(</span>JoinPoint joinPoint<span class="token punctuation">,</span> String inputString<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>inputString<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><strong>@target</strong> - limits matching to join points (the execution of methods when using Spring AOP) where the class of the executing object has an annotation of the given type.<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"@target(org.springframework.stereotype.Service)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">atargetPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于所有标注了@Service注解的类的方法.</li>
+<li><strong>@args</strong> - limits matching to join points (the execution of methods when using Spring AOP) where the runtime type of the actual arguments passed have annotations of the given type(s)<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"@args(com.chen.eureka.producer.aspect.ParamAnnotation, ..)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">aargsPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于，参数是带有@ParamAnnotation注解的类.的方法。方法参数为User类，而User类带有@ParamAnnotation注解，则切入此方法。</li>
+<li><strong>@within</strong> - limits matching to join points within types that have the given annotation (the execution of methods declared in types with the given annotation when using Spring AOP)<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"@within(org.springframework.stereotype.Service)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">awithinPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+定位于持有@Service注解的class的方法，接口不起作用。</li>
+<li><strong>@annotation</strong> - limits matching to join points where the subject of the join point (method being executed in Spring AOP) has the given annotation<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"@annotation(com.chen.eureka.producer.aspect.MyAnnotation)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">aannotationPointCut</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+持有@MyAnnotation的方法。</li>
+</ol>
+<hr>
+<h3 id="Some-Example"><a href="#Some-Example" class="headerlink" title="Some Example"></a>Some Example</h3><h5 id="before-args-execution"><a href="#before-args-execution" class="headerlink" title="before+@args+execution"></a>before+@args+execution</h5><p>controller：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/aoptest2/{in}"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">aopTest2</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    User u <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    u<span class="token punctuation">.</span><span class="token function">setAddress</span><span class="token punctuation">(</span><span class="token string">"address"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> producerService<span class="token punctuation">.</span><span class="token function">beforeTest</span><span class="token punctuation">(</span>u<span class="token punctuation">,</span> in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>service:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> String <span class="token function">beforeTest</span><span class="token punctuation">(</span>User u<span class="token punctuation">,</span> String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is beforeTest..."</span><span class="token operator">+</span>u<span class="token punctuation">.</span><span class="token function">getAddress</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token string">"beforeTest result"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Aspect</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Before</span><span class="token punctuation">(</span><span class="token string">"@args(paramAnnotation, ..) &amp;&amp; execution(* com.chen.eureka.producer.service.ProducerService.before*(..))"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">beforeAndAargsAspect</span><span class="token punctuation">(</span>JoinPoint thisJoinPoint<span class="token punctuation">,</span> ParamAnnotation paramAnnotation<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"beforeAndAargsAspect："</span><span class="token operator">+</span>paramAnnotation<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>参数类User@args(paramAnnotation, ..)</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@ParamAnnotation</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String id<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String address<span class="token punctuation">;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>result：</p>
+<pre><code>beforeAndAargsAspect：@com.chen.eureka.producer.aspect.ParamAnnotation()
+This is beforeTest...
+</code></pre><h5 id="after-execution"><a href="#after-execution" class="headerlink" title="after+execution"></a>after+execution</h5><p>controller:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/aoptest/{in}"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">aopTest</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> producerService<span class="token punctuation">.</span><span class="token function">afterTest</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>service</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> String <span class="token function">afterTest</span><span class="token punctuation">(</span>String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is afterTest..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span> <span class="token string">"afterTest result"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Aspect:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@After</span><span class="token punctuation">(</span><span class="token string">"execution(* com.chen.eureka.producer.service.ProducerService.afterTest(..))"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">AfterAspect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"AfterAndAnotationAspect： clear resource"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>result:</p>
+<pre><code>This is afterTest...
+AfterAndAnotationAspect： clear resource
+</code></pre><h5 id="AfterReturning-Annotation"><a href="#AfterReturning-Annotation" class="headerlink" title="AfterReturning+@Annotation"></a>AfterReturning+@Annotation</h5><p>controller:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/aoptest3/{in}"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">aopTest3</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> producerService<span class="token punctuation">.</span><span class="token function">afterRunningTest</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>service</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@MyAnnotation</span>
+<span class="token keyword">public</span> User <span class="token function">afterRunningTest</span><span class="token punctuation">(</span>String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is afterRunningTest..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    User user <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">User</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    user<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is orginal id:"</span><span class="token operator">+</span>user<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> user<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Aspect:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@AfterReturning</span><span class="token punctuation">(</span>returning<span class="token operator">=</span><span class="token string">"rvt"</span><span class="token punctuation">,</span>pointcut<span class="token operator">=</span><span class="token string">"@annotation(com.chen.eureka.producer.aspect.MyAnnotation)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">AfterReturningAndAnotationAspect</span><span class="token punctuation">(</span>Object rvt<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    User u  <span class="token operator">=</span> <span class="token punctuation">(</span>User<span class="token punctuation">)</span> rvt<span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"AfterReturningAndAnotationAspect： 正在处理返回值·····:"</span><span class="token operator">+</span>u<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    u<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span><span class="token string">"new Id"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"返回值被改变为:"</span><span class="token operator">+</span>u<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>result:</p>
+<pre><code>This is afterTest...
+AfterAndAnotationAspect： clear resource
+This is afterRunningTest...
+This is orginal id:id
+AfterReturningAndAnotationAspect： 正在处理返回值·····:id
+返回值被改变为:new Id
+</code></pre><p>这个例子有点注意，public void AfterReturningAndAnotationAspect(Object rvt)的rvt是切入函数的返回值，是一个引用。所以，rvt=rvt+1；不会改变返回值，他只是使rvt引用指向了其他对象。所以返回值处理不能处理String，Integer等对象</p>
+<h5 id="AfterThrowingAdvice-target"><a href="#AfterThrowingAdvice-target" class="headerlink" title="AfterThrowingAdvice+@target"></a>AfterThrowingAdvice+@target</h5><p>controller:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/aoptest4/{in}"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">aopTest4</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> String in<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> producerService<span class="token punctuation">.</span><span class="token function">afterThrowingTest</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>service</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> String <span class="token function">afterThrowingTest</span><span class="token punctuation">(</span>String in<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception
+<span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is afterThrowingTest..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"I have throwed a Exception"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Exception</span><span class="token punctuation">(</span><span class="token string">"I have throwed a Exception"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Aspect:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@AfterThrowing</span><span class="token punctuation">(</span>throwing<span class="token operator">=</span><span class="token string">"ex"</span><span class="token punctuation">,</span>pointcut<span class="token operator">=</span><span class="token string">"@target(org.springframework.stereotype.Service) &amp;&amp; within(com.chen.eureka.producer..*)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">AfterThrowingAndAtarget</span><span class="token punctuation">(</span>Throwable ex<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"AfterThrowingAndAtarget： 捕捉到异常·····"</span><span class="token operator">+</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"AfterThrowingAndAtarget 模拟异常处理"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>result:</p>
+<pre><code>This is afterThrowingTest...
+I have throwed a Exception
+AfterThrowingAndAtarget： 捕捉到异常·····java.lang.Exception: I have throwed a Exception
+AfterThrowingAndAtarget 模拟异常处理
+</code></pre><h5 id="Around-within-annotation"><a href="#Around-within-annotation" class="headerlink" title="Around+within+@annotation"></a>Around+within+@annotation</h5><p>controller:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/aoptest5/{in}"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> String <span class="token function">aopTest5</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span> String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">return</span> producerService<span class="token punctuation">.</span><span class="token function">aroundTest</span><span class="token punctuation">(</span>in<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>service</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token annotation punctuation">@MyAnnotation</span>
+<span class="token keyword">public</span> String <span class="token function">aroundTest</span><span class="token punctuation">(</span>String in<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"This is aroundTest"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span> <span class="token string">"aroundTest result"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Aspect:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Around</span><span class="token punctuation">(</span><span class="token string">"@annotation(myAnnotation)"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> Object <span class="token function">AroundAndAannotation</span><span class="token punctuation">(</span>ProceedingJoinPoint point<span class="token punctuation">,</span> MyAnnotation myAnnotation<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    Object object <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"正在使用Around进行Before增强···"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span>
+    <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"shortString"</span><span class="token operator">+</span>point<span class="token punctuation">.</span><span class="token function">toShortString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"LongString:"</span><span class="token operator">+</span>point<span class="token punctuation">.</span><span class="token function">toLongString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"第一个参数是："</span><span class="token operator">+</span>point<span class="token punctuation">.</span><span class="token function">getArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        object <span class="token operator">=</span> point<span class="token punctuation">.</span><span class="token function">proceed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"正在使用Around进行AfterReturning增强···"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        object <span class="token operator">=</span> <span class="token string">"增强型Object"</span><span class="token operator">+</span>object<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> e<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"正在使用Around进行AfterThrowing增强···"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  
+    <span class="token punctuation">}</span><span class="token keyword">finally</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"正在使用Around进行After增强···"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"资源正在释放······"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> object<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>result:</p>
+<pre><code>正在使用Around进行Before增强···
+shortStringexecution(ProducerServiceImpl.aroundTest(..))
+LongString:execution(public java.lang.String com.chen.eureka.producer.service.ProducerServiceImpl.aroundTest(java.lang.String))
+第一个参数是：test2
+This is aroundTest
+正在使用Around进行AfterReturning增强···
+正在使用Around进行After增强···
+资源正在释放······
+增强型ObjectaroundTest result
+</code></pre><h5 id="同一class内进行SpringAOP"><a href="#同一class内进行SpringAOP" class="headerlink" title="同一class内进行SpringAOP"></a>同一class内进行SpringAOP</h5><p>在工作遇到一个问题，类本身调用本身的方法，需要对同一类方法进行切入。乍一看这是不能办到的</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> ApiMessage<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token function">postData</span><span class="token punctuation">(</span>Document document<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token function">mainProcess</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token annotation punctuation">@ProcessExceptionAnnotation</span><span class="token punctuation">(</span>status <span class="token operator">=</span> InboundMonitorLogStatusCodeConstant<span class="token punctuation">.</span>PROCESS_ERROR_STATUS_CODE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">mainProcess</span><span class="token punctuation">(</span>Document document<span class="token punctuation">,</span> InboundTransaction transaction<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上类中postData（）调用mainProcess（）方法，AOP无法织入，因为默认mainProcess(document, transaction)；相当于this.mainProcess(document, transaction);不会去调用代理类的增强方法。<br>解决方法：<br>自身@Autowired自身</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">TransactionDataServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">TransactionDataService</span>
+<span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Autowired</span>
+  <span class="token keyword">private</span> TransactionDataServiceImpl proxySelf<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>调用方法时，强制使用代理类方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> ApiMessage<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token function">postData</span><span class="token punctuation">(</span>Document document<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    proxySelf<span class="token punctuation">.</span><span class="token function">mainProcess</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token annotation punctuation">@ProcessExceptionAnnotation</span><span class="token punctuation">(</span>status <span class="token operator">=</span> InboundMonitorLogStatusCodeConstant<span class="token punctuation">.</span>PROCESS_ERROR_STATUS_CODE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">mainProcess</span><span class="token punctuation">(</span>Document document<span class="token punctuation">,</span> InboundTransaction transaction<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2017/12/15/SpringAOP/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2017/12/15/SpringAOP/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

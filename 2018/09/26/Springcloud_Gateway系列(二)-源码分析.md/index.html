@@ -1,0 +1,568 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842935103.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>SpringCloud_Gateway系列(二)-源码分析</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="SpringCloud-Gateway系列-二-源码分析"><a href="#SpringCloud-Gateway系列-二-源码分析" class="headerlink" title="SpringCloud_Gateway系列(二)-源码分析"></a>SpringCloud_Gateway系列(二)-源码分析</h1><hr>
+<h2 id="初始化流程"><a href="#初始化流程" class="headerlink" title="初始化流程"></a>初始化流程</h2><ol>
+<li><h3 id="初始化类"><a href="#初始化类" class="headerlink" title="初始化类"></a>初始化类</h3><p>SpringCloud_Gateway的配置类主要有三个：</p>
+<ul>
+<li>GatewayAutoConfiguration:（单独介绍）</li>
+<li>GatewayClassPathWarningAutoConfiguration：这个配置类主要是校验作用。当我们的项目中是使用的SpringMvc时会触发警告。或者当项目没有包含Spring Webflux也会触发warn</li>
+<li>GatewayLoadBalancerClientAutoConfiguration：主要是配置负载均衡</li>
+</ul>
+</li>
+<li><h3 id="GatewayAutoConfiguration"><a href="#GatewayAutoConfiguration" class="headerlink" title="GatewayAutoConfiguration"></a>GatewayAutoConfiguration</h3><ul>
+<li><h4 id="初始化Netty相关配置，这里不深入看了。这玩意我目前还看不懂以后再来看"><a href="#初始化Netty相关配置，这里不深入看了。这玩意我目前还看不懂以后再来看" class="headerlink" title="初始化Netty相关配置，这里不深入看了。这玩意我目前还看不懂以后再来看"></a>初始化Netty相关配置，这里不深入看了。这玩意我目前还看不懂以后再来看</h4></li>
+<li><h4 id="初始化各种GatewayFilterFactory"><a href="#初始化各种GatewayFilterFactory" class="headerlink" title="初始化各种GatewayFilterFactory"></a>初始化各种GatewayFilterFactory</h4><p>就是这一堆<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/FilerFactory.png" alt="GatewayFilterFactory"></p>
+</li>
+<li><h4 id="初始化各种RoutePredicateFactory"><a href="#初始化各种RoutePredicateFactory" class="headerlink" title="初始化各种RoutePredicateFactory"></a>初始化各种RoutePredicateFactory</h4><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/%E5%86%85%E7%BD%AE%E7%9A%84predicate.png" alt="predicates"></p>
+</li>
+<li><h4 id="初始化各种GlobalFilter"><a href="#初始化各种GlobalFilter" class="headerlink" title="初始化各种GlobalFilter"></a>初始化各种GlobalFilter</h4><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/globalfilter.png" alt="globalfilter"></p>
+</li>
+<li><h4 id="初始化RouteDefinitionLocator和RouteLocator"><a href="#初始化RouteDefinitionLocator和RouteLocator" class="headerlink" title="初始化RouteDefinitionLocator和RouteLocator"></a>初始化RouteDefinitionLocator和RouteLocator</h4><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/springcloudgatewayRoute%E8%BD%AC%E6%8D%A2.png" alt="初始化"><br>RouteDefinitionLocator主要有3个：</p>
+<ul>
+<li>PropertiesRouteDefinitionLocator是负责加载yml或者properties中配置的路由信息</li>
+<li>InMemoryRouteDefinitionRepository是一个口子，实现了RouteDefinitionRepository这个接口，我们可以自己实现RouteDefinitionRepository接口，达到从内存，Redis，各种DB，或者云化Config（比如YY的cnt）拉取配置的目的</li>
+<li>DiscoveryClientRouteDefinitionLocator 这个类是用来从DiscoverClient整合路由信息的。DiscoveryClient目前spring支持Eureka,Zookeeper,Consul.可以自己选用。我们这里不想带入服务发现，暂时不分析。</li>
+</ul>
+<p>当3个RouteDefinitionLocator加载完成后，会被包装为一个CompositeRouteDefinitionLocator。这个组合Locator是route和routeDefinition转换的中间站。</p>
+<p>RouteDefinitionLocator实现也有3个：</p>
+<ul>
+<li>RouteDefinitionRouteLocator：核心类之一，RouteDefinition转换为Route</li>
+<li>CompositeRouteLocator：包装RouteDefinitionRouteLocator</li>
+<li>CachingRouteLocator：包装CompositeRouteLocator，会在第一次运行后，cache转换后的route</li>
+</ul>
+</li>
+<li><h4 id="初始化FilteringWebHandler"><a href="#初始化FilteringWebHandler" class="headerlink" title="初始化FilteringWebHandler"></a>初始化FilteringWebHandler</h4><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/FilteringWebHandler.png" alt="filteringWebhander"><br>实现WebHandler，是filter chain的入口。会把GlobalFilter转换为GatewayFilter。运行时会combine</p>
+</li>
+<li><h4 id="初始化RoutePredicateHandlerMapping"><a href="#初始化RoutePredicateHandlerMapping" class="headerlink" title="初始化RoutePredicateHandlerMapping"></a>初始化RoutePredicateHandlerMapping</h4><p>RoutePredicateHandlerMapping的类继承关系图<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/RoutePredicateHandlerMapping%E7%B1%BB%E5%9B%BE.png" alt="RoutePredicateHandlerMapping"><br>可以看到RoutePredicateHandlerMapping实现了HandlerMapping接口。在DispatcherHandler中，会对HandlerMapping进行操作。这里是整个spring webflux和spring cloud gateway整合的入口。<br>看过springMvc的朋友可能对DispatcherHandler这个类很熟悉，对的，你没有猜错。spring webflux中也是叫这个名字。Spring Cloud Gateway 入口就在</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token function">concatMap</span><span class="token punctuation">(</span>mapping <span class="token operator">-</span><span class="token operator">></span> mapping<span class="token punctuation">.</span><span class="token function">getHandler</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>这里。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>Void<span class="token operator">></span> <span class="token function">handle</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       ServerHttpRequest request <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+       logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Processing "</span> <span class="token operator">+</span> request<span class="token punctuation">.</span><span class="token function">getMethodValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" request for ["</span> <span class="token operator">+</span> request<span class="token punctuation">.</span><span class="token function">getURI</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlerMappings <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">return</span> Mono<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>HANDLER_NOT_FOUND_EXCEPTION<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+   <span class="token keyword">return</span> Flux<span class="token punctuation">.</span><span class="token function">fromIterable</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlerMappings<span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">concatMap</span><span class="token punctuation">(</span>mapping <span class="token operator">-</span><span class="token operator">></span> mapping<span class="token punctuation">.</span><span class="token function">getHandler</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">switchIfEmpty</span><span class="token punctuation">(</span>Mono<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>HANDLER_NOT_FOUND_EXCEPTION<span class="token punctuation">)</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">flatMap</span><span class="token punctuation">(</span>handler <span class="token operator">-</span><span class="token operator">></span> <span class="token function">invokeHandler</span><span class="token punctuation">(</span>exchange<span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">)</span>
+           <span class="token punctuation">.</span><span class="token function">flatMap</span><span class="token punctuation">(</span>result <span class="token operator">-</span><span class="token operator">></span> <span class="token function">handleResult</span><span class="token punctuation">(</span>exchange<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><h4 id="初始化RouteRefreshListener"><a href="#初始化RouteRefreshListener" class="headerlink" title="初始化RouteRefreshListener"></a>初始化RouteRefreshListener</h4><p>RouteRefreshListener主要是用来动态更新Route信息类。是我们动态更新route的核心。在我们这个系列（三）中我们会详细介绍。</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="运行时流程"><a href="#运行时流程" class="headerlink" title="运行时流程"></a>运行时流程</h2><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/%E6%80%BB%E6%B5%81%E7%A8%8B.png" alt="运行时详细流程图"></p>
+<ol>
+<li><h4 id="在DispatcherHandler-handle请求"><a href="#在DispatcherHandler-handle请求" class="headerlink" title="在DispatcherHandler handle请求"></a>在DispatcherHandler handle请求</h4><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>Void<span class="token operator">></span> <span class="token function">handle</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          ServerHttpRequest request <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Processing "</span> <span class="token operator">+</span> request<span class="token punctuation">.</span><span class="token function">getMethodValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" request for ["</span> <span class="token operator">+</span> request<span class="token punctuation">.</span><span class="token function">getURI</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlerMappings <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">return</span> Mono<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>HANDLER_NOT_FOUND_EXCEPTION<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> Flux<span class="token punctuation">.</span><span class="token function">fromIterable</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlerMappings<span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">concatMap</span><span class="token punctuation">(</span>mapping <span class="token operator">-</span><span class="token operator">></span> mapping<span class="token punctuation">.</span><span class="token function">getHandler</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">switchIfEmpty</span><span class="token punctuation">(</span>Mono<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>HANDLER_NOT_FOUND_EXCEPTION<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">flatMap</span><span class="token punctuation">(</span>handler <span class="token operator">-</span><span class="token operator">></span> <span class="token function">invokeHandler</span><span class="token punctuation">(</span>exchange<span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">flatMap</span><span class="token punctuation">(</span>result <span class="token operator">-</span><span class="token operator">></span> <span class="token function">handleResult</span><span class="token punctuation">(</span>exchange<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里是spring webflux和spring cloud gateway交互入口。this.handlerMappings一般一共有4个，当我们匹配到RoutePredicateHandlerMapping时，返回FilteringWebHandler，触发next().不再调用其他的mapping，然后就会invokeHandler，handleResult等。</p>
+</li>
+<li><h4 id="RoutePredicateHandlerMapping"><a href="#RoutePredicateHandlerMapping" class="headerlink" title="RoutePredicateHandlerMapping"></a>RoutePredicateHandlerMapping</h4><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/RoutePredicateHandlerMapping%E7%B1%BB%E5%9B%BE.png" alt="RoutePredicateHandlerMapping类图"><br>mapping.getHandler(exchange))会调用到AbstractHandlerMapping的getHandler方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>Object<span class="token operator">></span> <span class="token function">getHandler</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token function">getHandlerInternal</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>handler <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>CorsUtils<span class="token punctuation">.</span><span class="token function">isCorsRequest</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              CorsConfiguration configA <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>globalCorsConfigSource<span class="token punctuation">.</span><span class="token function">getCorsConfiguration</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              CorsConfiguration configB <span class="token operator">=</span> <span class="token function">getCorsConfiguration</span><span class="token punctuation">(</span>handler<span class="token punctuation">,</span> exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              CorsConfiguration config <span class="token operator">=</span> <span class="token punctuation">(</span>configA <span class="token operator">!=</span> null <span class="token operator">?</span> configA<span class="token punctuation">.</span><span class="token function">combine</span><span class="token punctuation">(</span>configB<span class="token punctuation">)</span> <span class="token operator">:</span> configB<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">getCorsProcessor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> exchange<span class="token punctuation">)</span> <span class="token operator">||</span>
+                      CorsUtils<span class="token punctuation">.</span><span class="token function">isPreFlightRequest</span><span class="token punctuation">(</span>exchange<span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                  <span class="token keyword">return</span> REQUEST_HANDLED_HANDLER<span class="token punctuation">;</span>
+              <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+          <span class="token keyword">return</span> handler<span class="token punctuation">;</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>由此进入到RoutePredicateHandlerMapping的getHandlerInternal(ServerWebExchange exchange)中。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">protected</span> Mono<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">getHandlerInternal</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      exchange<span class="token punctuation">.</span><span class="token function">getAttributes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>GATEWAY_HANDLER_MAPPER_ATTR<span class="token punctuation">,</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">return</span> <span class="token function">lookupRoute</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span>
+              <span class="token comment" spellcheck="true">// .log("route-predicate-handler-mapping", Level.FINER) //name this</span>
+              <span class="token punctuation">.</span><span class="token function">flatMap</span><span class="token punctuation">(</span><span class="token punctuation">(</span>Function<span class="token operator">&lt;</span>Route<span class="token punctuation">,</span> Mono<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">>></span><span class="token punctuation">)</span> r <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+                  exchange<span class="token punctuation">.</span><span class="token function">getAttributes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>GATEWAY_PREDICATE_ROUTE_ATTR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                      logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Mapping ["</span> <span class="token operator">+</span> <span class="token function">getExchangeDesc</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"] to "</span> <span class="token operator">+</span> r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token punctuation">}</span>
+
+                  exchange<span class="token punctuation">.</span><span class="token function">getAttributes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>GATEWAY_ROUTE_ATTR<span class="token punctuation">,</span> r<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token keyword">return</span> Mono<span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span>webHandler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">switchIfEmpty</span><span class="token punctuation">(</span>Mono<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>Mono<span class="token punctuation">.</span><span class="token function">fromRunnable</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+                  exchange<span class="token punctuation">.</span><span class="token function">getAttributes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>GATEWAY_PREDICATE_ROUTE_ATTR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isTraceEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                      logger<span class="token punctuation">.</span><span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">"No RouteDefinition found for ["</span> <span class="token operator">+</span> <span class="token function">getExchangeDesc</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token punctuation">}</span>
+              <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>核心是lookupRoute(exchange)</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">protected</span> Mono<span class="token operator">&lt;</span>Route<span class="token operator">></span> <span class="token function">lookupRoute</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>routeLocator
+              <span class="token punctuation">.</span><span class="token function">getRoutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token comment" spellcheck="true">//individually filter routes so that filterWhen error delaying is not a problem</span>
+              <span class="token punctuation">.</span><span class="token function">concatMap</span><span class="token punctuation">(</span>route <span class="token operator">-</span><span class="token operator">></span> Mono
+                      <span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span>route<span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">filterWhen</span><span class="token punctuation">(</span>r <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+                          <span class="token comment" spellcheck="true">// add the current route we are testing</span>
+                          exchange<span class="token punctuation">.</span><span class="token function">getAttributes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>GATEWAY_PREDICATE_ROUTE_ATTR<span class="token punctuation">,</span> r<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                          <span class="token keyword">return</span> r<span class="token punctuation">.</span><span class="token function">getPredicate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                      <span class="token punctuation">}</span><span class="token punctuation">)</span>
+                      <span class="token comment" spellcheck="true">//instead of immediately stopping main flux due to error, log and swallow it</span>
+                      <span class="token punctuation">.</span><span class="token function">doOnError</span><span class="token punctuation">(</span>e <span class="token operator">-</span><span class="token operator">></span> logger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Error applying predicate for route: "</span><span class="token operator">+</span>route<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                      <span class="token punctuation">.</span><span class="token function">onErrorResume</span><span class="token punctuation">(</span>e <span class="token operator">-</span><span class="token operator">></span> Mono<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token punctuation">)</span>
+              <span class="token comment" spellcheck="true">// .defaultIfEmpty() put a static Route not found</span>
+              <span class="token comment" spellcheck="true">// or .switchIfEmpty()</span>
+              <span class="token comment" spellcheck="true">// .switchIfEmpty(Mono.&lt;Route>empty().log("noroute"))</span>
+              <span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token comment" spellcheck="true">//TODO: error handling</span>
+              <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>route <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+                  <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                      logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Route matched: "</span> <span class="token operator">+</span> route<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token punctuation">}</span>
+                  <span class="token function">validateRoute</span><span class="token punctuation">(</span>route<span class="token punctuation">,</span> exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token keyword">return</span> route<span class="token punctuation">;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里this.routeLocator..getRoutes()会调用CachingRouteLocator拿到缓存下来的route。然后执行过滤r.getPredicate().apply(exchange)。lambda表达式的r就是route。<br>这里的r.getPredicate()得到的AsyncPredicate方法很有艺术性。可以深入学习一下（见第4小节：AsyncPredicate生成）</p>
+</li>
+<li><h4 id="第一次路由初始化cache流程"><a href="#第一次路由初始化cache流程" class="headerlink" title="第一次路由初始化cache流程"></a>第一次路由初始化cache流程</h4><p>我们看一下CachingRouteLocator实现，有个很好用的代码部分</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CachingRouteLocator</span> <span class="token keyword">implements</span> <span class="token class-name">RouteLocator</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">final</span> RouteLocator delegate<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> Flux<span class="token operator">&lt;</span>Route<span class="token operator">></span> routes<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> List<span class="token operator">></span> cache <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">CachingRouteLocator</span><span class="token punctuation">(</span>RouteLocator delegate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>delegate <span class="token operator">=</span> delegate<span class="token punctuation">;</span>
+        routes <span class="token operator">=</span> CacheFlux<span class="token punctuation">.</span><span class="token function">lookup</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> <span class="token string">"routes"</span><span class="token punctuation">,</span> Route<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">onCacheMissResume</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>delegate<span class="token punctuation">.</span><span class="token function">getRoutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>AnnotationAwareOrderComparator<span class="token punctuation">.</span>INSTANCE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Flux<span class="token operator">&lt;</span>Route<span class="token operator">></span> <span class="token function">getRoutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>routes<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * Clears the routes cache
+     * @return routes flux
+     */</span>
+    <span class="token keyword">public</span> Flux<span class="token operator">&lt;</span>Route<span class="token operator">></span> <span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>cache<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>routes<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@EventListener</span><span class="token punctuation">(</span>RefreshRoutesEvent<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token comment" spellcheck="true">/* for testing */</span> <span class="token keyword">void</span> <span class="token function">handleRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里构造函数中的这段代码很有意思</p>
+<pre class="line-numbers language-java"><code class="language-java">routes <span class="token operator">=</span> CacheFlux<span class="token punctuation">.</span><span class="token function">lookup</span><span class="token punctuation">(</span>cache<span class="token punctuation">,</span> <span class="token string">"routes"</span><span class="token punctuation">,</span> Route<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">onCacheMissResume</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>delegate<span class="token punctuation">.</span><span class="token function">getRoutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>AnnotationAwareOrderComparator<span class="token punctuation">.</span>INSTANCE<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这里提供一种Flux流缓存构造方式，他的意思是，当cache没有的时候，我们执行this.delegate.getRoutes().sort(AnnotationAwareOrderComparator.INSTANCE)获得Flux流，并把这个结果写入cache这个Map。这不会马上执行，当有subscribe才会执行。是懒加载方式。</p>
+<p>当我们缺少缓存时，this.delegate.getRoutes()将会调用CompositeRouteLocator的getRoutes()方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> Flux<span class="token operator">&lt;</span>Route<span class="token operator">></span> <span class="token function">getRoutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>delegates<span class="token punctuation">.</span><span class="token function">flatMap</span><span class="token punctuation">(</span>RouteLocator<span class="token operator">:</span><span class="token operator">:</span>getRoutes<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后就会进入RouteDefinitionRouteLocator的getRoutes()方法。这个方法是一个核心的方法。负责把所有routeDefinition转换为route。是连接RouteDefinitionLocator和RouteLocator的通道。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> Flux<span class="token operator">&lt;</span>Route<span class="token operator">></span> <span class="token function">getRoutes</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>routeDefinitionLocator<span class="token punctuation">.</span><span class="token function">getRouteDefinitions</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token operator">:</span><span class="token operator">:</span>convertToRoute<span class="token punctuation">)</span>
+              <span class="token comment" spellcheck="true">//TODO: error handling</span>
+              <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>route <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+                  <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                      logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"RouteDefinition matched: "</span> <span class="token operator">+</span> route<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                  <span class="token punctuation">}</span>
+                  <span class="token keyword">return</span> route<span class="token punctuation">;</span>
+              <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>直接进入核心方法convertToRoute</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> Route <span class="token function">convertToRoute</span><span class="token punctuation">(</span>RouteDefinition routeDefinition<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> predicate <span class="token operator">=</span> <span class="token function">combinePredicates</span><span class="token punctuation">(</span>routeDefinition<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      List<span class="token operator">&lt;</span>GatewayFilter<span class="token operator">></span> gatewayFilters <span class="token operator">=</span> <span class="token function">getFilters</span><span class="token punctuation">(</span>routeDefinition<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">return</span> Route<span class="token punctuation">.</span><span class="token function">async</span><span class="token punctuation">(</span>routeDefinition<span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">asyncPredicate</span><span class="token punctuation">(</span>predicate<span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">replaceFilters</span><span class="token punctuation">(</span>gatewayFilters<span class="token punctuation">)</span>
+              <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个方法有两个子方法，第一个是combinePredicates会把routeDefinition带有的predicate组合成为一个AsyncPredicate。（见4.AsyncPredicate生成）还有得到gatewayFilters（见5.gatewayFilters生成）。然后调用Route的build接口生成Route。最后存入cache。</p>
+</li>
+</ol>
+<ol start="4">
+<li><h4 id="AsyncPredicate生成"><a href="#AsyncPredicate生成" class="headerlink" title="AsyncPredicate生成"></a>AsyncPredicate生成</h4><p>当我们调用combinePredicates方法时，会得到AsyncPredicate。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> <span class="token function">combinePredicates</span><span class="token punctuation">(</span>RouteDefinition routeDefinition<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      List<span class="token operator">&lt;</span>PredicateDefinition<span class="token operator">></span> predicates <span class="token operator">=</span> routeDefinition<span class="token punctuation">.</span><span class="token function">getPredicates</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> predicate <span class="token operator">=</span> <span class="token function">lookup</span><span class="token punctuation">(</span>routeDefinition<span class="token punctuation">,</span> predicates<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">for</span> <span class="token punctuation">(</span>PredicateDefinition andPredicate <span class="token operator">:</span> predicates<span class="token punctuation">.</span><span class="token function">subList</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> predicates<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> found <span class="token operator">=</span> <span class="token function">lookup</span><span class="token punctuation">(</span>routeDefinition<span class="token punctuation">,</span> andPredicate<span class="token punctuation">)</span><span class="token punctuation">;</span>
+          predicate <span class="token operator">=</span> predicate<span class="token punctuation">.</span><span class="token function">and</span><span class="token punctuation">(</span>found<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> predicate<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里循环调用lookup方法，再用and连接起来。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> <span class="token function">lookup</span><span class="token punctuation">(</span>RouteDefinition route<span class="token punctuation">,</span> PredicateDefinition predicate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      RoutePredicateFactory<span class="token operator">&lt;</span>Object<span class="token operator">></span> factory <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>predicates<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>predicate<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>factory <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"Unable to find RoutePredicateFactory with name "</span> <span class="token operator">+</span> predicate<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> String<span class="token operator">></span> args <span class="token operator">=</span> predicate<span class="token punctuation">.</span><span class="token function">getArgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"RouteDefinition "</span> <span class="token operator">+</span> route<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" applying "</span>
+                  <span class="token operator">+</span> args <span class="token operator">+</span> <span class="token string">" to "</span> <span class="token operator">+</span> predicate<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+
+      Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">></span> properties <span class="token operator">=</span> factory<span class="token punctuation">.</span><span class="token function">shortcutType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">normalize</span><span class="token punctuation">(</span>args<span class="token punctuation">,</span> factory<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>parser<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      Object config <span class="token operator">=</span> factory<span class="token punctuation">.</span><span class="token function">newConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      ConfigurationUtils<span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span>config<span class="token punctuation">,</span> properties<span class="token punctuation">,</span>
+              factory<span class="token punctuation">.</span><span class="token function">shortcutFieldPrefix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> predicate<span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> validator<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>publisher <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">this</span><span class="token punctuation">.</span>publisher<span class="token punctuation">.</span><span class="token function">publishEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">PredicateArgsEvent</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> route<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> properties<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> factory<span class="token punctuation">.</span><span class="token function">applyAsync</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里会根据predicate的name，得到对应的RoutePredicateFactory，比如name=StripPrefix就会得到StripPrefixGatewayFilterFactory。在调用ConfigurationUtils.bind方法，把predicate的配置与工厂绑定，调用factory.applyAsync(config)生成AsyncPredicate。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">default</span> AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> <span class="token function">applyAsync</span><span class="token punctuation">(</span>C config<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> <span class="token function">toAsyncPredicate</span><span class="token punctuation">(</span><span class="token function">apply</span><span class="token punctuation">(</span>config<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>关键方法toAsyncPredicate</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> AsyncPredicate<span class="token operator">&lt;</span>ServerWebExchange<span class="token operator">></span> <span class="token function">toAsyncPredicate</span><span class="token punctuation">(</span>Predicate<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> ServerWebExchange<span class="token operator">></span> predicate<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>predicate<span class="token punctuation">,</span> <span class="token string">"predicate must not be null"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> t <span class="token operator">-</span><span class="token operator">></span> Mono<span class="token punctuation">.</span><span class="token function">just</span><span class="token punctuation">(</span>predicate<span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>至此，predicate变成了AsyncPredicate。但是一个route配置了多个不同的predicate怎么组合的。<br>我们看看AsyncPredicate源码</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">AsyncPredicate</span><span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token keyword">extends</span> <span class="token class-name">Function</span><span class="token operator">&lt;</span>T<span class="token punctuation">,</span> Publisher<span class="token operator">&lt;</span>Boolean<span class="token operator">>></span> <span class="token punctuation">{</span>
+    <span class="token keyword">default</span> AsyncPredicate<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">and</span><span class="token punctuation">(</span>AsyncPredicate<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> T<span class="token operator">></span> other<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>other<span class="token punctuation">,</span> <span class="token string">"other must not be null"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> t <span class="token operator">-</span><span class="token operator">></span> Flux<span class="token punctuation">.</span><span class="token function">zip</span><span class="token punctuation">(</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">,</span> other<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>tuple <span class="token operator">-</span><span class="token operator">></span> tuple<span class="token punctuation">.</span><span class="token function">getT1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> tuple<span class="token punctuation">.</span><span class="token function">getT2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">default</span> AsyncPredicate<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">negate</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> t <span class="token operator">-</span><span class="token operator">></span> Mono<span class="token punctuation">.</span><span class="token function">from</span><span class="token punctuation">(</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>b <span class="token operator">-</span><span class="token operator">></span> <span class="token operator">!</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">default</span> AsyncPredicate<span class="token operator">&lt;</span>T<span class="token operator">></span> <span class="token function">or</span><span class="token punctuation">(</span>AsyncPredicate<span class="token operator">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> T<span class="token operator">></span> other<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Objects<span class="token punctuation">.</span><span class="token function">requireNonNull</span><span class="token punctuation">(</span>other<span class="token punctuation">,</span> <span class="token string">"other must not be null"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> t <span class="token operator">-</span><span class="token operator">></span> Flux<span class="token punctuation">.</span><span class="token function">zip</span><span class="token punctuation">(</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">,</span> other<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>tuple <span class="token operator">-</span><span class="token operator">></span> tuple<span class="token punctuation">.</span><span class="token function">getT1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span> tuple<span class="token punctuation">.</span><span class="token function">getT2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看看and方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">return</span> t <span class="token operator">-</span><span class="token operator">></span> Flux<span class="token punctuation">.</span><span class="token function">zip</span><span class="token punctuation">(</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">,</span> other<span class="token punctuation">.</span><span class="token function">apply</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span>tuple <span class="token operator">-</span><span class="token operator">></span> tuple<span class="token punctuation">.</span><span class="token function">getT1</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> tuple<span class="token punctuation">.</span><span class="token function">getT2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>短短的一句话，包括了多线程执行，再把所有执行结果 “&amp;&amp;”操作。zip这个方法很精辟。这就是rx架构的精髓。</p>
+</li>
+<li><h4 id="gatewayFilters生成"><a href="#gatewayFilters生成" class="headerlink" title="gatewayFilters生成"></a>gatewayFilters生成</h4><p>调用getFilters(routeDefinition)，也会由名字找到对应factory生成gatewayFilter，再触发bind绑定。但是不同的是，这里会给没有order的filter加上order</p>
+<pre class="line-numbers language-java"><code class="language-java">ArrayList<span class="token operator">&lt;</span>GatewayFilter<span class="token operator">></span> ordered <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>filters<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> filters<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  GatewayFilter gatewayFilter <span class="token operator">=</span> filters<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>gatewayFilter <span class="token keyword">instanceof</span> <span class="token class-name">Ordered</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    ordered<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>gatewayFilter<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    ordered<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">OrderedGatewayFilter</span><span class="token punctuation">(</span>gatewayFilter<span class="token punctuation">,</span> i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><h4 id="invokeHandler流程"><a href="#invokeHandler流程" class="headerlink" title="invokeHandler流程"></a>invokeHandler流程</h4><p>直接看代码吧</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> Mono<span class="token operator">&lt;</span>HandlerResult<span class="token operator">></span> <span class="token function">invokeHandler</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">,</span> Object handler<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>handlerAdapters <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          <span class="token keyword">for</span> <span class="token punctuation">(</span>HandlerAdapter handlerAdapter <span class="token operator">:</span> <span class="token keyword">this</span><span class="token punctuation">.</span>handlerAdapters<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              <span class="token keyword">if</span> <span class="token punctuation">(</span>handlerAdapter<span class="token punctuation">.</span><span class="token function">supports</span><span class="token punctuation">(</span>handler<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                  <span class="token keyword">return</span> handlerAdapter<span class="token punctuation">.</span><span class="token function">handle</span><span class="token punctuation">(</span>exchange<span class="token punctuation">,</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span>
+          <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> Mono<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token string">"No HandlerAdapter: "</span> <span class="token operator">+</span> handler<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里会调用到SimpleHandlerAdapter的handle方法。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>HandlerResult<span class="token operator">></span> <span class="token function">handle</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">,</span> Object handler<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      WebHandler webHandler <span class="token operator">=</span> <span class="token punctuation">(</span>WebHandler<span class="token punctuation">)</span> handler<span class="token punctuation">;</span>
+      Mono<span class="token operator">&lt;</span>Void<span class="token operator">></span> mono <span class="token operator">=</span> webHandler<span class="token punctuation">.</span><span class="token function">handle</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> mono<span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span>Mono<span class="token punctuation">.</span><span class="token function">empty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>传入的handler就是org.springframework.cloud.gateway.handler.FilteringWebHandler。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>Void<span class="token operator">></span> <span class="token function">handle</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      Route route <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequiredAttribute</span><span class="token punctuation">(</span>GATEWAY_ROUTE_ATTR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      List<span class="token operator">&lt;</span>GatewayFilter<span class="token operator">></span> gatewayFilters <span class="token operator">=</span> route<span class="token punctuation">.</span><span class="token function">getFilters</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      List<span class="token operator">&lt;</span>GatewayFilter<span class="token operator">></span> combined <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>globalFilters<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      combined<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>gatewayFilters<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token comment" spellcheck="true">//TODO: needed or cached?</span>
+      AnnotationAwareOrderComparator<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>combined<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Sorted gatewayFilterFactories: "</span><span class="token operator">+</span> combined<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+      <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">DefaultGatewayFilterChain</span><span class="token punctuation">(</span>combined<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>组合全局filter加上route域的filter。生成DefaultGatewayFilterChain。开始回调所有的filter。</p>
+<hr>
+<p>走完filter就是调用目标服务，返回代理信息。源码分析结束。老哥们，是不是看的很累。</p>
+</li>
+</ol>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/09/26/Springcloud_Gateway系列(二)-源码分析.md/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/09/26/Springcloud_Gateway系列(二)-源码分析.md/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

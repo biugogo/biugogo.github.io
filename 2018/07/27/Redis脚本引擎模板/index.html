@@ -1,0 +1,710 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842931503.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Redis执行Lua脚本引擎Demo</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Redis执行Lua脚本引擎Demo"><a href="#Redis执行Lua脚本引擎Demo" class="headerlink" title="Redis执行Lua脚本引擎Demo"></a>Redis执行Lua脚本引擎Demo</h1><hr>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>最近看到老师谢了一个Lua脚本的简单执行引擎，感觉很不错。写成一个Demo，方便以后学习。</p>
+<hr>
+<p>首先是Redis的Spring Boot下配置,直接上代码。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span><span class="token punctuation">(</span>initMethod <span class="token operator">=</span> <span class="token string">"init"</span><span class="token punctuation">,</span> destroyMethod <span class="token operator">=</span> <span class="token string">"destroy"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@ConfigurationProperties</span><span class="token punctuation">(</span>prefix <span class="token operator">=</span> <span class="token string">"app.redis"</span><span class="token punctuation">,</span> ignoreUnknownFields <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> RedisSentinelFactory <span class="token function">redisSentinelFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RedisSentinelFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里使用Spring的自动注入。yml中需要配置</p>
+<pre class="line-numbers language-yml"><code class="language-yml">app:
+  redis:
+    max-total: 300
+    max-wait-millis: 8000
+    max-idle: 100
+    test-on-borrow: false
+    test-on-return: false
+    test-while-idle: true
+    master-name: wolfkill_test_redis_001
+    servers: group1003-bj-sentinel.yy.com:20060,group1003-sz-sentinel.yy.com:20060,group1003-wx-sentinel.yy.com:20060
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里的RedisSentinelFactory是公司包装的一个读写分离的工厂。</p>
+<hr>
+<p>进入正题，这里开始介绍脚本引擎</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
+<span class="token keyword">public</span> RedisLuaScriptEngine <span class="token function">redisLuaScriptEngine</span><span class="token punctuation">(</span>RedisSentinelFactory redisSentinelFactory<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RedisLuaScriptEngine</span><span class="token punctuation">(</span><span class="token string">"cp_room"</span><span class="token punctuation">,</span> <span class="token string">"classpath:/script/cp_room.lua"</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Supplier</span><span class="token operator">&lt;</span>Jedis<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">public</span> Jedis <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> redisSentinelFactory<span class="token punctuation">.</span><span class="token function">getMaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里推荐一个Supplier接口，这是java.util.function包下的提供者接口，这个接口只有一个Get方法，从写它可以包装一个对象的提供方式。这里是一个简单引用。</p>
+<p>让我们来看下这个类<br>构造函数和类变量</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Slf4j</span>
+<span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RedisLuaScriptEngine</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/**
+     * 脚本缓存到Redis的Key前缀
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String LUA_SCRIPT_KEY_PREFIX <span class="token operator">=</span> <span class="token string">"string:lua_script_sha:"</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * Spring的Resource加载器
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> ResourceLoader RESOURCE_LOADER <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">PathMatchingResourcePatternResolver</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 脚本后缀
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String scriptName<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * 脚本所在项目地址，这里我们一般设置为classpath:/script/cp_room.lua
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String scriptPath<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * Jedis提供者
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> Supplier<span class="token operator">&lt;</span>Jedis<span class="token operator">></span> jedisSupplier<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 脚本在Redis存储的Key，它等于前缀+脚本后缀
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String luaScriptKey<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     *
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">volatile</span> String luaSHA<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">RedisLuaScriptEngine</span><span class="token punctuation">(</span>String scriptName<span class="token punctuation">,</span> String scriptPath<span class="token punctuation">,</span> Supplier<span class="token operator">&lt;</span>Jedis<span class="token operator">></span> jedisSupplier<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>scriptName <span class="token operator">=</span> scriptName<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>scriptPath <span class="token operator">=</span> scriptPath<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>jedisSupplier <span class="token operator">=</span> jedisSupplier<span class="token punctuation">;</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>luaScriptKey <span class="token operator">=</span> LUA_SCRIPT_KEY_PREFIX <span class="token operator">+</span> scriptName<span class="token punctuation">;</span>
+
+    <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>再看init()方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//加载脚本</span>
+    Resource resource <span class="token operator">=</span> RESOURCE_LOADER<span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span>scriptPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    String scriptContent <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//脚本写到一个String,指定编码格式</span>
+        scriptContent <span class="token operator">=</span> IOUtils<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>resource<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> Charset<span class="token punctuation">.</span><span class="token function">forName</span><span class="token punctuation">(</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"Load {} failed!"</span><span class="token punctuation">,</span> resource<span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//判断是否加载到</span>
+    Assert<span class="token punctuation">.</span><span class="token function">hasLength</span><span class="token punctuation">(</span>scriptContent<span class="token punctuation">,</span> <span class="token string">"Lua script must not be empty!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//通过提供者拿到Jedis实例</span>
+    <span class="token keyword">try</span> <span class="token punctuation">(</span>Jedis jedis <span class="token operator">=</span> jedisSupplier<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//缓存脚本。返回缓存脚本信息，我们可以根据luaSHA找到脚本</span>
+        luaSHA <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">scriptLoad</span><span class="token punctuation">(</span>scriptContent<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//把脚本信息放入Redis</span>
+        jedis<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>luaScriptKey<span class="token punctuation">,</span> luaSHA<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Load script {} success! LuaSHA:{}"</span><span class="token punctuation">,</span> scriptName<span class="token punctuation">,</span> luaSHA<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>scriptLoad方法：Redis Script Load 命令用于将脚本 script 添加到脚本缓存中，但并不立即执行这个脚本。如果给定的脚本已经在缓存里面了，那么不执行任何操作。<br>在脚本被加入到缓存之后，通过 EVALSHA 命令，可以使用脚本的 SHA1 校验和来调用这个脚本。<br>脚本可以在缓存中保留无限长的时间，直到执行 SCRIPT FLUSH 为止。</p>
+<p>我们加入一个定时器任务，5分钟更新脚本到代码。这里可以从redis动态修改脚本，再动态同步到代码的能力。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Scheduled</span><span class="token punctuation">(</span>initialDelay <span class="token operator">=</span> 10_1000<span class="token punctuation">,</span> fixedDelay <span class="token operator">=</span> <span class="token number">5</span> <span class="token operator">*</span> <span class="token number">60</span> <span class="token operator">*</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">reload</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">try</span> <span class="token punctuation">(</span>Jedis jedis <span class="token operator">=</span> jedisSupplier<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String value <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>luaScriptKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>StringUtils<span class="token punctuation">.</span><span class="token function">isNotEmpty</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>Objects<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>value<span class="token punctuation">,</span> luaSHA<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Reload luaSHA success! New:{}"</span><span class="token punctuation">,</span> luaSHA<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            luaSHA <span class="token operator">=</span> value<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<p>核心代码：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+ * 执行Lua方法
+ */</span>
+<span class="token keyword">public</span> LuaScriptResult <span class="token function">execute</span><span class="token punctuation">(</span><span class="token annotation punctuation">@NonNull</span> String method<span class="token punctuation">,</span> <span class="token annotation punctuation">@NonNull</span> List<span class="token operator">&lt;</span>Object<span class="token operator">></span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    List<span class="token operator">&lt;</span>String<span class="token operator">></span> list <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token punctuation">(</span>args<span class="token punctuation">.</span><span class="token function">size</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>Object arg <span class="token operator">:</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>null <span class="token operator">==</span> arg <span class="token operator">?</span> null <span class="token operator">:</span> arg<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">(</span>Jedis jedis <span class="token operator">=</span> jedisSupplier<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//执行脚本，传入参数</span>
+        Object result <span class="token operator">=</span> jedis<span class="token punctuation">.</span><span class="token function">evalsha</span><span class="token punctuation">(</span>luaSHA<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span>EMPTY_STRING_ARRAY<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>log<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"method:{} args:{} result:{}"</span><span class="token punctuation">,</span> method<span class="token punctuation">,</span> args<span class="token punctuation">,</span> result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">//返回执行器的包装结果，详见下文</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">LuaScriptResult</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里有一个很有趣的代码：</p>
+<pre class="line-numbers language-java"><code class="language-java">list<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>commons<span class="token punctuation">.</span>lang3<span class="token punctuation">.</span>ArrayUtils<span class="token punctuation">.</span>EMPTY_STRING_ARRAY<span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>为什么list的toArray能拷贝内容到一个不可变空数组？<br>让我们看看ArrayList的toArray方法</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token operator">&lt;</span>T<span class="token operator">></span> T<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">toArray</span><span class="token punctuation">(</span>T<span class="token punctuation">[</span><span class="token punctuation">]</span> a<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token punctuation">.</span>length <span class="token operator">&lt;</span> size<span class="token punctuation">)</span>
+        <span class="token comment" spellcheck="true">// Make a new array of a's runtime type, but my contents:</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>T<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span> Arrays<span class="token punctuation">.</span><span class="token function">copyOf</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> size<span class="token punctuation">,</span> a<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span><span class="token function">arraycopy</span><span class="token punctuation">(</span>elementData<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> a<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>a<span class="token punctuation">.</span>length <span class="token operator">></span> size<span class="token punctuation">)</span>
+        a<span class="token punctuation">[</span>size<span class="token punctuation">]</span> <span class="token operator">=</span> null<span class="token punctuation">;</span>
+    <span class="token keyword">return</span> a<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到，如果数组长度低于size，那会直接拷贝到新建的相同类型的数组。传入的空数组只起getClass（）作用。</p>
+<p>执行结果包装器,更加方便的拿到结果</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@ToString</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">LuaScriptResult</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">final</span> Object object<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token function">LuaScriptResult</span><span class="token punctuation">(</span>Object object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>object <span class="token operator">=</span> object<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> Integer <span class="token function">asInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null <span class="token operator">==</span> object <span class="token operator">?</span> null <span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>Number<span class="token punctuation">)</span> object<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">intValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> List <span class="token function">asList</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>List<span class="token punctuation">)</span> object<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">asSting</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null <span class="token operator">==</span> object <span class="token operator">?</span> null <span class="token operator">:</span> object<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">asBoolean</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> null <span class="token operator">==</span> object <span class="token operator">?</span> <span class="token boolean">false</span> <span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<p>再看看lua脚本，这里积累一下</p>
+<pre class="line-numbers language-java"><code class="language-java">
+<span class="token operator">--</span> 程序入口
+<span class="token operator">--</span> 常量定义
+local rcall <span class="token operator">=</span> redis<span class="token punctuation">.</span>call
+local rerror <span class="token operator">=</span> redis<span class="token punctuation">.</span>error_reply
+local one_day_seconds <span class="token operator">=</span> <span class="token number">86400</span>
+
+<span class="token operator">--</span> 连麦申请（uid<span class="token operator">-</span><span class="token operator">></span>申请时间）
+local key_mic_apply_list <span class="token operator">=</span> <span class="token string">"zset:cp:mic:apply:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id
+<span class="token operator">--</span> 当前麦上用户 uid<span class="token operator">-</span><span class="token operator">></span>上麦时间
+local key_on_mic_list <span class="token operator">=</span> <span class="token string">"zset:cp:mic:on:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id
+<span class="token operator">--</span> 麦序信息（<span class="token punctuation">{</span>token<span class="token operator">:</span>xxx<span class="token punctuation">,</span>status<span class="token operator">:</span><span class="token number">1</span>开<span class="token operator">|</span><span class="token number">2</span>关<span class="token punctuation">}</span>） <span class="token number">1</span>
+local key_mic_info <span class="token operator">=</span> <span class="token string">"hash:cp:mic:info:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span>uid
+<span class="token operator">--</span> 上麦通知确认
+local key_mic_on_ack <span class="token operator">=</span> <span class="token string">"zset:cp:mic:on_ack:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id
+<span class="token operator">--</span> 下麦通知确认
+local key_mic_off_ack <span class="token operator">=</span> <span class="token string">"zset:cp:mic:off_ack:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id
+<span class="token operator">--</span> 喜欢我的人（uid<span class="token operator">-</span><span class="token operator">></span>喜欢时间）
+local key_like_me <span class="token operator">=</span> <span class="token string">"zset:cp:likeme:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> uid
+<span class="token operator">--</span> 我喜欢的人（uid<span class="token operator">-</span><span class="token operator">></span>喜欢时间）
+local key_my_like <span class="token operator">=</span> <span class="token string">"zset:cp:mylike:"</span> <span class="token operator">--</span> <span class="token operator">+</span> room_id <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> uid
+<span class="token operator">--</span> 区内cp锁<span class="token punctuation">,</span>防止出现cp重复（uid<span class="token operator">-</span><span class="token operator">></span>cp_uid）
+local key_cp_lock <span class="token operator">=</span> <span class="token string">"hash:cp:lock"</span>
+
+<span class="token operator">--</span> 连麦申请
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span>：成功  <span class="token number">1</span>：失败
+local function <span class="token function">apply_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> time_now<span class="token punctuation">)</span>
+    local apply_key <span class="token operator">=</span> key_mic_apply_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id<span class="token punctuation">;</span>
+    local apply_time <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZSCORE"</span><span class="token punctuation">,</span> apply_key<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+
+    <span class="token operator">--</span> 如果之前没有申请过
+    <span class="token keyword">if</span> not apply_time then
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> apply_key<span class="token punctuation">,</span> <span class="token function">tonumber</span><span class="token punctuation">(</span>time_now<span class="token punctuation">)</span><span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> apply_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span> <span class="token operator">--</span> 防御性ttl
+        <span class="token keyword">return</span> <span class="token punctuation">{</span> <span class="token number">0</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+    end
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+end
+
+<span class="token operator">--</span> 取消连麦
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span>：连麦申请存在  <span class="token number">1</span>：连麦申请不存在
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span>：用户在麦上 <span class="token number">1</span>：用户没在麦上
+local function <span class="token function">cancel_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    local result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    local apply_key <span class="token operator">=</span> key_mic_apply_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id<span class="token punctuation">;</span>
+    local on_list_key <span class="token operator">=</span> key_on_mic_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id
+
+    local apply_count <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZREM"</span><span class="token punctuation">,</span> apply_key<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    local on_list_count <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZREM"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+
+    result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> apply_count <span class="token operator">==</span> <span class="token number">0</span> and <span class="token number">1</span> or <span class="token number">0</span><span class="token punctuation">;</span>
+    result<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> on_list_count <span class="token operator">==</span> <span class="token number">0</span> and <span class="token number">1</span> or <span class="token number">0</span>
+
+    <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"DEL"</span><span class="token punctuation">,</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> result
+end
+
+local function <span class="token function">off_none_owner_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">)</span>
+    local on_list_key <span class="token operator">=</span> key_on_mic_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id
+    local on_mic_uids <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZRANGE"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+    local off_uid_list <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">for</span> i<span class="token punctuation">,</span> on_mic_uid in <span class="token function">pairs</span><span class="token punctuation">(</span>on_mic_uids<span class="token punctuation">)</span> <span class="token keyword">do</span>
+        local _mic_info_key <span class="token operator">=</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> on_mic_uid
+        <span class="token operator">--</span> 不是房主
+        <span class="token keyword">if</span> not <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HGET"</span><span class="token punctuation">,</span> _mic_info_key<span class="token punctuation">,</span> <span class="token string">"owner"</span><span class="token punctuation">)</span> then
+            table<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>off_uid_list<span class="token punctuation">,</span> on_mic_uid<span class="token punctuation">)</span>
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZREM"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> on_mic_uid<span class="token punctuation">)</span>
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"DEL"</span><span class="token punctuation">,</span> _mic_info_key<span class="token punctuation">)</span>
+        end
+    end
+
+    <span class="token keyword">return</span> off_uid_list
+end
+
+<span class="token operator">--</span> 上麦
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span>  <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span>：上麦成功   <span class="token number">1</span>：上麦失败
+<span class="token operator">--</span>  <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">-</span><span class="token operator">></span> 如果之前麦上有人则返回他们
+local function <span class="token function">on_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> token<span class="token punctuation">,</span> time_now<span class="token punctuation">)</span>
+    local result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token operator">--</span> 没有申请过？
+    <span class="token keyword">if</span> not <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZSCORE"</span><span class="token punctuation">,</span> key_mic_apply_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id<span class="token punctuation">,</span> uid<span class="token punctuation">)</span> then
+        result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">else</span>
+        local on_list_key <span class="token operator">=</span> key_on_mic_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id
+        local mic_on_ack_key <span class="token operator">=</span> key_mic_on_ack <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id
+        local mic_info_key <span class="token operator">=</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid<span class="token punctuation">;</span>
+        local time_long <span class="token operator">=</span> <span class="token function">tonumber</span><span class="token punctuation">(</span>time_now<span class="token punctuation">)</span>
+
+        <span class="token keyword">if</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZSCORE"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> uid<span class="token punctuation">)</span> then <span class="token operator">--</span> 已经在麦上
+            result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+        <span class="token keyword">else</span>
+            result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+            <span class="token operator">--</span> 删掉麦上非主播用户
+            result<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">off_none_owner_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">)</span>
+            <span class="token operator">--</span> 上麦
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> time_long<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span>
+            <span class="token operator">--</span> 加入上麦确认
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> mic_on_ack_key<span class="token punctuation">,</span> time_long<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> mic_on_ack_key<span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">)</span>
+            <span class="token operator">--</span> 保存token
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HSET"</span><span class="token punctuation">,</span> mic_info_key<span class="token punctuation">,</span> <span class="token string">"token"</span><span class="token punctuation">,</span> token<span class="token punctuation">)</span>
+            <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> mic_info_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span>
+        end
+    end
+
+    <span class="token keyword">return</span> result
+end
+
+
+<span class="token operator">--</span> 主播上麦
+local function <span class="token function">on_owner_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> token<span class="token punctuation">,</span> time_now<span class="token punctuation">)</span>
+    local on_list_key <span class="token operator">=</span> key_on_mic_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id
+    local mic_info_key <span class="token operator">=</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid<span class="token punctuation">;</span>
+
+    <span class="token operator">--</span> 把自己抱上麦
+    <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> <span class="token function">tonumber</span><span class="token punctuation">(</span>time_now<span class="token punctuation">)</span><span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> on_list_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span>
+    <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HMSET"</span><span class="token punctuation">,</span> mic_info_key<span class="token punctuation">,</span> <span class="token string">"owner"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">"status"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+    <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> mic_info_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span>
+end
+
+<span class="token operator">--</span> 下麦
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span>  <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span>：下麦成功 <span class="token number">1</span>：下麦失败
+local function <span class="token function">off_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">,</span> time_now<span class="token punctuation">)</span>
+    local result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZREM"</span><span class="token punctuation">,</span> key_on_mic_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id<span class="token punctuation">,</span> uid<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span> then <span class="token operator">--</span> 在麦上
+        <span class="token operator">--</span> 删除连麦信息
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"DEL"</span><span class="token punctuation">,</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid<span class="token punctuation">)</span>
+
+        <span class="token operator">--</span> 加入下麦确认
+        local mic_off_ack_key <span class="token operator">=</span> key_mic_off_ack <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id<span class="token punctuation">;</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> mic_off_ack_key<span class="token punctuation">,</span> <span class="token function">tonumber</span><span class="token punctuation">(</span>time_now<span class="token punctuation">)</span><span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> mic_off_ack_key<span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">)</span>
+
+        <span class="token operator">--</span> 删除连麦申请
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZREM"</span><span class="token punctuation">,</span>key_mic_apply_list <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id<span class="token punctuation">,</span>uid<span class="token punctuation">)</span>
+        result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">else</span>
+        result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+    end
+
+    <span class="token keyword">return</span> result
+end
+
+<span class="token operator">--</span> 用户开麦
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span> 成功 <span class="token number">1</span>失败
+local function <span class="token function">open_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    local mic_info_key <span class="token operator">=</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid
+
+    <span class="token keyword">if</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXISTS"</span><span class="token punctuation">,</span> mic_info_key<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span> then
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HSET"</span><span class="token punctuation">,</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid<span class="token punctuation">,</span> <span class="token string">"status"</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span> <span class="token number">0</span> <span class="token punctuation">}</span>
+    end
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+end
+
+<span class="token operator">--</span> 用户关麦
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token number">0</span> 成功 <span class="token number">1</span>失败
+local function <span class="token function">close_mic</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    local mic_info_key <span class="token operator">=</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid
+
+    <span class="token keyword">if</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXISTS"</span><span class="token punctuation">,</span> mic_info_key<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span> then
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HSET"</span><span class="token punctuation">,</span> key_mic_info <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> uid<span class="token punctuation">,</span> <span class="token string">"status"</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span> <span class="token number">0</span> <span class="token punctuation">}</span>
+    end
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span> <span class="token number">1</span> <span class="token punctuation">}</span>
+end
+
+<span class="token operator">--</span> 喜欢某人
+<span class="token operator">--</span> 返回数组，定义如下
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token number">0</span>：to_uid喜欢from_uid <span class="token number">1</span>：to_uid不喜欢from_uid
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token number">0</span>：from_uid初次喜欢to_uid <span class="token number">1</span>：from_uid已经喜欢过to_uid
+<span class="token operator">--</span> <span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token number">0</span><span class="token operator">:</span> 可以达成cp <span class="token number">1</span><span class="token operator">:</span>不能达成cp
+
+local function <span class="token function">like_someone</span><span class="token punctuation">(</span>room_id<span class="token punctuation">,</span> from_uid<span class="token punctuation">,</span> to_uid<span class="token punctuation">,</span> can_make_cp<span class="token punctuation">,</span> time_now<span class="token punctuation">)</span>
+    local result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+    local to_uid_like_me_key <span class="token operator">=</span> key_like_me <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> to_uid <span class="token operator">--</span> 喜欢to_uid的人
+    local from_uid_like_me_key <span class="token operator">=</span> key_like_me <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> from_uid <span class="token operator">--</span> 喜欢from_uid的人
+
+    local is_to_uid_like_from_uid <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZSCORE"</span><span class="token punctuation">,</span> from_uid_like_me_key<span class="token punctuation">,</span> to_uid<span class="token punctuation">)</span> <span class="token operator">--</span> to_uid是否已经喜欢from_uid
+    local is_from_uid_like_to_uid <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZSCORE"</span><span class="token punctuation">,</span> to_uid_like_me_key<span class="token punctuation">,</span> from_uid<span class="token punctuation">)</span> <span class="token operator">--</span> from_uid是否已经喜欢to_uid
+
+    <span class="token operator">--</span> to_uid是否喜欢from_uid
+    <span class="token keyword">if</span> is_to_uid_like_from_uid then
+        result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">else</span>
+        result<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+    end
+    <span class="token operator">--</span> from_uid是否已经喜欢过to_uid
+    <span class="token keyword">if</span> is_from_uid_like_to_uid then
+        result<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+    <span class="token keyword">else</span>
+        result<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    end
+
+    <span class="token operator">--</span> 检查是不是已经达成cp
+    local cp_status <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HMGET"</span><span class="token punctuation">,</span> key_cp_lock<span class="token punctuation">,</span> from_uid<span class="token punctuation">,</span> to_uid<span class="token punctuation">)</span> <span class="token operator">--</span> 双方最近cp达成状态
+    local is_from_uid_already_cp <span class="token operator">=</span> cp_status<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">--</span> from_uid的cp状态
+    local is_to_uid_already_cp <span class="token operator">=</span> cp_status<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token operator">--</span> to_uid的cp状态
+
+    <span class="token keyword">if</span> not is_from_uid_already_cp and not is_to_uid_already_cp and <span class="token string">"true"</span> <span class="token operator">==</span> can_make_cp then
+        <span class="token operator">--</span> 双方都没有cp，可以达成cp
+        result<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">else</span>
+        result<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">1</span>
+    end
+
+    <span class="token operator">--</span> 保存喜欢数据
+    <span class="token operator">--</span> 如果from_uid之前没有喜欢过to_uid
+    <span class="token keyword">if</span> not is_from_uid_like_to_uid then
+        local time_long <span class="token operator">=</span> <span class="token function">tonumber</span><span class="token punctuation">(</span>time_now<span class="token punctuation">)</span>
+        local from_uid_my_like_key <span class="token operator">=</span> key_my_like <span class="token punctuation">.</span><span class="token punctuation">.</span> room_id <span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token string">":"</span> <span class="token punctuation">.</span><span class="token punctuation">.</span> from_uid <span class="token operator">--</span> from_uid喜欢的人
+
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> from_uid_my_like_key<span class="token punctuation">,</span> time_long<span class="token punctuation">,</span> to_uid<span class="token punctuation">)</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"ZADD"</span><span class="token punctuation">,</span> to_uid_like_me_key<span class="token punctuation">,</span> time_long<span class="token punctuation">,</span> from_uid<span class="token punctuation">)</span>
+
+        <span class="token operator">--</span> 防御性ttl
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> from_uid_my_like_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> to_uid_like_me_key<span class="token punctuation">,</span> one_day_seconds<span class="token punctuation">)</span>
+    end
+
+    <span class="token keyword">if</span> result<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">0</span> and is_to_uid_like_from_uid then
+        <span class="token operator">--</span> 加个锁可以防止区内cp重复
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HMSET"</span><span class="token punctuation">,</span> key_cp_lock<span class="token punctuation">,</span> from_uid<span class="token punctuation">,</span> to_uid<span class="token punctuation">,</span> to_uid<span class="token punctuation">,</span> from_uid<span class="token punctuation">)</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"EXPIRE"</span><span class="token punctuation">,</span> key_cp_lock<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">)</span>
+    end
+
+    <span class="token keyword">return</span> result
+end
+
+<span class="token operator">--</span> 解除cp
+local function <span class="token function">cancel_cp</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span>
+    <span class="token operator">--</span> 清空cp lock
+    local cp_uid <span class="token operator">=</span> <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HGET"</span><span class="token punctuation">,</span> key_cp_lock<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> cp_uid then
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HDEL"</span><span class="token punctuation">,</span> key_cp_lock<span class="token punctuation">,</span> cp_uid<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    <span class="token keyword">else</span>
+        <span class="token function">rcall</span><span class="token punctuation">(</span><span class="token string">"HDEL"</span><span class="token punctuation">,</span> key_cp_lock<span class="token punctuation">,</span> uid<span class="token punctuation">)</span>
+    end
+end
+
+<span class="token operator">--</span> echo
+local function <span class="token function">echo</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> ARGV
+end
+
+local fns <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+fns<span class="token punctuation">[</span><span class="token string">"apply_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> apply_mic
+fns<span class="token punctuation">[</span><span class="token string">"cancel_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> cancel_mic
+fns<span class="token punctuation">[</span><span class="token string">"on_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> on_mic
+fns<span class="token punctuation">[</span><span class="token string">"off_none_owner_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> off_none_owner_mic
+fns<span class="token punctuation">[</span><span class="token string">"on_owner_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> on_owner_mic
+fns<span class="token punctuation">[</span><span class="token string">"off_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> off_mic
+fns<span class="token punctuation">[</span><span class="token string">"open_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> open_mic
+fns<span class="token punctuation">[</span><span class="token string">"close_mic"</span><span class="token punctuation">]</span> <span class="token operator">=</span> close_mic
+fns<span class="token punctuation">[</span><span class="token string">"like_someone"</span><span class="token punctuation">]</span> <span class="token operator">=</span> like_someone
+fns<span class="token punctuation">[</span><span class="token string">"cancel_cp"</span><span class="token punctuation">]</span> <span class="token operator">=</span> cancel_cp
+fns<span class="token punctuation">[</span><span class="token string">"echo"</span><span class="token punctuation">]</span> <span class="token operator">=</span> echo
+
+<span class="token operator">--</span> 程序入口
+<span class="token keyword">if</span> #ARGV <span class="token operator">==</span> <span class="token number">0</span> then
+    <span class="token function">rerror</span><span class="token punctuation">(</span><span class="token string">"invalid args!"</span><span class="token punctuation">)</span>
+end
+
+<span class="token keyword">return</span> fns<span class="token punctuation">[</span>ARGV<span class="token punctuation">[</span>#ARGV<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token function">unpack</span><span class="token punctuation">(</span>ARGV<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个lua脚本有个地方写的很好</p>
+<pre><code>local fns = {}
+fns[&quot;apply_mic&quot;] = apply_mic
+fns[&quot;cancel_mic&quot;] = cancel_mic
+fns[&quot;on_mic&quot;] = on_mic
+fns[&quot;off_none_owner_mic&quot;] = off_none_owner_mic
+fns[&quot;on_owner_mic&quot;] = on_owner_mic
+fns[&quot;off_mic&quot;] = off_mic
+fns[&quot;open_mic&quot;] = open_mic
+fns[&quot;close_mic&quot;] = close_mic
+fns[&quot;like_someone&quot;] = like_someone
+fns[&quot;cancel_cp&quot;] = cancel_cp
+fns[&quot;echo&quot;] = echo
+
+-- 程序入口
+if #ARGV == 0 then
+    rerror(&quot;invalid args!&quot;)
+end
+
+return fns[ARGV[#ARGV]](unpack(ARGV))
+</code></pre><p>这是程序入口，用一个table来重定向函数，再用unpack制造一个可变参数函数。#是取参数长度。把函数名当成最后一个参数，就可以定位到方法。并执行。</p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/07/27/Redis脚本引擎模板/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/07/27/Redis脚本引擎模板/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

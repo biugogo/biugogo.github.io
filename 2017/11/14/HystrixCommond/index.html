@@ -1,0 +1,410 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/155784291680.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Hystrix Configuration</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Hystrix配置"><a href="#Hystrix配置" class="headerlink" title="Hystrix配置"></a><strong>Hystrix配置</strong></h1><h2 id="本文参考spring官方文档，Hystrix-Configuration-hystrix-javanica完成。你可以在这里找到一些有用的信息"><a href="#本文参考spring官方文档，Hystrix-Configuration-hystrix-javanica完成。你可以在这里找到一些有用的信息" class="headerlink" title=" 本文参考spring官方文档，Hystrix Configuration , hystrix-javanica完成。你可以在这里找到一些有用的信息"></a> 本文参考<a href="http://cloud.spring.io/spring-cloud-static/Camden.SR7/#_circuit_breaker_hystrix_clients" target="_blank" rel="noopener">spring官方文档</a>，<a href="https://github.com/Netflix/Hystrix/wiki/Configuration" target="_blank" rel="noopener">Hystrix Configuration</a> , <a href="https://github.com/Netflix/Hystrix/tree/master/hystrix-contrib/hystrix-javanica#configuration" target="_blank" rel="noopener">hystrix-javanica</a>完成。你可以在这里找到一些有用的信息</h2><h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p> Hystrix uses <a href="https://github.com/Netflix/archaius" target="_blank" rel="noopener">Archaius</a>  for the default implementation of properties for configuration.<br>Each property has four levels of precedence:</p>
+<ol>
+<li><strong>Global default from code</strong><br>This is the default if none of the following 3 are set. 优先级最低的级别，如果其他的级别没有设定，默认使用此项配置信息。<br>The global default is shown as “Default Value”. 所有未配置的项默认值。</li>
+<li><p><strong>Dynamic global default property</strong><br>You can change a global default value by using properties. 你可以改变这个默认值在配置文件中。<br>example in yml:</p>
+<pre class="line-numbers language-yml"><code class="language-yml"> hystrix:
+   command:
+     default:
+       execution:
+         isolation:
+           thread:
+             timeoutInMilliseconds: 60000
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>example in property:</p>
+<pre class="line-numbers language-java"><code class="language-java">  hystrix<span class="token punctuation">.</span>command<span class="token punctuation">.</span><span class="token keyword">default</span><span class="token punctuation">.</span>execution<span class="token punctuation">.</span>isolation<span class="token punctuation">.</span>thread<span class="token punctuation">.</span>timeoutInMilliseconds<span class="token operator">:</span> <span class="token number">60000</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p><strong>Instance default from code</strong><br>代码里设置Instance的default值，优先级高于前两项。这里有一个例子关于代码设置默认值给一个Instance：</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token function">HystrixCommandInstance</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">super</span><span class="token punctuation">(</span>Setter<span class="token punctuation">.</span><span class="token function">withGroupKey</span><span class="token punctuation">(</span>HystrixCommandGroupKey<span class="token punctuation">.</span>Factory<span class="token punctuation">.</span><span class="token function">asKey</span><span class="token punctuation">(</span><span class="token string">"ExampleGroup"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">andCommandPropertiesDefaults</span><span class="token punctuation">(</span>HystrixCommandProperties<span class="token punctuation">.</span><span class="token function">Setter</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">withExecutionTimeoutInMilliseconds</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，一些常用的值的设置，有简单的构造方式：</p>
+<pre class="line-numbers language-java"><code class="language-java"> <span class="token keyword">public</span> <span class="token function">HystrixCommandInstance</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">super</span><span class="token punctuation">(</span>HystrixCommandGroupKey<span class="token punctuation">.</span>Factory<span class="token punctuation">.</span><span class="token function">asKey</span><span class="token punctuation">(</span><span class="token string">"ExampleGroup"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><strong>Dynamic instance property</strong><br> 动态实例配置，是使用最多的方式就是使用动态设置instance配置的方式。<br> example：<pre class="line-numbers language-java"><code class="language-java"> hystrix<span class="token punctuation">.</span>command<span class="token punctuation">.</span>HystrixCommandKey<span class="token punctuation">.</span>execution<span class="token punctuation">.</span>isolation<span class="token punctuation">.</span>thread<span class="token punctuation">.</span>timeoutInMilliseconds
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+ HystrixCommandKey会被你HystrixCommand的HystrixCommandKey.name()也就是commandKey替换。</li>
+</ol>
+<hr>
+<h2 id="配置使用"><a href="#配置使用" class="headerlink" title="配置使用"></a>配置使用</h2><p> 这里使用注解动态配置实例的方式展示常用的配置，其他的配置级别可以参考interface中的配置demo配置。<br> 直接参考代码，注释部分是使用详情。</p>
+<pre class="line-numbers language-java"><code class="language-java">  <span class="token annotation punctuation">@HystrixCommand</span><span class="token punctuation">(</span>
+     <span class="token comment" spellcheck="true">//fallbackMethod name ,fallbackMethod name 支持重载，自动根据参数匹配，支持自动级联，支持同步异步{sync command,sync fallback}{async command, sync fallback}，{async command, async fallback}，默认同步顺序执行即可</span>
+     fallbackMethod <span class="token operator">=</span> <span class="token string">"ribbonGetUserFallback"</span><span class="token punctuation">,</span>
+     <span class="token comment" spellcheck="true">//group key is used for grouping together commands,default = class name</span>
+     groupKey <span class="token operator">=</span> <span class="token string">"ConsumerTestAction"</span><span class="token punctuation">,</span>
+     <span class="token comment" spellcheck="true">//default = the name of annotated method</span>
+     commandKey <span class="token operator">=</span> <span class="token string">"ribbonGetUser"</span><span class="token punctuation">,</span>
+     <span class="token comment" spellcheck="true">//represent a HystrixThreadPool</span>
+     threadPoolKey <span class="token operator">=</span> <span class="token string">"hystrixThreadPool"</span><span class="token punctuation">,</span>
+     commandProperties <span class="token operator">=</span><span class="token punctuation">{</span>
+         <span class="token comment" spellcheck="true">/*
+          * Execution设置
+          */</span>
+         <span class="token comment" spellcheck="true">//设置线程HystrixCommand执行的隔离策略</span>
+         <span class="token comment" spellcheck="true">//This property indicates which isolation strategy HystrixCommand.run() executes with, one of the following two choices: THREAD SEMAPHORE , default = THREAD</span>
+         <span class="token comment" spellcheck="true">//Generally the only time you should use semaphore isolation for HystrixCommands is when the call is so high volume (hundreds per second, per instance) that the overhead of separate threads is too high; this typically only applies to non-network calls.</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"execution.isolation.strategy"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"SEMAPHORE"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置commond执行超时时间，默认1000ms</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"execution.isolation.thread.timeoutInMilliseconds"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"1000"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置开关timeout，默认true</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"execution.timeout.enabled"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置发生超时是是否中断，默认true</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"execution.isolation.thread.interruptOnTimeout"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+         <span class="token comment" spellcheck="true">/*
+          * 设置执行取消时是否执行中断操作，默认false, 当前版本不可用
+          */</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"execution.isolation.thread.interruptOnCancel"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"false"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+         <span class="token comment" spellcheck="true">//设置最大请求数，只有在隔离策略SEMAPHORE时生效（the maximum number of requests allowed to a HystrixCommand.run() method）.默认10</span>
+         <span class="token comment" spellcheck="true">//If this maximum concurrent limit is hit then subsequent requests will be rejected.</span>
+         <span class="token comment" spellcheck="true">//理论上选择semaphore size的原则和选择thread size一致，但选用semaphore时每次执行的单元要比较小且执行速度快（ms级别），否则的话应该用thread。</span>
+         <span class="token comment" spellcheck="true">//The isolation principle is still the same so the semaphore should still be a small percentage of the overall container (i.e. Tomcat) thread pool, not all of or most of it, otherwise it provides no protection.</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"execution.isolation.semaphore.maxConcurrentRequests"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+         <span class="token comment" spellcheck="true">/*
+          * Fallback设置，可以被用于THREAD和SEMAPHORE
+          */</span>
+
+         <span class="token comment" spellcheck="true">//设置fallback方法的最大请求数（the maximum number of requests a HystrixCommand.getFallback() method is allowed to make from the calling thread.）。默认10</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fallback.isolation.semaphore.maxConcurrentRequests"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//是否执行fallback方法，默认true</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"fallback.enabled"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+         <span class="token comment" spellcheck="true">/*
+          *Circuit Breaker熔断设置
+          */</span>
+
+         <span class="token comment" spellcheck="true">//是否开启熔断保护，默认true</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.enabled"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//set the minimum number of requests in a rolling window that will trip the circuit.</span>
+         <span class="token comment" spellcheck="true">//rolling window内最小的请求数。如果设为20，那么当一个rolling window的时间内（比如说1个rolling window是10秒）收到19个请求，即使19个请求都失败，也不会触发circuit break。默认20</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.requestVolumeThreshold"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"20"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//set the amount of time, after tripping the circuit, to reject requests before allowing attempts again to determine if the circuit should again be closed.</span>
+         <span class="token comment" spellcheck="true">//简单来说，设置扫描间隔，确定是否应该改变断路器状态</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.sleepWindowInMilliseconds"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"5000"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置错误比率阀值，如果错误率>=该值，circuit会被打开，并短路所有请求触发fallback。默认50</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.errorThresholdPercentage"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"50"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置强制打开断路器，拒绝所有请求，默认false</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.forceOpen"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"false"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//forces the circuit breaker into a closed state in which it will allow requests regardless of the error percentage.</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.forceClosed"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"false"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+         <span class="token comment" spellcheck="true">/*
+          * Metrics 设置
+          */</span>
+
+         <span class="token comment" spellcheck="true">//设置统计的时间窗口值的，毫秒值，circuit break 的打开会根据1个rolling window的统计来计算.默认10000</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingStats.timeInMilliseconds"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10000"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置rolling window 的分片数，默认10片。每个片包含success，failure，timeout，rejection的次数的统计信息。</span>
+         <span class="token comment" spellcheck="true">//必须满足rolling window % numberBuckets == 0</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingStats.numBuckets"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//执行时是否enable指标的计算和跟踪，默认true</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingPercentile.enabled"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//不清楚作用????????????????</span>
+         <span class="token comment" spellcheck="true">//sets the duration of the rolling window in which execution times are kept to allow for percentile calculations，默认60000</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingPercentile.timeInMilliseconds"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"60000"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置rolling percentile window的分片数，默认6</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingPercentile.numBuckets"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"6"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//如果bucket size＝100，window＝10s，若这10s里有500次执行，只有最后100次执行会被统计到bucket里去。增加该值会增加内存开销以及排序的开销。默认100</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingPercentile.bucketSize"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"100"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//设置记录health 快照（用来统计成功和错误绿）的间隔，默认500ms</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.healthSnapshot.intervalInMilliseconds"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"500"</span><span class="token punctuation">)</span>
+     <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+     <span class="token comment" spellcheck="true">/*
+      * control the behavior of the thread-pools that Hystrix Commands execute on.
+      * Most of the time the default value of 10 threads will be fine (often it could be made smaller).
+      * larger公式：
+      *           每秒健康请求峰值×百分之99请求能完成的时间+一些空闲呼吸池
+      *           如： 每秒峰值30请求量 ，百分之99的请求能在0.2秒内完成。30*0.2=6+空闲呼吸池4=10
+      *           
+      * 基本得原则时保持线程池尽可能小，他主要是为了释放压力，防止资源被阻塞。当一切都是正常的时候，线程池一般仅会有1到2个线程激活来提供服务
+      */</span>
+     threadPoolProperties <span class="token operator">=</span> <span class="token punctuation">{</span>
+         <span class="token comment" spellcheck="true">//并发执行的最大线程数，默认值10</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"coreSize"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">/*
+          * Added in 1.5.9.当前版本不可用
+          * sets the maximum thread-pool size.
+          * This is the maximum amount of concurrency that can be supported without starting to reject HystrixCommands.
+          * Please note that this setting only takes effect if you also set allowMaximumSizeToDivergeFromCoreSize.
+          * Prior to 1.5.9, core and maximum sizes were always equal.
+          */</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"maximumSize"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"20"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">/*
+          * Added in 1.5.9.当前版本不可用
+          * This property allows the configuration for maximumSize to take effect.
+          * That value can then be equal to, or higher, than coreSize.
+          * Setting coreSize &lt; maximumSize creates a thread pool which can sustain maximumSize concurrency,
+          * but will return threads to the system during periods of relative inactivity. (subject to keepAliveTimeInMinutes)
+          */</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"allowMaximumSizeToDivergeFromCoreSize "</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">/*
+          * Added in 1.5.9.当前版本不可用
+          * sets the keep-alive time, in minutes.默认1。
+          * Prior to 1.5.9,all thread pools were fixed-size, as coreSize == maximumSize.
+          * In 1.5.9 and after, setting allowMaximumSizeToDivergeFromCoreSize to true allows those 2 values to diverge,
+          * such that the pool may acquire/release threads.
+          * If coreSize &lt; maximumSize, then this property controls how long a thread will go unused before being released.
+          */</span>
+
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"keepAliveTimeMinutes"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"1"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">/*
+          * 设置最大队列长度，默认值-1
+          *   如果设置-1，则使用SynchronousQueue同步队列。SynchronousQueue是无界的，是一种无缓冲的等待队列，但是由于该Queue本身的特性，在某次添加元素后必须等待其他线程取走后才能继续添加；可以认为SynchronousQueue是一个缓存值为1的阻塞队列。
+          *   如果设置为大于0的数，如100，使用LinkedBlockingQueue。new LinkedBlockingQueue(100)生成一个100队列长度的同步队列  LinkedBlockingQueue是无界的，是一个无界缓存的等待队列。基于链表的阻塞队列，内部维持着一个数据缓冲队列（该队列由链表构成）。
+          *   当生产者往队列中放入一个数据时，队列会从生产者手中获取数据，并缓存在队列内部，而生产者立即返回；只有当队列缓冲区达到最大值缓存容量时（LinkedBlockingQueue可以通过构造函数指定该值），才会阻塞生产者队列。
+          *   直到消费者从队列中消费掉一份数据，生产者线程会被唤醒，反之对于消费者这端的处理也基于同样的原理。
+          */</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"maxQueueSize"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"20"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//一个可以动态修改队列长度的值，maxQueueSize不能被动态修改，这个参数将允许我们动态设置该值，达到queueSizeRejectionThreshold该值后，请求也会被拒绝。</span>
+         <span class="token comment" spellcheck="true">//note:如果设置 maxQueueSize == -1，该字段将不起作用</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"queueSizeRejectionThreshold"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"15"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+
+
+         <span class="token comment" spellcheck="true">/*
+          * 并没有发现这两个配置放在threadPoolProperties和commandProperties的区别??????????????????????????
+          */</span>
+         <span class="token comment" spellcheck="true">//分片数量，timeInMilliseconds需要整除numBuckets</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingStats.numBuckets"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10"</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+         <span class="token comment" spellcheck="true">//线程池统计指标的时间，默认10000</span>
+         <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"metrics.rollingStats.timeInMilliseconds"</span><span class="token punctuation">,</span> value <span class="token operator">=</span> <span class="token string">"10000"</span><span class="token punctuation">)</span>
+     <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token comment" spellcheck="true">//an ability to specify exceptions types which should be ignored without fallback logic.The exception will be wrapped in HystrixBadRequestException</span>
+     ignoreExceptions <span class="token operator">=</span> <span class="token punctuation">{</span>BaseRuntimeException<span class="token punctuation">.</span><span class="token keyword">class</span>
+     <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     <span class="token comment" spellcheck="true">//all exceptions that are not ignored are raised as the cause of a HystrixRuntimeException</span>
+     raiseHystrixExceptions <span class="token operator">=</span><span class="token punctuation">{</span>
+         HystrixException<span class="token punctuation">.</span>RUNTIME_EXCEPTION
+     <span class="token punctuation">}</span>
+     <span class="token punctuation">)</span>
+ <span class="token keyword">public</span> User <span class="token function">ribbonGetUser</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+ <span class="token punctuation">{</span>
+     <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>restTemplate<span class="token punctuation">.</span><span class="token function">getForObject</span><span class="token punctuation">(</span><span class="token string">"http://eureka-test-producer/getUser"</span><span class="token punctuation">,</span> User<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2017/11/14/HystrixCommond/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2017/11/14/HystrixCommond/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

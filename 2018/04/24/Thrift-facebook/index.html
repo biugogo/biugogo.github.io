@@ -1,0 +1,536 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/2.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Thrift Annotation and Maven Pugin</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Thrift-Annotation-and-maven-pugin"><a href="#Thrift-Annotation-and-maven-pugin" class="headerlink" title="Thrift Annotation and maven pugin"></a>Thrift Annotation and maven pugin</h1><hr>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>最近项目里用到了Thrift，但是传统的方式，会生成很多冗余代码。我们用不上也不需要看，但是对于thrift<br>必须用到的。并且开发很是麻烦，还得切换命令行什么的。这里记录一个demo。使用maven自动生成thrift接口类并且使用thrift Annotation 和 thrift service。这里仅仅是一个例子，距离生成使用thrift还是有一定差距，毕竟还得有服务发现注册等等组件。<br>这里的server和client已经实现了多线程pool等，但是在例子中没有使用，请根据实际生产配置。</p>
+<hr>
+<h2 id="Step1-使用maven构建thrift文件"><a href="#Step1-使用maven构建thrift文件" class="headerlink" title="Step1 使用maven构建thrift文件"></a>Step1 使用maven构建thrift文件</h2><p>pom配置</p>
+<pre><code>&lt;profiles&gt;
+  &lt;profile&gt;
+    &lt;id&gt;genThrift&lt;/id&gt;
+    &lt;build&gt;
+      &lt;plugins&gt;
+        &lt;plugin&gt;
+          &lt;groupId&gt;com.facebook.mojo&lt;/groupId&gt;
+          &lt;artifactId&gt;swift-maven-plugin&lt;/artifactId&gt;
+          &lt;version&gt;0.12.2-SNAPSHOT&lt;/version&gt;
+          &lt;executions&gt;
+            &lt;execution&gt;
+              &lt;goals&gt;
+                &lt;goal&gt;generate&lt;/goal&gt;
+              &lt;/goals&gt;
+            &lt;/execution&gt;
+          &lt;/executions&gt;
+          &lt;configuration&gt;
+            &lt;idlFiles&gt;
+              &lt;!--这里是.thrift存放的位置 --&gt;
+              &lt;directory&gt;src/main/thrift&lt;/directory&gt;
+              &lt;includes&gt;
+                &lt;include&gt;
+                  *.thrift
+                &lt;/include&gt;
+              &lt;/includes&gt;
+              &lt;excludes&gt;
+              &lt;/excludes&gt;
+            &lt;/idlFiles&gt;
+            &lt;usePlainJavaNamespace&gt;true&lt;/usePlainJavaNamespace&gt;
+            &lt;!-- 配置java文件输出的目录 --&gt;
+            &lt;outputFolder&gt;src/main/java&lt;/outputFolder&gt;
+            &lt;!-- 不添加thriftException，使用自定义exception --&gt;
+            &lt;addThriftExceptions&gt;false&lt;/addThriftExceptions&gt;
+            &lt;!-- 自定义配置Annotation，定义的annotation会自动追加到生成的接口上 --&gt;
+            &lt;serviceAnnotations&gt;
+              &lt;serviceAnnotation&gt;com.yy.apollo.demo.ServiceCenterExporter&lt;/serviceAnnotation&gt;
+              &lt;serviceAnnotation&gt;com.yy.apollo.demo.ServiceCenterReference&lt;/serviceAnnotation&gt;
+            &lt;/serviceAnnotations&gt;
+          &lt;/configuration&gt;
+        &lt;/plugin&gt;
+      &lt;/plugins&gt;
+    &lt;/build&gt;
+  &lt;/profile&gt;
+&lt;/profiles&gt;
+</code></pre><p>maven命令</p>
+<pre><code>mvn clean install -P genThrift
+</code></pre><p>eclipse中配置图<br><img src="https://github.com/apollochen123/image/blob/master/thrift/thrift-maven%E9%85%8D%E7%BD%AE%E5%9B%BE.jpg?raw=true" alt="Thrift-maven配置"></p>
+<h2 id="Step2-Demo的-thrift文件"><a href="#Step2-Demo的-thrift文件" class="headerlink" title="Step2 Demo的.thrift文件"></a>Step2 Demo的.thrift文件</h2><pre><code>namespace java.swift com.yy.apollo.demo.thrift
+namespace java com.yy.apollo.demo.thrift
+
+enum RankType{
+    DAY,
+    WEEK,
+    MONTH,
+    ALL
+}
+enum RankSort{
+    ASC,
+    DESC
+}
+
+enum ErrorCode{
+    APP_INFO_NOT_EXIST,
+    SYS_ERROR,
+    OPTIONS_ERROR
+}
+exception RankException{
+    1: required ErrorCode code;
+    2: optional string msg;
+}
+struct RankItem{
+    1: optional string id;
+    2: optional i64 score;
+    3: optional i64 rank;
+    4: optional RankType type;
+    5: optional string rankName;
+}
+
+typedef list&lt;RankItem&gt; RankItemList
+typedef list&lt;string&gt; RankNameList
+typedef list&lt;RankType&gt; RankTypeList
+
+struct AppInfo{
+    1: required string appId;
+    2: required string rankId;
+}
+
+struct RankInfo{
+    1: required RankType type;
+    2: optional string name;
+}
+
+struct PutScoreOptions{
+    1: optional i64 time;
+    2: optional RankNameList rankNameList;
+    3: optional RankTypeList excludeRankTypeList;
+    4: optional bool includeItemIdRank;
+}
+
+struct PutScoreResult{
+    1: optional RankItemList itemIdRankList;
+    2: optional map&lt;string,RankItemList&gt; customNameMap
+}
+
+
+struct GetRangeOptions{
+    1: optional i64 time;
+    2: optional RankNameList rankNameList;
+    3: optional bool reversed;
+}
+
+struct GetRangeResult{
+    1: optional RankItemList rankList;
+    2: optional map&lt;string,RankItemList&gt; nameRankListMap;
+}
+
+struct GetRankOptions{
+    1: optional i64 time;
+    2: optional string rankName;
+    3: optional i32 preN;
+    4: optional i32 nextN;
+    5: optional bool reversed;
+}
+
+struct GetRankResult{
+    1: optional RankItem rank;
+    2: optional RankItemList preList;
+    3: optional RankItemList nextList
+}
+
+service WolfkillRankService{
+    void ping();
+
+    /**
+    * 将itemId对应的itemScore放入排行榜中
+    *
+    * @param appInfo 排行榜应用信息
+    * @param itemId 排行项Id
+    * @param itemScore 排行项积分
+    * @param options 可选参数
+    *
+    * @throws RankException 失败则抛出排行榜异常
+    */
+    PutScoreResult putScore(1:AppInfo appInfo,2:string itemId,3:i64 itemScore, 4:PutScoreOptions options) throws (1:RankException rankException);
+
+    /**
+    * 查询排行榜区间
+    *
+    * @param appInfo 排行榜应用信息
+    * @param type 排行榜类型
+    * @param start 开始下标（0开始）
+    * @param stop 结束下标
+    * @param options 可选参数
+    *
+    * @throws RankException 失败则抛出排行榜异常
+    */
+    GetRangeResult getRange(1:AppInfo appInfo,2:RankType type,3:i64 start,4:i64 stop,5:GetRangeOptions options) throws (1:RankException rankException);
+
+    /**
+    * 查询排行信息
+    *
+    * @param appInfo 排行榜应用信息
+    * @param type 排行榜类型
+    * @param itemId 排行项Id
+    * @param options 可选参数
+    *
+    * @throws RankException 失败则抛出排行榜异常
+    */
+    GetRankResult getRank(1:AppInfo appInfo,2:RankType type,3:string itemId,4:GetRankOptions options) throws (1:RankException rankException);
+}
+</code></pre><h2 id="step3-生成的thrift服务类"><a href="#step3-生成的thrift服务类" class="headerlink" title="step3 生成的thrift服务类"></a>step3 生成的thrift服务类</h2><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>thrift<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>codec<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>service<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>common<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>ListenableFuture<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>*<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@com</span><span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>ServiceCenterExporter  
+<span class="token annotation punctuation">@com</span><span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>ServiceCenterReference  
+<span class="token annotation punctuation">@ThriftService</span><span class="token punctuation">(</span><span class="token string">"WolfkillRankService"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">WolfkillRankService</span>
+<span class="token punctuation">{</span>
+    <span class="token annotation punctuation">@com</span><span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>ServiceCenterExporter  
+    <span class="token annotation punctuation">@com</span><span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>ServiceCenterReference  
+    <span class="token annotation punctuation">@ThriftService</span><span class="token punctuation">(</span><span class="token string">"WolfkillRankService"</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Async</span>
+    <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"ping"</span><span class="token punctuation">)</span>
+        ListenableFuture<span class="token operator">&lt;</span>Void<span class="token operator">></span> <span class="token function">ping</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"putScore"</span><span class="token punctuation">)</span>
+        ListenableFuture<span class="token operator">&lt;</span>PutScoreResult<span class="token operator">></span> <span class="token function">putScore</span><span class="token punctuation">(</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"appInfo"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> AppInfo appInfo<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"itemId"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> String itemId<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"itemScore"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> <span class="token keyword">long</span> itemScore<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"options"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> PutScoreOptions options
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"getRange"</span><span class="token punctuation">)</span>
+        ListenableFuture<span class="token operator">&lt;</span>GetRangeResult<span class="token operator">></span> <span class="token function">getRange</span><span class="token punctuation">(</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"appInfo"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> AppInfo appInfo<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"type"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> RankType type<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"start"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> <span class="token keyword">long</span> start<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"stop"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> <span class="token keyword">long</span> stop<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"options"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> GetRangeOptions options
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"getRank"</span><span class="token punctuation">)</span>
+        ListenableFuture<span class="token operator">&lt;</span>GetRankResult<span class="token operator">></span> <span class="token function">getRank</span><span class="token punctuation">(</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"appInfo"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> AppInfo appInfo<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"type"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> RankType type<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"itemId"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> String itemId<span class="token punctuation">,</span>
+            <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"options"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> GetRankOptions options
+        <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"ping"</span><span class="token punctuation">)</span>
+    <span class="token keyword">void</span> <span class="token function">ping</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+    <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"putScore"</span><span class="token punctuation">,</span>
+                  exception <span class="token operator">=</span> <span class="token punctuation">{</span>
+                      <span class="token annotation punctuation">@ThriftException</span><span class="token punctuation">(</span>type<span class="token operator">=</span>RankException<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    PutScoreResult <span class="token function">putScore</span><span class="token punctuation">(</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"appInfo"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> AppInfo appInfo<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"itemId"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> String itemId<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"itemScore"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> <span class="token keyword">long</span> itemScore<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"options"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> PutScoreOptions options
+    <span class="token punctuation">)</span> <span class="token keyword">throws</span> RankException<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"getRange"</span><span class="token punctuation">,</span>
+                  exception <span class="token operator">=</span> <span class="token punctuation">{</span>
+                      <span class="token annotation punctuation">@ThriftException</span><span class="token punctuation">(</span>type<span class="token operator">=</span>RankException<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    GetRangeResult <span class="token function">getRange</span><span class="token punctuation">(</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"appInfo"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> AppInfo appInfo<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"type"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> RankType type<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"start"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> <span class="token keyword">long</span> start<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"stop"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> <span class="token keyword">long</span> stop<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"options"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> GetRangeOptions options
+    <span class="token punctuation">)</span> <span class="token keyword">throws</span> RankException<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@ThriftMethod</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"getRank"</span><span class="token punctuation">,</span>
+                  exception <span class="token operator">=</span> <span class="token punctuation">{</span>
+                      <span class="token annotation punctuation">@ThriftException</span><span class="token punctuation">(</span>type<span class="token operator">=</span>RankException<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> id<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+                  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    GetRankResult <span class="token function">getRank</span><span class="token punctuation">(</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"appInfo"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> AppInfo appInfo<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"type"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> RankType type<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"itemId"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> String itemId<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@ThriftField</span><span class="token punctuation">(</span>value<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"options"</span><span class="token punctuation">)</span> <span class="token keyword">final</span> GetRankOptions options
+    <span class="token punctuation">)</span> <span class="token keyword">throws</span> RankException<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="Step4-创建server"><a href="#Step4-创建server" class="headerlink" title="Step4 创建server"></a>Step4 创建server</h2><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>server<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Arrays<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>nifty<span class="token punctuation">.</span>core<span class="token punctuation">.</span>RequestContext<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>codec<span class="token punctuation">.</span>ThriftCodecManager<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>service<span class="token punctuation">.</span>ThriftEventHandler<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>service<span class="token punctuation">.</span>ThriftServer<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>service<span class="token punctuation">.</span>ThriftServerConfig<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>service<span class="token punctuation">.</span>ThriftServiceProcessor<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>service<span class="token punctuation">.</span>ExampleService<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>WolfkillRankService<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Server</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        WolfkillRankService wolfkillRankService <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ExampleService</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        ThriftServiceProcessor processor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThriftServiceProcessor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ThriftCodecManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                Arrays<span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">myhander</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> wolfkillRankService<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token annotation punctuation">@SuppressWarnings</span><span class="token punctuation">(</span><span class="token string">"resource"</span><span class="token punctuation">)</span>
+        ThriftServer server <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThriftServer</span><span class="token punctuation">(</span>processor<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">ThriftServerConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setPort</span><span class="token punctuation">(</span><span class="token number">9001</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">myhander</span> <span class="token keyword">extends</span> <span class="token class-name">ThriftEventHandler</span> <span class="token punctuation">{</span>
+        <span class="token keyword">public</span> Object <span class="token function">getContext</span><span class="token punctuation">(</span>String methodName<span class="token punctuation">,</span> RequestContext requestContext<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"methodName:"</span> <span class="token operator">+</span> methodName <span class="token operator">+</span> <span class="token string">"       requestContext:"</span> <span class="token operator">+</span> requestContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> requestContext<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="Step5-创建-client"><a href="#Step5-创建-client" class="headerlink" title="Step5 创建 client"></a>Step5 创建 client</h2><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>client<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span>ExecutionException<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>nifty<span class="token punctuation">.</span>client<span class="token punctuation">.</span>FramedClientConnector<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>facebook<span class="token punctuation">.</span>swift<span class="token punctuation">.</span>service<span class="token punctuation">.</span>ThriftClientManager<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>common<span class="token punctuation">.</span>net<span class="token punctuation">.</span>HostAndPort<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>AppInfo<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollo<span class="token punctuation">.</span>demo<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>WolfkillRankService<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ThriftClient</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        ThriftClientManager clientManager <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThriftClientManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        FramedClientConnector connector <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">FramedClientConnector</span><span class="token punctuation">(</span>HostAndPort<span class="token punctuation">.</span><span class="token function">fromParts</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9001</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            WolfkillRankService wolfkillRankService <span class="token operator">=</span> clientManager<span class="token punctuation">.</span><span class="token function">createClient</span><span class="token punctuation">(</span>connector<span class="token punctuation">,</span> WolfkillRankService<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            wolfkillRankService<span class="token punctuation">.</span><span class="token function">ping</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>wolfkillRankService<span class="token punctuation">.</span><span class="token function">putScore</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AppInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"itemId"</span><span class="token punctuation">,</span> <span class="token number">888</span><span class="token punctuation">,</span> null<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> <span class="token operator">|</span> ExecutionException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="执行结果"><a href="#执行结果" class="headerlink" title="执行结果"></a>执行结果</h2><p>先运行server，在运行client</p>
+<h3 id="console-for-client"><a href="#console-for-client" class="headerlink" title="console for client"></a>console for client</h3><pre><code>PutScoreResult{itemIdRankList=[RankItem{id=itemId, score=888, rank=0, type=null, rankName=null}], customNameMap=null}
+</code></pre><h3 id="console-for-Server"><a href="#console-for-Server" class="headerlink" title="console for Server"></a>console for Server</h3><pre><code>methodName:WolfkillRankService.ping       requestContext:com.facebook.nifty.core.NiftyRequestContext@1201209d
+Pong
+methodName:WolfkillRankService.putScore       requestContext:com.facebook.nifty.core.NiftyRequestContext@7e12da9a
+</code></pre>
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/04/24/Thrift-facebook/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/04/24/Thrift-facebook/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

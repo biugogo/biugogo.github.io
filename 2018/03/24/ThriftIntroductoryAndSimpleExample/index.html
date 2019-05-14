@@ -1,0 +1,421 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/155784268684.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Thrift</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Thrift"><a href="#Thrift" class="headerlink" title="Thrift"></a>Thrift</h1><hr>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><blockquote>
+<p>The Apache Thrift software framework, for scalable cross-language services development, combines a software stack with a code generation engine to build services that work efficiently and seamlessly between C++, Java, Python, PHP, Ruby, Erlang, Perl, Haskell, C#, Cocoa, JavaScript, Node.js, Smalltalk, OCaml and Delphi and other languages.</p>
+</blockquote>
+<p>简单说，就是一个跨平台的代码生成工具，生成代码是用来远程调用函数的框架.</p>
+<hr>
+<p>参考博文：</p>
+<ul>
+<li><a href="http://thrift-tutorial.readthedocs.io/en/latest/thrift-stack.html" target="_blank" rel="noopener">http://thrift-tutorial.readthedocs.io/en/latest/thrift-stack.html</a></li>
+<li><a href="http://thrift.apache.org/static/files/thrift-20070401.pdf" target="_blank" rel="noopener">http://thrift.apache.org/static/files/thrift-20070401.pdf</a></li>
+<li><a href="https://www.cnblogs.com/exceptioneye/p/4945073.html" target="_blank" rel="noopener">https://www.cnblogs.com/exceptioneye/p/4945073.html</a></li>
+<li><a href="http://blog.163.com/kewangwu@126/blog/static/86728471201271353354581/" target="_blank" rel="noopener">http://blog.163.com/kewangwu@126/blog/static/86728471201271353354581/</a></li>
+<li><a href="https://www.jianshu.com/p/0f4113d6ec4b" target="_blank" rel="noopener">https://www.jianshu.com/p/0f4113d6ec4b</a></li>
+</ul>
+<hr>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>本文是基于window的，linux其实是类似的</p>
+<ol>
+<li>下载thirft.exe <a href="http://archive.apache.org/dist/thrift/" target="_blank" rel="noopener">官网下载</a>,本文选择0.9.3版本 thrift-0.9.3.exe ，并将下载文件重命名为thrift.exe</li>
+<li><p>配置环境变量：<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/thrift%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg" alt="配置环境变量"></p>
+</li>
+<li><p>查看是否安装成功</p>
+<pre><code>thrift -version
+</code></pre></li>
+<li>编写一个.thrift文件，example：Hello.thrift<pre><code>namespace java com.yy.apolloTest
+service Hello {
+string hi(1:string para);
+}
+</code></pre>这里的namespace 类似java的包</li>
+<li><p>进入Hello.thrift所在目录，使用命令行把上面的Hello.thrift编译为java代码</p>
+<pre><code>thrift --gen java Hello.thrift
+</code></pre><p>未报错，说明编译成功，你能在Hello.thrift所在目录看到gen-java文件生成，文件结构为上方namespace定义的结构<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/thrift%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.png" alt="文件结构"></p>
+</li>
+<li><p>拷贝生成的java文件到项目工程<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/thrift%E9%A1%B9%E7%9B%AE%E6%A0%91%E7%8A%B6%E5%9B%BE.png" alt="图"></p>
+</li>
+</ol>
+<hr>
+<h2 id="Simple-example-with-java"><a href="#Simple-example-with-java" class="headerlink" title="Simple example with java"></a>Simple example with java</h2><h3 id="1-实现Hello-Iface，实现你需要被远程调用的方法"><a href="#1-实现Hello-Iface，实现你需要被远程调用的方法" class="headerlink" title="1.实现Hello.Iface，实现你需要被远程调用的方法"></a>1.实现Hello.Iface，实现你需要被远程调用的方法</h3><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>ByteBuffer<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>text<span class="token punctuation">.</span>SimpleDateFormat<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>TException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>google<span class="token punctuation">.</span>protobuf<span class="token punctuation">.</span>InvalidProtocolBufferException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>protoc<span class="token punctuation">.</span>UserProtos<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HelloImpl</span> <span class="token keyword">implements</span> <span class="token class-name">Hello<span class="token punctuation">.</span>Iface</span> <span class="token punctuation">{</span>
+
+    SimpleDateFormat format <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SimpleDateFormat</span><span class="token punctuation">(</span><span class="token string">"yyyy.MM.dd:HH:mm:ss"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">hi</span><span class="token punctuation">(</span>String para<span class="token punctuation">)</span> <span class="token keyword">throws</span> TException <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> format<span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span>System<span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="2-实现Service"><a href="#2-实现Service" class="headerlink" title="2.实现Service"></a>2.实现Service</h3><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>server<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>protocol<span class="token punctuation">.</span>TBinaryProtocol<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>TServerSocket<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>TTransportException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>Hello<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>Hello<span class="token punctuation">.</span>Processor<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>HelloImpl<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>protocol<span class="token punctuation">.</span>TBinaryProtocol<span class="token punctuation">.</span>Factory<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>server<span class="token punctuation">.</span>TServer<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>server<span class="token punctuation">.</span>TThreadPoolServer<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>server<span class="token punctuation">.</span>TThreadPoolServer<span class="token punctuation">.</span>Args<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Server</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">startServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"server start"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//使用Socket 协议传输</span>
+            TServerSocket serverTransport <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TServerSocket</span><span class="token punctuation">(</span><span class="token number">9001</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">//处理器，包含需要被远程调用的方法</span>
+            Hello<span class="token punctuation">.</span>Processor process <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Processor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">HelloImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">//使用二进制编码</span>
+            Factory portFactory <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TBinaryProtocol<span class="token punctuation">.</span>Factory</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">//配置Server的参数</span>
+            Args args <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Args</span><span class="token punctuation">(</span>serverTransport<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            args<span class="token punctuation">.</span><span class="token function">processor</span><span class="token punctuation">(</span>process<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            args<span class="token punctuation">.</span><span class="token function">protocolFactory</span><span class="token punctuation">(</span>portFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//配置使用哪种Server，这里是使用线程池Server</span>
+            TServer server <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TThreadPoolServer</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            server<span class="token punctuation">.</span><span class="token function">serve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TTransportException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"server end"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Server server <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Server</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        server<span class="token punctuation">.</span><span class="token function">startServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="3-实现client"><a href="#3-实现client" class="headerlink" title="3. 实现client"></a>3. 实现client</h3><pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>client<span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>io<span class="token punctuation">.</span>IOException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>nio<span class="token punctuation">.</span>ByteBuffer<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>TException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>protocol<span class="token punctuation">.</span>TBinaryProtocol<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>protocol<span class="token punctuation">.</span>TProtocol<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>TSocket<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>TTransport<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>thrift<span class="token punctuation">.</span>transport<span class="token punctuation">.</span>TTransportException<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>Hello<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>protoc<span class="token punctuation">.</span>UserAdd<span class="token punctuation">;</span>
+<span class="token keyword">import</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>apollotest<span class="token punctuation">.</span>protoc<span class="token punctuation">.</span>UserProtos<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">startClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"client"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        TTransport transport<span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//访问9001端口的socket</span>
+        transport <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TSocket</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">,</span> <span class="token number">9001</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//使用二进制编码协议</span>
+        TProtocol protocol <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TBinaryProtocol</span><span class="token punctuation">(</span>transport<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">//创建client</span>
+        Hello<span class="token punctuation">.</span>Client client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Hello<span class="token punctuation">.</span>Client</span><span class="token punctuation">(</span>protocol<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//打开连接</span>
+            transport<span class="token punctuation">.</span><span class="token function">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//远程调用hi()方法，print返回String</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>client<span class="token punctuation">.</span><span class="token function">hi</span><span class="token punctuation">(</span><span class="token string">"2018"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TTransportException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">TException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        transport<span class="token punctuation">.</span><span class="token function">close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"client close"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Client client <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Client</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        client<span class="token punctuation">.</span><span class="token function">startClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Console</p>
+<pre><code>client
+2018.03.24:17:12:59
+client close
+</code></pre><h3 id="4-遇到的问题："><a href="#4-遇到的问题：" class="headerlink" title="4.遇到的问题："></a>4.<strong>遇到的问题</strong>：</h3><p>生成的Hello.java在Eclipse中报错，自动编译的代码跑不过，需要mvn compile才能跑，项目会有叉，但是不影响运行。逼死强迫症系列。<br>在Idea中完美运行，没有问题<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/thrift%E7%94%9F%E6%88%90%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99.png" alt="错误"></p>
+<hr>
+<h2 id="简单原理分析"><a href="#简单原理分析" class="headerlink" title="简单原理分析"></a>简单原理分析</h2><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/thrift%E5%8E%9F%E7%90%86%E5%9B%BE%E8%A7%A3.png" alt="原理图"></p>
+<p>Thrift 是一个跨语言的序列化/RPC框架，它含有三个主要的组件：</p>
+<ol>
+<li>protocol：protocol定义了消息是怎样序列化的</li>
+<li>transport：transport定义了消息是怎样在客户端和服务器端之间通信的，server用于从transport接收序列化的消息，根据protocol反序列化之，调用用户定义的消息处理器，并序列化消息处理器的响应，然后再将它们写回transport</li>
+<li>server：单线程Server还是多线程，线程池server，是阻塞方式还是非阻塞方式</li>
+</ol>
+<h3 id="Protocol"><a href="#Protocol" class="headerlink" title="Protocol"></a>Protocol</h3><p>thrift的序列化方式主要有：<br><strong>TBinaryProtocol</strong>：二进制协议-直接二进制格式编码数字值为二进制，而不是转换为文本。<br><strong>TCompactProtocol</strong>：紧凑的协议-非常有效，密集的数据编码.<br><strong>TDenseProtocol</strong>：密协议类似tcompactprotocol，从传送的内容中去除元信息，并将其添加回接收器<br>。密集的协议仍然是实验性的和java暂时不可用<br><strong>TJSONProtocol</strong>：使用Json编码数据<br><strong>TSimpleJSONProtocol</strong>：一个只用json写的协议，适合脚本语言解析<br><strong>TDebugProtocol</strong>：使用人类可以看的文本传输，在debug时候<br><img src="https://raw.githubusercontent.com/apollochen123/image/master/Thrift%E4%BC%A0%E8%BE%93%E6%A0%BC%E5%BC%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9.png" alt="优缺点"></p>
+<h3 id="Transport"><a href="#Transport" class="headerlink" title="Transport"></a>Transport</h3><p>TSocket：套接字-用于传输的阻塞套接字I/O。<br>TFramedTransport：帧传输——在帧中发送数据，每个帧在前面加上一个长度。使用非阻塞服务器时需要进行此传输.   TFileTransport：文件传输-此传输将写入文件。而这个运输不包含java实现的，它应该是足够简单的实现。<br>TMemoryTransport：存储运输使用内存I/O的java实现使用一个简单的ByteArrayOutputStream实现。<br>TZlibTransport：zlib压缩使用zlib运输执行。与其他交通工具一起使用。java实现不可用。</p>
+<h3 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h3><p>thrift的序列化方式主要有</p>
+<ul>
+<li>TSimpleServer<br>TSimplerServer接受一个连接，处理连接请求，直到客户端关闭了连接，它才回去接受一个新的连接。正因为它只在一个单独的线程中以阻塞I/O的方式完成这些工作，所以它只能服务一个客户端连接，其他所有客户端在被服务器端接受之前都只能等待。TSimpleServer主要用于测试目的，不要在生产环境中使用它！</li>
+<li>TNonblockingServer<br>TNonblockingServer使用非阻塞的I/O解决了TSimpleServer一个客户端阻塞其他所有客户端的问题。它使用了java.nio.channels.Selector，通过调用select()，它使得你阻塞在多个连接上，而不是阻塞在单一的连接上。当一或多个连接准备好被接受/读/写时，select()调用便会返回。TNonblockingServer处理这些连接的时候，要么接受它，要么从它那读数据，要么把数据写到它那里，然后再次调用select()来等待下一个可用的连接。通用这种方式，server可同时服务多个客户端，而不会出现一个客户端把其他客户端全部“饿死”的情况。然而，还有个棘手的问题：所有消息是被调用select()方法的同一个线程处理的。假设有10个客户端，处理每条消息所需时间为100毫秒，那么，latency和吞吐量分别是多少？当一条消息被处理的时候，其他9个客户端就等着被select，所以客户端需要等待1秒钟才能从服务器端得到回应，吞吐量就是10个请求/秒。如果可以同时处理多条消息的话，会很不错吧？</li>
+<li>THsHaServer<br>THsHaServer（半同步/半异步的server）就应运而生了。它使用一个单独的线程来处理网络I/O，一个独立的worker线程池来处理消息。这样，只要有空闲的worker线程，消息就会被立即处理，因此多条消息能被并行处理。用上面的例子来说，现在的latency就是100毫秒，而吞吐量就是100个请求/秒。</li>
+<li>TThreadedSelectorServer<br>Thrift 0.8引入了另一种server实现，即TThreadedSelectorServer。它与THsHaServer的主要区别在于，TThreadedSelectorServer允许你用多个线程来处理网络I/O。它维护了两个线程池，一个用来处理网络I/O，另一个用来进行请求的处理。当网络I/O是瓶颈的时候，TThreadedSelectorServer比THsHaServer的表现要好。为了展现它们的区别，我进行了一个测试，令其消息处理器在不做任何工作的情况下立即返回，以衡量在不同客户端数量的情况下的平均latency和吞吐量。对THsHaServer，我使用32个worker线程；对TThreadedSelectorServer，我使用16个worker线程和16个selector线程。</li>
+<li>TThreadPoolServer<br>TThreadPoolServer与其他三种server不同的是： 有一个专用的线程用来接受连接。一旦接受了一个连接，它就会被放入ThreadPoolExecutor中的一个worker线程里处理。worker线程被绑定到特定的客户端连接上，直到它关闭。一旦连接关闭，该worker线程就又回到了线程池中。你可以配置线程池的最小、最大线程数，默认值分别是5（最小）和Integer.MAX_VALUE（最大）。</li>
+</ul>
+<hr>
+<h2 id="Thrift数据结构"><a href="#Thrift数据结构" class="headerlink" title="Thrift数据结构"></a>Thrift数据结构</h2><h3 id="一个稍复杂的-thrift文件"><a href="#一个稍复杂的-thrift文件" class="headerlink" title="一个稍复杂的.thrift文件"></a>一个稍复杂的.thrift文件</h3><pre><code>namespace java com.yy.apollotest
+
+enum RequestType {
+   SAY_HELLO,   //问好
+   QUERY_TIME,  //询问时间
+}
+
+struct Request {
+   1: required RequestType type;  // 请求的类型，必选
+   2: required string name;       // 发起请求的人的名字，必选
+   3: optional i32 age;           // 发起请求的人的年龄，可选
+}
+
+exception RequestException {
+   1: required i32 code;
+   2: optional string reason;
+}
+
+// 服务名
+service HelloWordService {
+   string doAction(1: Request request) throws (1:RequestException qe); // 可能抛出异常。
+}
+</code></pre><h3 id="thrift支持的数据类型"><a href="#thrift支持的数据类型" class="headerlink" title="thrift支持的数据类型"></a>thrift支持的数据类型</h3><p>1.基本类型（括号内为对应的Java类型）：<br>bool（boolean）: 布尔类型(TRUE or FALSE)<br>byte（byte）: 8位带符号整数<br>i16（short）: 16位带符号整数<br>i32（int）: 32位带符号整数<br>i64（long）: 64位带符号整数<br>double（double）: 64位浮点数<br>string（String）: 采用UTF-8编码的字符串</p>
+<p>2.特殊类型（括号内为对应的Java类型）：<br>binary（ByteBuffer）：未经过编码的字节流</p>
+<p>3.Structs（结构）：<br>struct定义了一个很普通的OOP对象，但是没有继承特性。</p>
+<pre><code>struct UserProfile {
+1: i32 uid = 1,  //默认值为1
+2: string name = &quot;User1&quot;,
+3: string blurb
+}
+</code></pre><p>4.collection</p>
+<pre><code>list&lt;i32&gt; subNodeList,
+map&lt;i32,string&gt; subNodeMap,
+set&lt;i32&gt; subNodeSet
+</code></pre>
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/03/24/ThriftIntroductoryAndSimpleExample/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/03/24/ThriftIntroductoryAndSimpleExample/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

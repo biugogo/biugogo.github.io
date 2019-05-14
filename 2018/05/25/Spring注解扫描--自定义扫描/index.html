@@ -1,0 +1,414 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842940456.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>自定义注解生成Spring Bean</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="自定义注解生成spring-bean"><a href="#自定义注解生成spring-bean" class="headerlink" title="自定义注解生成spring bean"></a>自定义注解生成spring bean</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>最近看到公司一段关于thrift整合spring的项目源码。其中涉及到配置thrift接口所在package地址，自动就会扫描到方法，并注册到服务总心的代码。参看了源码，涉及到了一些spring boot配置文件自动装配，自定义注解扫描生成bean的过程。可能对于以后参看spring ioc源码有帮助。记录学习一下。</p>
+<hr>
+<h2 id="配置文件处理"><a href="#配置文件处理" class="headerlink" title="配置文件处理"></a>配置文件处理</h2><p>使用 @ConfigurationProperties 可以轻松的处理好配置文件<br>比如如下一段yml</p>
+<pre><code>parkes:
+  servicecenter: #thrift 相关的配置
+    center:  #集线塔配置
+      address: jxt-zk-test.yy.com:2181 #集线塔的地址
+      application: wolfkill #集线塔应用名称
+    export:  #服务export时必须
+      host: 127.0.0.1
+      port: 10059  #服务生产者端口
+    packages: #定义需scan的export/reference package
+      exports: com.yy.wolfkill.thrift.pkgame.meta
+      references: com.yy.wolfkill.thrift.pkgame.metasync,com.yy.wolfkill.thrift.opconfig
+    group: &quot;*&quot;
+</code></pre><p>我们可以这样定义一个容器,</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">package</span> com<span class="token punctuation">.</span>yy<span class="token punctuation">.</span>parkes<span class="token punctuation">.</span>servicecenter<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>List<span class="token punctuation">;</span>
+<span class="token keyword">import</span> java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>Map<span class="token punctuation">;</span>
+<span class="token keyword">import</span> org<span class="token punctuation">.</span>springframework<span class="token punctuation">.</span>boot<span class="token punctuation">.</span>context<span class="token punctuation">.</span>properties<span class="token punctuation">.</span>ConfigurationProperties<span class="token punctuation">;</span>
+
+<span class="token annotation punctuation">@ConfigurationProperties</span><span class="token punctuation">(</span>prefix <span class="token operator">=</span> <span class="token string">"parkes.servicecenter"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Data</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ServiceCenterProperties</span> <span class="token punctuation">{</span>
+
+  <span class="token keyword">private</span> Center center <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Center</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> Export export <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Export</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">private</span> String group <span class="token operator">=</span> <span class="token string">"*"</span><span class="token punctuation">;</span>
+
+  <span class="token comment" spellcheck="true">/**
+   * 设置需要扫描并且自动注册的bean的package
+   *
+   * @see com.yy.parkes.servicecenter.ServiceCenterExporter
+   * @see com.yy.parkes.servicecenter.ServiceCenterReference
+   */</span>
+  <span class="token keyword">private</span> Packages packages<span class="token punctuation">;</span>
+  <span class="token annotation punctuation">@Data</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Packages</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> List<span class="token operator">&lt;</span>String<span class="token operator">></span> exports<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> List<span class="token operator">&lt;</span>String<span class="token operator">></span> references<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token annotation punctuation">@Data</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Export</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String host<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">int</span> port<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token annotation punctuation">@Data</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Center</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> String address<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String application<span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>再使用@EnableConfigurationProperties,让配置生成bean可以被Autowried.当然，这里可以使用@Component在ServiceCenterProperties上，让他直接生成bean，可以在需要时注入。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@EnableConfigurationProperties</span><span class="token punctuation">(</span>ServiceCenterProperties<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>；
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ServiceCenterAutoConfiguration</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>关于@EnableConfigurationProperties还可以使用这种方式，多用于bean的生成.生成的ServiceCenterProperties也是会完成自动装配的。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
+<span class="token annotation punctuation">@ConfigurationProperties</span><span class="token punctuation">(</span>prefix <span class="token operator">=</span> <span class="token string">"parkes.servicecenter"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> ServiceCenterProperties <span class="token function">getServiceCenterProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ServiceCenterProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="根据扫描包和自定义注解，实例化你想要的bean"><a href="#根据扫描包和自定义注解，实例化你想要的bean" class="headerlink" title="根据扫描包和自定义注解，实例化你想要的bean"></a>根据扫描包和自定义注解，实例化你想要的bean</h2><p>首先我们定义一个类，实现spring提供的3个接口<br>ImportBeanDefinitionRegistrar接口会在import这个类时，调用registerBeanDefinitions方法，进行bean的注入。<br>EnvironmentAware接口，会在import时，自动调用setEnvironment，为这个类注入环境变量<br>BeanFactoryAware接口，会在import是，自动调用setBeanFactory，为这个类注入BeanFactory</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ServiceCenterRegistrar</span> <span class="token keyword">implements</span> <span class="token class-name">ImportBeanDefinitionRegistrar</span><span class="token punctuation">,</span>
+  BeanFactoryAware<span class="token punctuation">,</span> EnvironmentAware <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> Environment environment<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> ConfigurableListableBeanFactory beanFactory<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">registerBeanDefinitions</span><span class="token punctuation">(</span>AnnotationMetadata metadata<span class="token punctuation">,</span>
+        BeanDefinitionRegistry registry<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">}</span>
+
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setBeanFactory</span><span class="token punctuation">(</span>BeanFactory beanFactory<span class="token punctuation">)</span> <span class="token keyword">throws</span> BeansException <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>beanFactory <span class="token keyword">instanceof</span> <span class="token class-name">ConfigurableListableBeanFactory</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span>beanFactory <span class="token operator">=</span> <span class="token punctuation">(</span>ConfigurableListableBeanFactory<span class="token punctuation">)</span> beanFactory<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  <span class="token annotation punctuation">@Override</span>
+   <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setEnvironment</span><span class="token punctuation">(</span>Environment environment<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token keyword">this</span><span class="token punctuation">.</span>environment <span class="token operator">=</span> environment<span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个类大致就是这样，提前帮我们安排好了environment，beanFactory，registry。让我们回到正题，如何扫描自定义注解，然后实例化为Bean</p>
+<ol>
+<li><p>首先我们先定义一个Scanner类，确定我们要扫描的注解</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Scanner</span> <span class="token keyword">extends</span> <span class="token class-name">ClassPathScanningCandidateComponentProvider</span> <span class="token punctuation">{</span>
+
+<span class="token function">Scanner</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token function">addIncludeFilter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AnnotationTypeFilter</span><span class="token punctuation">(</span>
+   ServiceCenterReference<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token function">addIncludeFilter</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">AnnotationTypeFilter</span><span class="token punctuation">(</span>
+   ServiceCenterExporter<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ <span class="token function">addExcludeFilter</span><span class="token punctuation">(</span>
+   <span class="token keyword">new</span> <span class="token class-name">RegexPatternTypeFilter</span><span class="token punctuation">(</span>Pattern<span class="token punctuation">.</span><span class="token function">compile</span><span class="token punctuation">(</span><span class="token string">".*\\$Async"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+ <span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">isCandidateComponent</span><span class="token punctuation">(</span>AnnotatedBeanDefinition beanDefinition<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>我们自定义扫描的为ServiceCenterReference.class，ServiceCenterExporter.class注解的类，以及$Async结尾的类。这里不讨论Scanner的原理，会专门拆分一篇博客来介绍spring的scanner原理</p>
+</li>
+<li><p>扫描得到BeanDefinition,然后进行处理</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">doRegisterServiceCenterService</span><span class="token punctuation">(</span>String basePackage<span class="token punctuation">,</span> BeanDefinitionRegistry registry<span class="token punctuation">,</span>
+<span class="token keyword">boolean</span> isExport<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+
+Scanner scanner <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Scanner</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//scanner 扫描后得到的BeanDefinition</span>
+Set<span class="token operator">&lt;</span>BeanDefinition<span class="token operator">></span> candidateComponents <span class="token operator">=</span> scanner
+ <span class="token punctuation">.</span><span class="token function">findCandidateComponents</span><span class="token punctuation">(</span>basePackage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>BeanDefinition candidateComponent <span class="token operator">:</span> candidateComponents<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token comment" spellcheck="true">//如果BeanDefinition是基于注解扫描</span>
+ <span class="token keyword">if</span> <span class="token punctuation">(</span>candidateComponent <span class="token keyword">instanceof</span> <span class="token class-name">AnnotatedBeanDefinition</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token comment" spellcheck="true">//强转</span>
+   AnnotatedBeanDefinition beanDefinition <span class="token operator">=</span> <span class="token punctuation">(</span>AnnotatedBeanDefinition<span class="token punctuation">)</span> candidateComponent<span class="token punctuation">;</span>
+   <span class="token comment" spellcheck="true">//拿到注解元信息</span>
+   AnnotationMetadata annotationMetadata <span class="token operator">=</span> beanDefinition<span class="token punctuation">.</span><span class="token function">getMetadata</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token comment" spellcheck="true">//判定这个注解修饰的是否是interface</span>
+   Assert<span class="token punctuation">.</span><span class="token function">isTrue</span><span class="token punctuation">(</span>annotationMetadata<span class="token punctuation">.</span><span class="token function">isInterface</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+     <span class="token string">"@ServiceCenterReference or @ServiceCenterExporter can only be specified on an interface"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token comment" spellcheck="true">//isExport是判定这个是thrift服务提供者还是消费者，对这里影响不大。</span>
+     <span class="token comment" spellcheck="true">//如果这个元信息是被注解@ServiceCenterExporter修饰，执行registerExporter</span>
+   <span class="token keyword">if</span> <span class="token punctuation">(</span>isExport <span class="token operator">&amp;&amp;</span> annotationMetadata<span class="token punctuation">.</span><span class="token function">hasAnnotation</span><span class="token punctuation">(</span>ServiceCenterExporter<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token function">registerExporter</span><span class="token punctuation">(</span>registry<span class="token punctuation">,</span> annotationMetadata<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>isExport <span class="token operator">&amp;&amp;</span> annotationMetadata
+     <span class="token punctuation">.</span><span class="token function">hasAnnotation</span><span class="token punctuation">(</span>ServiceCenterReference<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token function">registerReference</span><span class="token punctuation">(</span>registry<span class="token punctuation">,</span> annotationMetadata<span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>取得注解中信息，并生成BeanDefinition<br>例如我们的注解如下</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Target</span><span class="token punctuation">(</span>ElementType<span class="token punctuation">.</span>TYPE<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Retention</span><span class="token punctuation">(</span>RetentionPolicy<span class="token punctuation">.</span>RUNTIME<span class="token punctuation">)</span>
+<span class="token annotation punctuation">@Documented</span>
+<span class="token keyword">public</span> @<span class="token keyword">interface</span> <span class="token class-name">ServiceCenterExporter</span> <span class="token punctuation">{</span>
+
+<span class="token keyword">int</span> DEFAULT_PORT <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+ServiceProtocolType <span class="token function">protocol</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> ServiceProtocolType<span class="token punctuation">.</span>thrift<span class="token punctuation">;</span>
+
+ThriftProtocolType <span class="token function">thriftProtocol</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> ThriftProtocolType<span class="token punctuation">.</span>BINARY<span class="token punctuation">;</span>
+
+TransportType <span class="token function">transport</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> TransportType<span class="token punctuation">.</span>TFRAMED<span class="token punctuation">;</span>
+
+<span class="token keyword">int</span> <span class="token function">port</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">default</span> DEFAULT_PORT<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>生成BeanDefinition</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">registerExporter</span><span class="token punctuation">(</span>BeanDefinitionRegistry registry<span class="token punctuation">,</span> AnnotationMetadata metadata<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">//取得Annotation的配置元素</span>
+Map<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> Object<span class="token operator">></span> attrs <span class="token operator">=</span> metadata
+ <span class="token punctuation">.</span><span class="token function">getAnnotationAttributes</span><span class="token punctuation">(</span>ServiceCenterExporter<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ThriftProtocolType thriftProtocol <span class="token operator">=</span> AnnotationUtils<span class="token punctuation">.</span><span class="token function">getThriftProtocol</span><span class="token punctuation">(</span>attrs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+TransportType transport <span class="token operator">=</span> AnnotationUtils<span class="token punctuation">.</span><span class="token function">getTransport</span><span class="token punctuation">(</span>attrs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+String className <span class="token operator">=</span> metadata<span class="token punctuation">.</span><span class="token function">getClassName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+BeanDefinitionBuilder definition <span class="token operator">=</span> BeanDefinitionBuilder
+ <span class="token punctuation">.</span><span class="token function">genericBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+definition<span class="token punctuation">.</span><span class="token function">getBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setBeanClass</span><span class="token punctuation">(</span>ServiceExporter<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+definition<span class="token punctuation">.</span><span class="token function">addPropertyValue</span><span class="token punctuation">(</span><span class="token string">"protocol"</span><span class="token punctuation">,</span> AnnotationUtils<span class="token punctuation">.</span><span class="token function">getProtocol</span><span class="token punctuation">(</span>attrs<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+definition<span class="token punctuation">.</span><span class="token function">addPropertyValue</span><span class="token punctuation">(</span><span class="token string">"interfaceName"</span><span class="token punctuation">,</span> className<span class="token punctuation">)</span><span class="token punctuation">;</span>
+definition<span class="token punctuation">.</span><span class="token function">addPropertyValue</span><span class="token punctuation">(</span><span class="token string">"thriftProtocol"</span><span class="token punctuation">,</span> thriftProtocol<span class="token punctuation">)</span><span class="token punctuation">;</span>
+definition<span class="token punctuation">.</span><span class="token function">addPropertyValue</span><span class="token punctuation">(</span><span class="token string">"transport"</span><span class="token punctuation">,</span> transport<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ExportConfig exportConfig <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ExportConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> port <span class="token operator">=</span> AnnotationUtils<span class="token punctuation">.</span><span class="token function">getPort</span><span class="token punctuation">(</span>attrs<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span>port <span class="token operator">!=</span> ServiceCenterExporter<span class="token punctuation">.</span>DEFAULT_PORT<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ exportConfig<span class="token punctuation">.</span><span class="token function">setPort</span><span class="token punctuation">(</span>port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+definition<span class="token punctuation">.</span><span class="token function">addPropertyValue</span><span class="token punctuation">(</span><span class="token string">"exportConfig"</span><span class="token punctuation">,</span> exportConfig<span class="token punctuation">)</span><span class="token punctuation">;</span>
+definition<span class="token punctuation">.</span><span class="token function">setInitMethodName</span><span class="token punctuation">(</span><span class="token string">"export"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//创建beanDefinition，用特殊名字</span>
+BeanDefinitionHolder holder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BeanDefinitionHolder</span><span class="token punctuation">(</span>definition<span class="token punctuation">.</span><span class="token function">getBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+ <span class="token function">getBeanName</span><span class="token punctuation">(</span>className<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token comment" spellcheck="true">//真正注册，带有别名注册的功能</span>
+BeanDefinitionReaderUtils<span class="token punctuation">.</span><span class="token function">registerBeanDefinition</span><span class="token punctuation">(</span>holder<span class="token punctuation">,</span> registry<span class="token punctuation">)</span><span class="token punctuation">;</span>
+log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"[cmd=registerExported, attrs={}, interfaceName={}]"</span><span class="token punctuation">,</span> attrs<span class="token punctuation">,</span> className<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/05/25/Spring注解扫描--自定义扫描/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/05/25/Spring注解扫描--自定义扫描/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842935103.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>SpringCloud_Gateway系列(一)-使用</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="SpringCloud-Gateway系列-一-使用"><a href="#SpringCloud-Gateway系列-一-使用" class="headerlink" title="SpringCloud_Gateway系列(一)-使用"></a>SpringCloud_Gateway系列(一)-使用</h1><hr>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>最近闲着没事，看了一下Spring提供网关。基于Netty + Spring webflux 反应式编程web框架的Spring Cloud Gateway。抛弃了传统servlet模式，投入了netty怀抱的spring-webflux，很适用网关高并发场景。</p>
+<blockquote>
+<p>Spring Framework 5 includes a new spring-webflux module. The module contains support for reactive HTTP and WebSocket clients as well as for reactive server web applications including REST, HTML browser, and WebSocket style interactions.</p>
+</blockquote>
+<p>这里没有自己实测zuul，zuul2.0，SpringCloudGateway的性能，但是鉴于网上对于SpringCloudGateway很多有失偏颇的测试：（国内大部分都道听途说看了这篇帖子）</p>
+<ul>
+<li><a href="http://www.infoq.com/cn/articles/comparing-api-gateway-performances" target="_blank" rel="noopener">http://www.infoq.com/cn/articles/comparing-api-gateway-performances</a></li>
+</ul>
+<p>这里得说一句，没那么差（可能是最好的网关），这个帖子的性能差是归结于reactor-netty使用http 1.0的问题。具体可以参考官方spencergibb给出的解释与测试：</p>
+<ul>
+<li><a href="https://github.com/spring-cloud/spring-cloud-gateway/issues/124" target="_blank" rel="noopener">https://github.com/spring-cloud/spring-cloud-gateway/issues/124</a></li>
+</ul>
+<hr>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ul>
+<li><a href="https://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/web-reactive.html" target="_blank" rel="noopener">https://docs.spring.io/spring/docs/5.0.0.BUILD-SNAPSHOT/spring-framework-reference/html/web-reactive.html</a></li>
+<li><a href="http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#_spring_cloud_gateway" target="_blank" rel="noopener">http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#_spring_cloud_gateway</a></li>
+</ul>
+<hr>
+<h1 id="专业名词解释"><a href="#专业名词解释" class="headerlink" title="专业名词解释"></a>专业名词解释</h1><ol>
+<li>Route:路由，网关的基础模块，他包括一个ID，URL，一个Predicate集合，一个filter集合。</li>
+<li>Predicate：就是Java8的Predicate。决定这个请求走哪个Route。入参是org.springframework.web.server.ServerWebExchange。</li>
+<li>filter：继承GatewayFilter，对请求一系列操作。</li>
+</ol>
+<p>一句话解释，网关有很多路—Route，每个route都有Predicate,当你碰到一个完全符合的Predicate集合，你就会进入这条路，进入这条路后，filter就会对你进行不可描述的操作，比如我给你http头加个字段，做身份校验，负载均衡等。</p>
+<hr>
+<h1 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works"></a>How it works</h1><p><img src="https://raw.githubusercontent.com/apollochen123/image/master/springcloudgateway/howitworks.png" alt="howitworks"></p>
+<hr>
+<h1 id="简单Yml配置"><a href="#简单Yml配置" class="headerlink" title="简单Yml配置"></a>简单Yml配置</h1><p>可以参考官方文档，比我这写的详细 <a href="http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#gateway-request-predicates-factories" target="_blank" rel="noopener">官方文档</a></p>
+<ol>
+<li><h3 id="内置常用Predicate-Factories"><a href="#内置常用Predicate-Factories" class="headerlink" title="内置常用Predicate Factories"></a>内置常用Predicate Factories</h3><ul>
+<li>After/Before/Between Route Predicate Factory<br>设置match After/Before/Between时间的请求<pre class="line-numbers language-yml"><code class="language-yml">spring:
+cloud:
+  gateway:
+    routes:
+    - id: before_route
+      uri: http://example.org
+      predicates:
+      - Before=2017-01-20T17:42:47.789-07:00[America/Denver]
+#        - After=2017-01-20T17:42:47.789-07:00[America/Denver]
+#        - Between=2017-01-20T17:42:47.789-07:00[America/Denver], 2017-01-21T17:42:47.789-07:00[America/Denver]
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>设置match header，cookie，Host，正则表达式匹配Predicate</p>
+<pre class="line-numbers language-yml"><code class="language-yml">spring:
+cloud:
+  gateway:
+    routes:
+    - id: cookie_route
+      uri: http://example.org
+      predicates:
+        # Cookies匹配正则表达式ch.p
+      - Cookie=chocolate, ch.p
+        # Header中的X-Request-Id匹配正则表达式\d+
+      - Header=X-Request-Id, \d+
+        # Host匹配**.somehost.org
+      - Host=**.somehost.org
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>最常用的Path Route Predicate Factory。匹配url的Predicate</p>
+<pre class="line-numbers language-yml"><code class="language-yml">spring:
+cloud:
+  gateway:
+    routes:
+    - id: host_route
+      uri: http://example.org
+      predicates:
+        #匹配/local/a,/local/a/b等
+      - Path=/local/**
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>其他<pre class="line-numbers language-yml"><code class="language-yml">spring:
+cloud:
+  gateway:
+    routes:
+      - id: host_route
+        uri: http://example.org
+        predicates:
+          #匹配请求方式为Get的请求
+        - Method=GET
+          #匹配请求路径带有参数baz
+        - Query=baz
+          #匹配请求路径带参数foo=ba.
+        - Query=foo, ba.
+          #匹配远程请求ip地址符合192.168.1.1/24
+        - RemoteAddr=192.168.1.1/24
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ul>
+</li>
+<li><h3 id="内置常用GatewayFilter-Factories"><a href="#内置常用GatewayFilter-Factories" class="headerlink" title="内置常用GatewayFilter Factories"></a>内置常用GatewayFilter Factories</h3><pre class="line-numbers language-yml"><code class="language-yml">spring:
+cloud:
+ gateway:
+   routes:
+   - id: test_routes
+     uri: http://example.org
+     filters:
+       #给请求Header添加headerX-Request-Foo=Bar
+     - AddRequestHeader=X-Request-Foo, Bar
+       #给请求添加param foo=bar
+     - AddRequestParameter=foo, bar
+       #给Respouse header添加X-Response-Foo=Bar
+     - AddResponseHeader=X-Response-Foo, Bar
+       #很常用的前缀剥离
+       #比如：StripPrefix=1就是剥离一层前缀，StripPrefix=2就是剥离两层前缀。
+       #StripPrefix=1情况下http://localhost:8828/gamemeta3/gamemeta/admin/bizdata/search将会被转发：http://example.org/gamemeta/admin/bizdata/search
+     - StripPrefix=0
+       #符合的请求将会被转发到http://example.org/kxdRoom/question/search
+     - SetPath=/kxdRoom/question/search
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><h3 id="配置例子"><a href="#配置例子" class="headerlink" title="配置例子"></a>配置例子</h3></li>
+</ol>
+<pre class="line-numbers language-yml"><code class="language-yml">spring:
+  logging:
+    level: debug
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      routes:
+      - id: local_prefix_route
+        uri: lb:http://local
+        predicates:
+        - Path=/local/**
+        filters:
+        - StripPrefix=1
+#        - Hystrix=local
+        - name: Hystrix
+          args:
+            name: local
+            fallbackUri: forward:/error
+
+      #定向跳转
+      - id: question_search_route
+        uri: https://wolfkill-game-test.yy.com
+        predicates:
+        - Path=/room/search
+        #- Path=/kxdRoom/**
+        filters:
+        - SetPath=/kxdRoom/question/search
+
+server:
+  port: 8828
+
+ribbon:
+  eureka:
+   enabled: false
+
+local:
+  ribbon:
+    listOfServers: http://localhost:9001,http://localhost:9002
+hystrix:
+  command:
+    local:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+      circuitBreaker:
+        enabled: true
+        errorThresholdPercentage: 50
+        sleepWindowInMilliseconds: 5000
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>local_prefix_route:这个route是一个包含了hystrix加ribbon配置的.当我们请求<br><a href="http://localhost:8828/local/pro/get会被转发到http://localhost:9001/pro/get或者http://localhost:9001/pro/get。如果一秒不反回，会转发到error。" target="_blank" rel="noopener">http://localhost:8828/local/pro/get会被转发到http://localhost:9001/pro/get或者http://localhost:9001/pro/get。如果一秒不反回，会转发到error。</a></p>
+<p>question_search_route：这个route会让<a href="http://localhost:8828/kxdRoom/*" target="_blank" rel="noopener">http://localhost:8828/kxdRoom/*</a>* 转发到<a href="https://wolfkill-game-test.yy.com/kxdRoom/question/search。" target="_blank" rel="noopener">https://wolfkill-game-test.yy.com/kxdRoom/question/search。</a></p>
+<h1 id="代码配置"><a href="#代码配置" class="headerlink" title="代码配置"></a>代码配置</h1><p>见官方文案：<br><a href="http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#_fluent_java_routes_api" target="_blank" rel="noopener">http://cloud.spring.io/spring-cloud-static/Finchley.SR1/single/spring-cloud.html#_fluent_java_routes_api</a></p>
+<h1 id="动态配置Route"><a href="#动态配置Route" class="headerlink" title="动态配置Route"></a>动态配置Route</h1><p>见SpringCloud_Gateway系列(三)整合</p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/09/25/Springcloud_Gateway系列(一)-使用/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/09/25/Springcloud_Gateway系列(一)-使用/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

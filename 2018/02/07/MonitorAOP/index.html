@@ -1,0 +1,347 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842924765.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>AOP in Catch Error</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Monitor-Error-Catch-AOP"><a href="#Monitor-Error-Catch-AOP" class="headerlink" title="Monitor Error Catch AOP"></a>Monitor Error Catch AOP</h1><h3 id="Without-Monitor-Error-Catch-AOP"><a href="#Without-Monitor-Error-Catch-AOP" class="headerlink" title="Without Monitor Error Catch AOP"></a>Without Monitor Error Catch AOP</h3><p>we don’t use this AOP code:</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">mainProcess</span><span class="token punctuation">(</span>Document document<span class="token punctuation">,</span> InboundTransaction transaction<span class="token punctuation">)</span> <span class="token keyword">throws</span> InboundProcessException
+<span class="token punctuation">{</span>
+    <span class="token keyword">try</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//convert inbound data from xml to json</span>
+        List<span class="token operator">&lt;</span>Element<span class="token operator">></span> elements <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getRootElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">elements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String typeCode <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getRootElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String headerCode <span class="token operator">=</span> elements<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String itemCode <span class="token operator">=</span> inboundNodeViewRepository<span class="token punctuation">.</span><span class="token function">findNodeCodeByLevelAndTypeCodeAndStatusCode</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> typeCode<span class="token punctuation">,</span>
+            InboundConfigurationStatusCodeConstant<span class="token punctuation">.</span>ACTIVE_STATUS_CODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        JSONObject inboundDataJson <span class="token operator">=</span> <span class="token function">convertInboundToJson</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> headerCode<span class="token punctuation">,</span> itemCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">//entitlement mapping and choose generation process variant</span>
+        List<span class="token operator">&lt;</span>RuntimeGenerationProcessModel<span class="token operator">></span> runtimeModels <span class="token operator">=</span> <span class="token function">GenerateRunTimeGeneralProcessModels</span><span class="token punctuation">(</span>inboundDataJson<span class="token punctuation">,</span> headerCode<span class="token punctuation">,</span> itemCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">geneContextAndInvokeWorkflow</span><span class="token punctuation">(</span>runtimeModels<span class="token punctuation">,</span> inboundDataJson<span class="token punctuation">,</span> headerCode<span class="token punctuation">,</span> itemCode<span class="token punctuation">,</span> transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        EmsLogger<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token keyword">instanceof</span> <span class="token class-name">MutiMessageException</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            List<span class="token operator">&lt;</span>MessageResponse<span class="token operator">></span> messageResponseList <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>MutiMessageException<span class="token punctuation">)</span> e<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getMessageList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            List<span class="token operator">&lt;</span>String<span class="token operator">></span> messageList <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            messageResponseList<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>m <span class="token operator">-</span><span class="token operator">></span> <span class="token punctuation">{</span>
+                messageList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>m<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            String message <span class="token operator">=</span> Arrays<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>messageList<span class="token punctuation">.</span><span class="token function">toArray</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            InboundMonitorLog inboundMonitorLog <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InboundMonitorLog</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setErrorInformation</span><span class="token punctuation">(</span>Arrays<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setExecutionBy</span><span class="token punctuation">(</span><span class="token string">"SAPIT"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setExecutionDate</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setInboundTransaction</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setMessage</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setStatusCode</span><span class="token punctuation">(</span>InboundMonitorLogStatusCodeConstant<span class="token punctuation">.</span>PROCESS_ERROR_STATUS_CODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundMonitorLogRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>inboundMonitorLog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            transaction<span class="token punctuation">.</span><span class="token function">setCurrentInboundLog</span><span class="token punctuation">(</span>inboundMonitorLog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>transaction<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token punctuation">{</span>
+                transaction<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span>inboundTransactionRepository<span class="token punctuation">.</span><span class="token function">getSequence</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+            inboundTransactionRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">throw</span> e<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">else</span>
+        <span class="token punctuation">{</span>
+            InboundProcessException inboundProcessException <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InboundProcessException</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundProcessException<span class="token punctuation">.</span><span class="token function">setErrorInfo</span><span class="token punctuation">(</span>Arrays<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundProcessException<span class="token punctuation">.</span><span class="token function">setExecutionBy</span><span class="token punctuation">(</span><span class="token string">"SAPIT"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundProcessException<span class="token punctuation">.</span><span class="token function">setExecutionDate</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundProcessException<span class="token punctuation">.</span><span class="token function">setErrorStatusCode</span><span class="token punctuation">(</span>InboundMonitorLogStatusCodeConstant<span class="token punctuation">.</span>PROCESS_ERROR_STATUS_CODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            inboundProcessException<span class="token punctuation">.</span><span class="token function">setInboundTransaction</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">throw</span> inboundProcessException<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>try catch is so long and catch code can’t reused.</p>
+<h3 id="Use-AOP-Catch"><a href="#Use-AOP-Catch" class="headerlink" title="Use AOP Catch"></a>Use AOP Catch</h3><pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@ProcessExceptionAnnotation</span><span class="token punctuation">(</span>InboundMonitorLogStatusCodeConstant<span class="token punctuation">.</span>PROCESS_ERROR_STATUS_CODE<span class="token punctuation">)</span>
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">mainProcess</span><span class="token punctuation">(</span>Document document<span class="token punctuation">,</span> InboundTransaction transaction<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//convert inbound data from xml to json</span>
+    List<span class="token operator">&lt;</span>Element<span class="token operator">></span> elements <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getRootElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">elements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    String typeCode <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">getRootElement</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    String headerCode <span class="token operator">=</span> elements<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    String itemCode <span class="token operator">=</span> inboundNodeViewRepository<span class="token punctuation">.</span><span class="token function">findNodeCodeByLevelAndTypeCodeAndStatusCode</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> typeCode<span class="token punctuation">,</span>
+        InboundConfigurationStatusCodeConstant<span class="token punctuation">.</span>ACTIVE_STATUS_CODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    JSONObject inboundDataJson <span class="token operator">=</span> <span class="token function">convertInboundToJson</span><span class="token punctuation">(</span>document<span class="token punctuation">,</span> headerCode<span class="token punctuation">,</span> itemCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    InboundDataModel inboundDataModel <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InboundDataModel</span><span class="token punctuation">(</span>inboundDataJson<span class="token punctuation">,</span> headerCode<span class="token punctuation">,</span> itemCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">//entitlement mapping and choose generation process variant</span>
+    List<span class="token operator">&lt;</span>RuntimeGenerationProcessModel<span class="token operator">></span> runtimeModels <span class="token operator">=</span> <span class="token function">GenerateRunTimeGeneralProcessModels</span><span class="token punctuation">(</span>inboundDataJson<span class="token punctuation">,</span> headerCode<span class="token punctuation">,</span> itemCode<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">geneContextAndInvokeWorkflow</span><span class="token punctuation">(</span>runtimeModels<span class="token punctuation">,</span> inboundDataModel<span class="token punctuation">,</span> transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>@ProcessExceptionAnnotation(InboundMonitorLogStatusCodeConstant.PROCESS_ERROR_STATUS_CODE).value of the annotation is the monitor statusCode.<br>you just need add the annotation and set monitor log status code in it.</p>
+<p>You can extend the AOP, such as adding some other Exception:<br>ProcessExceptionaAspect.java</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token keyword">instanceof</span> <span class="token class-name">InboundProcessException</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    InboundTransaction transaction <span class="token operator">=</span> ThreadLocalCache<span class="token punctuation">.</span>transaction<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    InboundMonitorLog inboundMonitorLog <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">InboundMonitorLog</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setErrorInformation</span><span class="token punctuation">(</span>Arrays<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setExecutionBy</span><span class="token punctuation">(</span><span class="token string">"SAPIT"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setExecutionDate</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setInboundTransaction</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setMessage</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>StringUtils<span class="token punctuation">.</span><span class="token function">isNoneBlank</span><span class="token punctuation">(</span>processExceptionAnnotation<span class="token punctuation">.</span><span class="token function">value</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setStatusCode</span><span class="token punctuation">(</span>processExceptionAnnotation<span class="token punctuation">.</span><span class="token function">value</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">{</span>
+        inboundMonitorLog<span class="token punctuation">.</span><span class="token function">setStatusCode</span><span class="token punctuation">(</span>InboundMonitorLogStatusCodeConstant<span class="token punctuation">.</span>FAILED_STATUS_CODE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    inboundMonitorLogRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>inboundMonitorLog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    transaction<span class="token punctuation">.</span><span class="token function">setCurrentInboundLog</span><span class="token punctuation">(</span>inboundMonitorLog<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>transaction<span class="token punctuation">.</span><span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        transaction<span class="token punctuation">.</span><span class="token function">setId</span><span class="token punctuation">(</span>inboundTransactionRepository<span class="token punctuation">.</span><span class="token function">getSequence</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    inboundTransactionRepository<span class="token punctuation">.</span><span class="token function">save</span><span class="token punctuation">(</span>transaction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    BaseRuntimeException ex <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BaseRuntimeException</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getLocalizedMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ex<span class="token punctuation">.</span><span class="token function">setStackTrace</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">throw</span> ex<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Add yourselves Exception after above code.</p>
+<h3 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h3><ol>
+<li>If you use this AOP, please make sure that :transaction must in ThreadLocalCache.<pre><code>ThreadLocalCache.transaction.set(transaction);
+</code></pre>please remember clear ThreadLocalCache before the request is finished</li>
+<li>AOP can’t take effect in methods of the same kind. Because of<pre><code>//this code is same as
+//this.mainProcess(document, transaction)
+mainProcess(document, transaction);
+</code></pre>I use a ingenious way to solve it. @Autowired itself in class<pre><code>@Service
+public class TransactionDataServiceImpl implements TransactionDataService
+{
+ @Autowired
+ private TransactionDataServiceImpl proxySelf;
+}
+</code></pre>and then<pre><code>     proxySelf.mainProcess(document, transaction);
+</code></pre>Now AOP can take effect.</li>
+</ol>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2018/02/07/MonitorAOP/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2018/02/07/MonitorAOP/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
