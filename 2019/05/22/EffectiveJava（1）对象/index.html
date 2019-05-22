@@ -1,0 +1,459 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/1557842698798.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>EffectiveJava(1)--对象</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="EffectiveJava-1-–对象"><a href="#EffectiveJava-1-–对象" class="headerlink" title="EffectiveJava(1)–对象"></a>EffectiveJava(1)–对象</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ol>
+<li>静态工厂方法</li>
+<li>Builder模式</li>
+<li>单例模式</li>
+<li>终结方法</li>
+</ol>
+<hr>
+<h2 id="静态工厂方法"><a href="#静态工厂方法" class="headerlink" title="静态工厂方法"></a>静态工厂方法</h2><p>静态工厂方法的好处：</p>
+<ol>
+<li><p><strong>优势1</strong>:静态工厂方法有名称。举个GUAVA的例子Lists类的例子。生成一个带容量的List。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>E<span class="token operator">></span> ArrayList<span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token function">newArrayListWithCapacity</span><span class="token punctuation">(</span><span class="token keyword">int</span> initialArraySize<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+ <span class="token function">checkNonnegative</span><span class="token punctuation">(</span>initialArraySize<span class="token punctuation">,</span> <span class="token string">"initialArraySize"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// for GWT.</span>
+ <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>initialArraySize<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>虽然这个例子在java7以后不是必要的，因为使用new ArrayList&lt;&gt;(int)更好。这里主要是想说，这个静态工厂方法的名称可以很清晰的表达我们创建了一个带容量的ArrayList。</p>
+</li>
+<li><p><strong>优势2</strong>:静态工厂方法不必在每次调用它们的时候都创建一个新对象。举个Boolean的例子</p>
+<pre class="line-numbers language-java"><code class="language-java"> <span class="token keyword">public</span> <span class="token keyword">static</span> Boolean <span class="token function">valueOf</span><span class="token punctuation">(</span>String s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">return</span> <span class="token function">parseBoolean</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token operator">?</span> TRUE <span class="token operator">:</span> FALSE<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>对象每次返回持有的两个Boolean对象之一。为重复的调用返回相同对象，这种方法类似于享元(Flyweight)模式。这样有助于类总能严格控制在某个时刻哪些实例应该存在。这种类被称作实例受控的类（ instance-controlled ）。单例模式也是借助这种特性实现的。</p>
+</li>
+<li><p><strong>优势3</strong>:静态工厂方法它可以返回原返回类型的任何子类型的对象。</p>
+</li>
+<li><p><strong>优势4</strong>:静态工厂方法返回的对象的类可以随着每次调用而发生变化，这取决于静态工厂方法的参数值。</p>
+</li>
+</ol>
+<p>优势3和4可以合并到一起讲，静态方法返回接口类型，实现类可以对外界屏蔽，根据参数等不同可以返回不同的实现。EnumSet是一个很好的例子(感兴趣可以查看一下EnumSet的两种实现，真的很骚)。</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>E <span class="token keyword">extends</span> <span class="token class-name">Enum</span><span class="token operator">&lt;</span>E<span class="token operator">>></span> EnumSet<span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token function">noneOf</span><span class="token punctuation">(</span>Class<span class="token operator">&lt;</span>E<span class="token operator">></span> elementType<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Enum<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span> universe <span class="token operator">=</span> <span class="token function">getUniverse</span><span class="token punctuation">(</span>elementType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>universe <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassCastException</span><span class="token punctuation">(</span>elementType <span class="token operator">+</span> <span class="token string">" not an enum"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>universe<span class="token punctuation">.</span>length <span class="token operator">&lt;=</span> <span class="token number">64</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RegularEnumSet</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>elementType<span class="token punctuation">,</span> universe<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">JumboEnumSet</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>elementType<span class="token punctuation">,</span> universe<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果枚举类的项小于等于64，使用RegularEnumSet实现(elements只需要一个long实现就OK).如果枚举项大于64，使用JumboEnumSet实现(elements使用long数组实现)<br>外界不需要知道EnumSet是使用RegularEnumSet还是JumboEnumSet实现。只需要使用即可。</p>
+<ol start="5">
+<li><p><strong>优势5</strong>:静态工厂的方法返回的对象所属的类，在编写包含该静态工厂方<br>法的类时可以不存在。<br>这里有个很注明的例子。JDBC Driver的静态工厂方法通过反射创建实现对象。</p>
+</li>
+<li><p><strong>优势6</strong>:通过静态工厂方法可以实现参数类型相同但是却不同的对象。考虑下面代码</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">A</span><span class="token punctuation">{</span>
+ <span class="token keyword">private</span> <span class="token keyword">int</span> a<span class="token punctuation">;</span>
+ <span class="token keyword">private</span> <span class="token keyword">int</span> b<span class="token punctuation">;</span>
+
+ <span class="token keyword">public</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span><span class="token punctuation">{</span>
+     <span class="token keyword">this</span><span class="token punctuation">.</span>a <span class="token operator">=</span> i<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token keyword">public</span> <span class="token function">A</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span><span class="token punctuation">{</span>
+     <span class="token keyword">this</span><span class="token punctuation">.</span>b <span class="token operator">=</span> i<span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果A这个class只需要a或者b就可以初始化，但是构造函数重载却无法实现。静态工厂方法可以帮我解决这个问题。</p>
+</li>
+</ol>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> A <span class="token function">initWithA</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        A res <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        res<span class="token punctuation">.</span><span class="token function">setA</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> A <span class="token function">initWithB</span><span class="token punctuation">(</span><span class="token keyword">int</span> i<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        A res <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">A</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        res<span class="token punctuation">.</span><span class="token function">setB</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h2 id="Builder模式"><a href="#Builder模式" class="headerlink" title="Builder模式"></a>Builder模式</h2><p>　</p>
+<h3 id="重载构造函数"><a href="#重载构造函数" class="headerlink" title="重载构造函数"></a>重载构造函数</h3><p>静态工厂和构造器有个共同的局限性：它们都不能很好地扩展到大量的可选参数。对于这种场景，我们一向习惯采用重载构造函数（ telescoping cons tructor ）模式<br>比如Excuption类</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token function">Exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token function">Exception</span><span class="token punctuation">(</span>String message<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token function">Exception</span><span class="token punctuation">(</span>String message<span class="token punctuation">,</span> Throwable cause<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> cause<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>重载构造函数模式下，提供的第一个构造器只有必要的参数，第二个构造器有一个可选参数，第三个构造器有两个可选参数，依此类推，最后一个构造器包含所有可选的参数。</p>
+<h3 id="JavaBeans模式"><a href="#JavaBeans模式" class="headerlink" title="JavaBeans模式"></a>JavaBeans模式</h3><p>但是遇到，4个必须参数，4个可选参数。重载构造函数的方式，但是当有许多参数的时候,客户端代码会很难缩写，并且仍然较难以阅读。这种类，通过什么方式构建比较好呢？有些同学想到JavaBeans模式。遗憾的是，JavaBeans模式自身有着很严重的缺点。因为构造过程被分到了几个调用中，在构造过程中JavaBean可能处于不一致的状态，同时JavaBeans模式使得把类做成不可变的可能性不复存在。</p>
+<h3 id="Builder模式-1"><a href="#Builder模式-1" class="headerlink" title="Builder模式"></a>Builder模式</h3><p>幸运的是，还有第三种替代方法，它既能保证像重叠构造器模式那样的安全性，也能<br>保证像JavaBeans模式那么好的可读性  —Builder模式</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BuilderDemo</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/**
+     * 必须参数
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String requiredParam1<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String requiredParam2<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * 可选参数
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String optionalParam1<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String optionalParam2<span class="token punctuation">;</span>
+
+
+    <span class="token keyword">private</span> <span class="token function">BuilderDemo</span><span class="token punctuation">(</span>Builder builder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>requiredParam1 <span class="token operator">=</span> builder<span class="token punctuation">.</span>requiredParam1<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>requiredParam2 <span class="token operator">=</span> builder<span class="token punctuation">.</span>requiredParam2<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>optionalParam1 <span class="token operator">=</span> builder<span class="token punctuation">.</span>optionalParam1<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>optionalParam2 <span class="token operator">=</span> builder<span class="token punctuation">.</span>optionalParam2<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Builder</span> <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> String requiredParam1<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> String requiredParam2<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> String optionalParam1<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> String optionalParam2<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token function">Builder</span><span class="token punctuation">(</span>String requiredParam1<span class="token punctuation">,</span> String requiredParam2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>requiredParam1 <span class="token operator">=</span> requiredParam1<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>requiredParam2 <span class="token operator">=</span> requiredParam2<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> Builder <span class="token function">setOptionalParam1</span><span class="token punctuation">(</span>String optionalParam1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>optionalParam1 <span class="token operator">=</span> optionalParam1<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> Builder <span class="token function">setOptionalParam2</span><span class="token punctuation">(</span>String optionalParam2<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>optionalParam2 <span class="token operator">=</span> optionalParam2<span class="token punctuation">;</span>
+            <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token keyword">public</span> BuilderDemo <span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">BuilderDemo</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        BuilderDemo<span class="token punctuation">.</span>Builder builder <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Builder</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token string">"2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        BuilderDemo demo <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">setOptionalParam1</span><span class="token punctuation">(</span><span class="token string">"optional1"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">setOptionalParam2</span><span class="token punctuation">(</span><span class="token string">"optional2"</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>但是Builder模式会有很大的代码冗余。不过不需要担心，工作中可以使用Lombook这个代码补齐神器。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token annotation punctuation">@Builder</span>
+<span class="token annotation punctuation">@AllArgsConstructor</span><span class="token punctuation">(</span>access <span class="token operator">=</span> AccessLevel<span class="token punctuation">.</span>PRIVATE<span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BuilderDemo</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/**
+     * 必须参数
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String requiredParam1<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String requiredParam2<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * 可选参数
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String optionalParam1<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String optionalParam2<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>一个两个注解就可以搞定。没有用过的同学可以了解一下。</p>
+<hr>
+<h2 id="单例模式Singleton"><a href="#单例模式Singleton" class="headerlink" title="单例模式Singleton"></a>单例模式Singleton</h2><h3 id="最优美的单例模式"><a href="#最优美的单例模式" class="headerlink" title="最优美的单例模式"></a>最优美的单例模式</h3><p>枚举单例模式最简洁，无偿地提供了序列化机制，绝对防止多次实例化，即使是在面对复杂的序列化或者反射攻击的时候。虽然这种方法还没有广泛采用，但是单元素的枚举类型经常成为实现Singleton的最佳方法。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> EnumSingleton <span class="token punctuation">{</span>
+    INSTANCE<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> EnumSingleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> INSTANCE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Ojbk的单例模式"><a href="#Ojbk的单例模式" class="headerlink" title="Ojbk的单例模式"></a>Ojbk的单例模式</h3><p>比较OK的单例模，需要注意反射攻击和序列化攻击（没人闲的蛋疼）</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">OjbkSingleton</span> <span class="token keyword">implements</span> <span class="token class-name">Serializable</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> OjbkSingleton INSTANCE <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">OjbkSingleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token function">OjbkSingleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> OjbkSingleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> INSTANCE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">//防止反序列化假冒单例</span>
+    <span class="token keyword">private</span> Object <span class="token function">readResolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> INSTANCE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="懒加载的单例模式"><a href="#懒加载的单例模式" class="headerlink" title="懒加载的单例模式"></a>懒加载的单例模式</h3><p>通过静态内部内类的方式实现懒加载和单利模式，需要懒加载的时候可以使用。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingleton</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">SingletonHolder</span> <span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> LazySingleton INSTANCE <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LazySingleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> SingletonHolder<span class="token punctuation">.</span>INSTANCE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="双重检查吃力不讨单例模式"><a href="#双重检查吃力不讨单例模式" class="headerlink" title="双重检查吃力不讨单例模式"></a>双重检查吃力不讨单例模式</h3><p>双重检查在1.5之前，是不安全的。主要是volatile关键字在1.5之前不能保证不会指令重排。所以也是不安全的。1.5之后，volatile保证了变量可见性的同时，也保证了指令不会重排。</p>
+<p>这里的volatile不能去掉。如果去掉，可能导致问题：INSTANCE = new DoubleCheckSingleton();并不是一个原子操作。</p>
+<ol>
+<li>给INSTANCE分配内存</li>
+<li>调用INSTANCE的构造函数来初始化成员变量，形成实例</li>
+<li>将INSTANCE对象指向分配的内存空间（执行完这步INSTANCE就非null了）<br>上面3个指令，在指令重排后可能出现1,3,2的顺序执行。所以其他线程拿到非null但是没有调用构造函数的INSTANCE就会出问题。</li>
+</ol>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DoubleCheckSingleton</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">volatile</span> DoubleCheckSingleton INSTANCE<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> DoubleCheckSingleton <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>INSTANCE <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>DoubleCheckSingleton<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>INSTANCE <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                    INSTANCE <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DoubleCheckSingleton</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> INSTANCE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h2 id="终结方法"><a href="#终结方法" class="headerlink" title="终结方法"></a>终结方法</h2><p>终结方法（finalize）通常是不可预测的，也是很危险的，一般情况下是不必要的。使用终结方法会导致行为不稳定、性能降低，以及可移植性问题。</p>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><ol>
+<li>终结方法和清除方法的缺点在于不能保证会被及时执行［ JLS . 12.6 ］。所以注重时间（ time-c「itical l 的任务不应该由终结方法或者清除方法来完成。</li>
+<li>终结方法线程的优先级比该应用程序的其他线程的优先级要低得多，因此不能确保及时运行所有的finalize方法。</li>
+<li>Java 语言规范不仅不保证终结方法或者清除方法会被及时地执行，而且根本就不保证它们会被执行。当一个程序终止的时候，某些已经无法访问的对象上的终结方法却根本没有被执行，这是完全有可能的。</li>
+<li>使用终结方法的另一个问题是：如果忽略在终结过程中被抛出来的未被捕获的异常，该对象的终结过程也会终止［ JLS, 12 . 6 ］。正常情况下，未被捕获的异常将会使线程终止，并打印出战轨迹（ Stack Trace ），但是，如果异常发生在终结方法之中，则不会如此，甚至连警告都不会打印出来。</li>
+<li>使用终结方法和清除方法有一个非常严重的性能损失</li>
+<li>终结方法有一个严重的安全问题： 它们为终结方法攻击（ finalizer attack ） 打开了类的大门。</li>
+</ol>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ol>
+<li>当资源的所有者忘记调用它的close 方法时，终结方法或者清除方法可以充当”安全网”。</li>
+<li>终止非关键的本地资源</li>
+</ol>
+<p><strong>既然不会用，那就尽量不要用finalize这个方法。</strong></p>
+<hr>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/05/22/EffectiveJava（1）对象/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/05/22/EffectiveJava（1）对象/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
