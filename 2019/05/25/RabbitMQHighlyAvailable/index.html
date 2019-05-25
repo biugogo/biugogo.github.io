@@ -125,7 +125,8 @@
 <p><strong>Mirrored Queue和non-Mirrored的主要差别在于，如果Master节点不可用， non-Mirrored的表现取决于他的持久化配置，持久化的non-Mirrored Queue会在节点重启后继续可用，在挂掉时间内，Queue接受到message会打印一条log，非持久化的non-Mirrored将永远消失。Mirrored Queue在节点全部挂掉前，都可以进行故障迁移。</strong></p>
 <p>non-Mirrored日志example</p>
 <pre><code>operation queue.declare caused a channel exception not_found: home node &#39;rabbit@hostname&#39; of durable queue &#39;queue-name&#39; in v
-</code></pre><h3 id="如何配置Mirroring"><a href="#如何配置Mirroring" class="headerlink" title="如何配置Mirroring"></a>如何配置Mirroring</h3><p>Mirrored Queue配置是通过配置policies实现的。当一个Queue满足多个policy时，会选择优先级最大的policy。Policies可以在任何时间更改。你可以先创建一个没有Mirrored的Queue然后再通过Policies让它变成Mirrored的。</p>
+</code></pre><hr>
+<h3 id="如何配置Mirroring"><a href="#如何配置Mirroring" class="headerlink" title="如何配置Mirroring"></a>如何配置Mirroring</h3><p>Mirrored Queue配置是通过配置policies实现的。当一个Queue满足多个policy时，会选择优先级最大的policy。Policies可以在任何时间更改。你可以先创建一个没有Mirrored的Queue然后再通过Policies让它变成Mirrored的。</p>
 <p>非Mirrored Queus和没有Mirror的MirroredQueue的差别在于，非Mirrored Queus因为不需要镜像组件，可以有更高的Msssage吞吐量。</p>
 <h4 id="Mirrored-Queus三种类型"><a href="#Mirrored-Queus三种类型" class="headerlink" title="Mirrored Queus三种类型"></a>Mirrored Queus三种类型</h4><ol>
 <li><p><strong>exactly</strong>：固定数量节点策略<br>设置ha-mode=axactly同时，需要设置ha-params=count。count就是节点数量，如果count=1，代表只有一个Master的Mirrored Queus；如果count=2代表1个Master和1个Mirror。如果这里这里节点数不够count，会在所有的节点上创建Queue。如果已经有超过count的Mirror Queue存在，会删除多余节点上的Queue。<br><em>注意使用ha-promote-on-shutdown=always在exactly模式下会有危险，因为Queue会跨节点迁移，使之变得不同步</em><br><img src="/gallery/rabbitMQ/haExactly.png" alt="img"><br><img src="/gallery/rabbitMQ/haExactlyDetails.png" alt="img">     </p>
