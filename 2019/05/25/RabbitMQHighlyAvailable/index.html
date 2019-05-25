@@ -1,0 +1,275 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/doraemon/1557842807990.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>RabbitMQ Highly Available</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="RabbitMQ高可用队列"><a href="#RabbitMQ高可用队列" class="headerlink" title="RabbitMQ高可用队列"></a>RabbitMQ高可用队列</h1><hr>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>本文主要翻译<a href="https://www.rabbitmq.com/ha.html#unsynchronised-Mirrors" target="_blank" rel="noopener">官方文档</a>作为记录理解。</p>
+<ol>
+<li>Mirrored Queue是什么</li>
+<li>如何配置Mirrored Queue</li>
+<li>Mirrored Queue Master节点选择和数据迁移</li>
+<li>Mirrored Queue故障迁移细节</li>
+</ol>
+<hr>
+<h3 id="Mirrored-Queue是什么"><a href="#Mirrored-Queue是什么" class="headerlink" title="Mirrored Queue是什么"></a>Mirrored Queue是什么</h3><p>默认情况下，Msssage Queue不像Exchange和Banding那样会复制到所有节点，RabbitMQ Cluster的队列是只会在一个节点上的（队列在哪个声明就会在哪个节点上）。但是可以通过配置Mirrored Queue让Queue在多个节点上形成镜像。</p>
+<p>每组Mirrored Queue由一个Master和一个或多个Mirror（镜像）。每个Queue都有自己的Matser。所有对Queue的操作都是首先应用在Matser上，再传播到Mirror。这些操作包括Msssage的发布和传递，消费者的Ack回包等。</p>
+<p>Mirrored Queue是在cluster模式下使用的，所以尽量保证所有的节点延迟很小最好是在一个局域网当中。</p>
+<p>当Msssage被发布到Mirrored Queue时，会被复制到所有的Mirrors。消费者不管他们连接到哪个节点都会连接到Master，当消费者与Master Ack后，Mirror就会删除这条Msssage。Mirrored Queue只会提高Queue的高可用，但是不会分配负载。</p>
+<p>如果Master挂掉了,最老的Mirror如果是同步的，就会被选举成新的Master，如果它不是同步的，它也可以成为Master，这个取决于队列配置。</p>
+<p><strong>Mirrored Queue和non-Mirrored的主要差别在于，如果Master节点不可用， non-Mirrored的表现取决于他的持久化配置，持久化的non-Mirrored Queue会在节点重启后继续可用，在挂掉时间内，Queue接受到message会打印一条log，非持久化的non-Mirrored将永远消失。Mirrored Queue在节点全部挂掉前，都可以进行故障迁移。</strong></p>
+<p>non-Mirrored日志example</p>
+<pre><code>operation queue.declare caused a channel exception not_found: home node &#39;rabbit@hostname&#39; of durable queue &#39;queue-name&#39; in v
+</code></pre><h3 id="如何配置Mirroring"><a href="#如何配置Mirroring" class="headerlink" title="如何配置Mirroring"></a>如何配置Mirroring</h3><p>Mirrored Queue配置是通过配置policies实现的。当一个Queue满足多个policy时，会选择优先级最大的policy。Policies可以在任何时间更改。你可以先创建一个没有Mirrored的Queue然后再通过Policies让它变成Mirrored的。</p>
+<p>非Mirrored Queus和没有Mirror的MirroredQueue的差别在于，非Mirrored Queus因为不需要镜像组件，可以有更高的Msssage吞吐量。</p>
+<h4 id="Mirrored-Queus三种类型"><a href="#Mirrored-Queus三种类型" class="headerlink" title="Mirrored Queus三种类型"></a>Mirrored Queus三种类型</h4><ol>
+<li><p><strong>exactly</strong>：固定数量节点策略<br>设置ha-mode=axactly同时，需要设置ha-params=count。count就是节点数量，如果count=1，代表只有一个Master的Mirrored Queus；如果count=2代表1个Master和1个Mirror。如果这里这里节点数不够count，会在所有的节点上创建Queue。如果已经有超过count的Mirror Queue存在，会删除多余节点上的Queue。<br><em>注意使用ha-promote-on-shutdown=always在exactly模式下会有危险，因为Queue会跨节点迁移，使之变得不同步</em><br><img src="/gallery/rabbitMQ/haExactly.png" alt="img"><br><img src="/gallery/rabbitMQ/haExactlyDetails.png" alt="img">     </p>
+<ul>
+<li>Pattern:匹配正则表达式</li>
+<li>Apply to:匹配队列还是交换机，这里是匹配队列</li>
+<li>Definition:配置详情，这里意思是固定数量的Mirrored Queus，队列最大长度500000。Master节点选择策略是最轻负载策略。</li>
+</ul>
+</li>
+<li><p><strong>all</strong>：全体节点策略<br>设置ha-mode=all，Queue会复制到全部节点，如果一个新的节点加入到集群，Queue也会自动复制到这个节点上。这个设置是非常保守的，如果不是特别重要的数据，没有必要这样，这会增加整个集群的负载，包括网络IO和磁盘IO等。通常建议复制到N/2 + 1个节点即可，N代表集群总节点数。<br><img src="/gallery/rabbitMQ/haAll.png" alt="img"></p>
+</li>
+<li><p><strong>nodes</strong>：指定名称节点<br>设置ha-mode=nodes同时需要配置ha-params=<em>node names</em>。node name即rabbit@hostname形式的状态。如果集群中没有node name，不会有Mirror生成，但是一旦指定name的node接入集群，Queue会自动在接入节点上创建。</p>
+</li>
+</ol>
+<h4 id="多少个Mirror合理？"><a href="#多少个Mirror合理？" class="headerlink" title="多少个Mirror合理？"></a>多少个Mirror合理？</h4><p>首先，配置ha-mode=all是十分保守的，会加重整个集群负载，增加不必要的网络消耗和磁盘消耗，通常建议</p>
+<pre><code>mirro数=N/2+1个 //N代表节点总数
+</code></pre><p>当然，如果有些数据是瞬态的，并且时效性很强的，设置更少的Mirror或者不设置Mirror也是可以的。</p>
+<hr>
+<h3 id="Mirrored-Queue-Master节点选择和数据迁移"><a href="#Mirrored-Queue-Master节点选择和数据迁移" class="headerlink" title="Mirrored Queue Master节点选择和数据迁移"></a>Mirrored Queue Master节点选择和数据迁移</h3><h4 id="Master节点选择策略"><a href="#Master节点选择策略" class="headerlink" title="Master节点选择策略"></a>Master节点选择策略</h4><p>为了保证message FIFO的特性，每个Queue都有一个Master，所有Queue的操作都是先对Master生效，然后传递到其他Mirror。Queue的Master节点选取有三种策略。</p>
+<ol>
+<li>min-Masters：负载最低节点策略</li>
+<li>client-local：客户端连接哪个节点就哪个策略</li>
+<li>random：随机</li>
+</ol>
+<p>一般选取min-Masters策略,在管理网页配置</p>
+<pre><code>Queue-Master-locator=min-Masters即可
+</code></pre><h4 id="Master节点迁移"><a href="#Master节点迁移" class="headerlink" title="Master节点迁移"></a>Master节点迁移</h4><p>当我们更改Master选择策略的时候，可能会造成节点迁移（当现主节点不满足新的策略时）。为了保证不丢失Msssage，rabbitMQ的旧Master会持续服务，直到有一个新的Mirror完全同步。这个过程一旦开始，就像会像Matser节点挂掉，从新选主的的过程，consumer会和Master断开连接，进行重连。</p>
+<p><em>比如Queue有A主，B从两个节点，现在策略指定Queue迁移至C,D两个节点，中间过程可能会有ACD三个节点，当CD中有某个同步完成，A节点会自动下线。最后留下CD俩个节点，同步完成</em>。</p>
+<hr>
+<h3 id="Mirrored-Queue故障迁移细节"><a href="#Mirrored-Queue故障迁移细节" class="headerlink" title="Mirrored Queue故障迁移细节"></a>Mirrored Queue故障迁移细节</h3><p>上文我们已经知道，每个Mirrored Queue都有一个Master和一个或几个Mirror，在不同的节点上，所有的操作都是在Master上进行的，再由Master广播给Mirror，包括Msssage消费也是从Master节点消费的。</p>
+<h4 id="Mirror挂掉"><a href="#Mirror挂掉" class="headerlink" title="Mirror挂掉"></a>Mirror挂掉</h4><p>一旦Mirror挂掉，出了一些记录外，不会发生任何事，Master依旧是Master，client也不会有任何动作，不会被告知失败。当然Mirror的失败也不会被立即检测到（因为心跳间隔的缘故）</p>
+<h4 id="Master挂掉"><a href="#Master挂掉" class="headerlink" title="Master挂掉"></a>Master挂掉</h4><ol>
+<li>运行时间最长的Mirror将被提拔成Master，这里假设这个运行时间最长的Mirror是完全同步的和Master。如果所有Mirror都不是同步的，只存在Master的这部分Msssage将会丢失。</li>
+<li>被选举的这个Mirror会对所有已经发送，但是还没有ACK的Msssage重新排队，这里包括客户端已经发出的ACK Msssage，但是这个ACK可能在到达Master前或者Master同步给Mirror时被丢包了。因此，被选举成新Master的Mirror不得不从新发送所有没有ack的Msssage。</li>
+<li>Consumers that have requested to be notified when a queue fails over will be notified of cancellation.(原文，不是很理解)</li>
+<li>因为Mirror重新发送没有ACK的所有Msssage，client将会收到重复的Msssage。</li>
+<li>在Mirror被选举成Master的选举过程，不会发生Msssage丢失。Client发送Message到连接的节点会被路由到Master，然后复制到所有节点，就算Master失败，这些Msssage还是会被发送到其他Mirror。一旦Mirror升级为新Master,这条Msssage已经在新Master Queue中了。</li>
+<li>如果Mirrored Queue设置了noAck=true，Msssage会发生丢失（就算Master节点没有发生故障，也会丢）</li>
+<li>Mirrored Queues也支持publisher confirms模式。message只有被所有Mirror确认后才会被认为成功发布。</li>
+<li>Mirrored Queues也支持transactions模式，只有当所有Mirror确认了transaction，clinet才会收到tx.commit-ok的回包。</li>
+</ol>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/05/25/RabbitMQHighlyAvailable/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/05/25/RabbitMQHighlyAvailable/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
