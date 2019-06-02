@@ -1,0 +1,418 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/1557842703189.jpg.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>EffectiveJava(2)--基础方法</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="EffectiveJava-2-–基础方法"><a href="#EffectiveJava-2-–基础方法" class="headerlink" title="EffectiveJava(2)–基础方法"></a>EffectiveJava(2)–基础方法</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ol>
+<li>hashCode()和equals()方法</li>
+<li>wait()和notify()</li>
+<li>toString()</li>
+</ol>
+<hr>
+<h3 id="1-hashCode-和equals-方法"><a href="#1-hashCode-和equals-方法" class="headerlink" title="1.hashCode()和equals()方法"></a>1.hashCode()和equals()方法</h3><h4 id="equals-原则"><a href="#equals-原则" class="headerlink" title="equals()原则"></a>equals()原则</h4><ol>
+<li>自反性(reflexive): 对于任何非null 的引用值x x . equals(x)必须返回true.</li>
+<li>对称性(symmetric)：对于任何非null 的引用值x 和y,当且仅当y.equals(x)返回true 时， x.equals(y)必须返回true.</li>
+<li>传递性(transitive): 对于任何非null 的引用值x 、y 和z,如果x.equals(y)返回true,并且y.equals(z)也返回true,那么x.equals(z)也必须返回true 0</li>
+<li>一致性(consistent): 对于任何非null 的引用值x 和y,只要equals 的比较操作在对象中所用的信息没有被修改，多次调用x.equals(y)就会一致地返回true,<br>或者一致地返回false</li>
+<li>对于任何非null 的引用值x, x.equals (null)必须返回false 。</li>
+</ol>
+<p>这些原则跟你想象的逻辑很符合，不需要特别记忆。</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BuilderDemo</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/**
+     * 必须参数
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String requiredParam1<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String requiredParam2<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">/**
+     * 可选参数
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String optionalParam1<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> String optionalParam2<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">equals</span><span class="token punctuation">(</span>Object o<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span> <span class="token operator">==</span> o<span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>o <span class="token operator">==</span> null <span class="token operator">||</span> <span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> o<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        BuilderDemo demo <span class="token operator">=</span> <span class="token punctuation">(</span>BuilderDemo<span class="token punctuation">)</span> o<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> Objects<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>requiredParam1<span class="token punctuation">,</span> demo<span class="token punctuation">.</span>requiredParam1<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+                Objects<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>requiredParam2<span class="token punctuation">,</span> demo<span class="token punctuation">.</span>requiredParam2<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+                Objects<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>optionalParam1<span class="token punctuation">,</span> demo<span class="token punctuation">.</span>optionalParam1<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+                Objects<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>optionalParam2<span class="token punctuation">,</span> demo<span class="token punctuation">.</span>optionalParam2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="覆盖equals时总要覆盖hashCode"><a href="#覆盖equals时总要覆盖hashCode" class="headerlink" title="覆盖equals时总要覆盖hashCode"></a>覆盖equals时总要覆盖hashCode</h4><ol>
+<li>相等的对象必须具有相等的散到码hashCode。</li>
+<li>相等的hashCode不一定是相等对象。（当然尽量让对象拥有不同的hashCode，可以提高hash table的性能）</li>
+</ol>
+<p>这个记忆点可以很简单，想想hashMap的结构，散列+链表。为什么需要链表，就是因为不同对象能别hash到一个链表里。相等对象如果没有相同的hashCode，用hashCode去hashMap里取值时，也就会变得不确定性。</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> Objects<span class="token punctuation">.</span><span class="token function">hash</span><span class="token punctuation">(</span>requiredParam1<span class="token punctuation">,</span> requiredParam2<span class="token punctuation">,</span> optionalParam1<span class="token punctuation">,</span> optionalParam2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h3 id="2-wait和notify"><a href="#2-wait和notify" class="headerlink" title="2.wait和notify"></a>2.wait和notify</h3><ol>
+<li><p>始终应该使用wait循环模式来调用wait 方法；永远不要在循环之外调用wait方法,理由:</p>
+<ol>
+<li>另一个线程可能已经得到了锁，并且从一个线程调用notify方法那一刻起，到等待线程苏醒过来的这段时间中，得到锁的线程已经改变了受保护的状态。</li>
+<li>条件并不成立，但是另一个线程可能意外地或恶意地调用了notify方法</li>
+<li>通知线程（ notifying thread ）在唤醒等待线程时可能会过度“大方” 。例如，即使只有某些等待线程的条件已经被满足，但是通知线程可能仍然调用notifyAll方法</li>
+<li><p>在没有通知的情况下，等待线程也可能（但很少）会苏醒过来。这被称为”伪唤醒”</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">synchronized</span> <span class="token punctuation">(</span>object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span>condition <span class="token keyword">do</span> not hold<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      object<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+</li>
+<li><p>notify还是notifyAll</p>
+<ol>
+<li>保守建议：始终使用notifyAll，它总会产生正确的结果，因为它可以保证你将会唤醒所有需要被唤醒的线程。这些线程醒来之后，会检查它们正在等待的条件，如果发现条件并不满足，就会继续等待。</li>
+<li>优化建议：从优化的角度来看，如果处于等待状态的所有线程都在等待同一个条件，而每次只有一个线程可以从这个条件中被唤醒，那么你就应该选择调用notify方法</li>
+</ol>
+</li>
+<li><p>一个使用notify和wait的例子,打印1-100,线程1打印双数，线程2打印单数:</p>
+<pre class="line-numbers language-java"><code class="language-java"> <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">WaitAndNotifyDemo</span> <span class="token punctuation">{</span>
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">volatile</span> <span class="token keyword">int</span> count <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Printer</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+     <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
+     <span class="token keyword">private</span> <span class="token keyword">final</span> Object object<span class="token punctuation">;</span>
+
+     <span class="token keyword">public</span> <span class="token function">Printer</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> Object object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+         <span class="token keyword">this</span><span class="token punctuation">.</span>object <span class="token operator">=</span> object<span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+
+     <span class="token annotation punctuation">@Override</span>
+     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token keyword">try</span> <span class="token punctuation">{</span>
+             <span class="token keyword">while</span> <span class="token punctuation">(</span>count <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                 <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                     <span class="token keyword">while</span> <span class="token punctuation">(</span>count <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                         object<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     <span class="token punctuation">}</span>
+                     <span class="token keyword">if</span> <span class="token punctuation">(</span>count <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                         count<span class="token operator">++</span><span class="token punctuation">;</span>
+                         object<span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     <span class="token punctuation">}</span>
+                 <span class="token punctuation">}</span>
+             <span class="token punctuation">}</span>
+         <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+             e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Printer2</span> <span class="token keyword">implements</span> <span class="token class-name">Runnable</span> <span class="token punctuation">{</span>
+     <span class="token keyword">private</span> String name<span class="token punctuation">;</span>
+     <span class="token keyword">private</span> <span class="token keyword">final</span> Object object<span class="token punctuation">;</span>
+
+     <span class="token keyword">public</span> <span class="token function">Printer2</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> Object object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token keyword">this</span><span class="token punctuation">.</span>name <span class="token operator">=</span> name<span class="token punctuation">;</span>
+         <span class="token keyword">this</span><span class="token punctuation">.</span>object <span class="token operator">=</span> object<span class="token punctuation">;</span>
+     <span class="token punctuation">}</span>
+
+     <span class="token annotation punctuation">@Override</span>
+     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+         <span class="token keyword">try</span> <span class="token punctuation">{</span>
+             <span class="token keyword">while</span> <span class="token punctuation">(</span>count <span class="token operator">&lt;</span> <span class="token number">100</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                 <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>object<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                     <span class="token keyword">while</span> <span class="token punctuation">(</span>count <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                         object<span class="token punctuation">.</span><span class="token function">wait</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     <span class="token punctuation">}</span>
+                     <span class="token keyword">if</span> <span class="token punctuation">(</span>count <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>name <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                         count<span class="token operator">++</span><span class="token punctuation">;</span>
+                         object<span class="token punctuation">.</span><span class="token function">notify</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                     <span class="token punctuation">}</span>
+                 <span class="token punctuation">}</span>
+             <span class="token punctuation">}</span>
+         <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+             e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+         <span class="token punctuation">}</span>
+     <span class="token punctuation">}</span>
+
+ <span class="token punctuation">}</span>
+
+ <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     Object lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     Printer p <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Printer</span><span class="token punctuation">(</span><span class="token string">"p1"</span><span class="token punctuation">,</span> lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     Printer2 p2 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Printer2</span><span class="token punctuation">(</span><span class="token string">"p2"</span><span class="token punctuation">,</span> lock<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+     ExecutorService executorService <span class="token operator">=</span> Executors<span class="token punctuation">.</span><span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     executorService<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     executorService<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span>p2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<hr>
+<h3 id="始终要覆盖toString"><a href="#始终要覆盖toString" class="headerlink" title="始终要覆盖toString"></a>始终要覆盖toString</h3><ol>
+<li>提供好的toString实现可以便类用起来更加舒适，使用了这个类的系统也更易于调试</li>
+<li>在实际应用中,toString方法应该返回对象中包含的所有值得关注的信息，</li>
+</ol>
+<h4 id="3种toString写法"><a href="#3种toString写法" class="headerlink" title="3种toString写法"></a>3种toString写法</h4><p>demo类</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ToStringTest</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> Integer a<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> Long b<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String c<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String d<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> String e<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol>
+<li>“+”连接</li>
+</ol>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"ToStringTest{"</span> <span class="token operator">+</span>
+                <span class="token string">"a="</span> <span class="token operator">+</span> a <span class="token operator">+</span>
+                <span class="token string">", b="</span> <span class="token operator">+</span> b <span class="token operator">+</span>
+                <span class="token string">", c='"</span> <span class="token operator">+</span> c <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", d='"</span> <span class="token operator">+</span> d <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">", e='"</span> <span class="token operator">+</span> e <span class="token operator">+</span> <span class="token string">'\''</span> <span class="token operator">+</span>
+                <span class="token string">'}'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>StringBuffer(StringBuilder)<pre class="line-numbers language-java"><code class="language-java"> <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">final</span> StringBuilder sb <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">StringBuilder</span><span class="token punctuation">(</span><span class="token string">"ToStringTest{"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">"a="</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">", b="</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+     sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">", c='"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">", d='"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">", e='"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'\''</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     sb<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span><span class="token string">'}'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+     <span class="token keyword">return</span> sb<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li>StringJoiner<pre class="line-numbers language-java"><code class="language-java"> <span class="token keyword">public</span> String <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">StringJoiner</span><span class="token punctuation">(</span><span class="token string">", "</span><span class="token punctuation">,</span> ToStringTest<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"["</span><span class="token punctuation">,</span> <span class="token string">"]"</span><span class="token punctuation">)</span>
+             <span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"a="</span> <span class="token operator">+</span> a<span class="token punctuation">)</span>
+             <span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"b="</span> <span class="token operator">+</span> b<span class="token punctuation">)</span>
+             <span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"c='"</span> <span class="token operator">+</span> c <span class="token operator">+</span> <span class="token string">"'"</span><span class="token punctuation">)</span>
+             <span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"d='"</span> <span class="token operator">+</span> d <span class="token operator">+</span> <span class="token string">"'"</span><span class="token punctuation">)</span>
+             <span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"e='"</span> <span class="token operator">+</span> e <span class="token operator">+</span> <span class="token string">"'"</span><span class="token punctuation">)</span>
+             <span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<p>性能测试结果是：<br>StringBuffer(StringBuilder)≈”+”，Java8的StringJoiner大约是前2者的3倍。结论是用”+”就好，看起来更加简易。（大多数编译器也会将”+”编译成StringBuilder的形式）</p>
+<hr>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/06/01/EffectiveJava（2）基础方法/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/06/01/EffectiveJava（2）基础方法/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
