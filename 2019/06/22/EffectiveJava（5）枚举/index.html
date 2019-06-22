@@ -1,0 +1,446 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/1557842817807.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>EffectiveJava(5)--枚举</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="EffectiveJava-5-–枚举"><a href="#EffectiveJava-5-–枚举" class="headerlink" title="EffectiveJava(5)–枚举"></a>EffectiveJava(5)–枚举</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ol>
+<li>枚举代替int常量</li>
+<li>EnumSet和EnumMap</li>
+<li>枚举常用写法和策略模式</li>
+</ol>
+<hr>
+<h3 id="1-枚举代替int常量"><a href="#1-枚举代替int常量" class="headerlink" title="1. 枚举代替int常量"></a>1. 枚举代替int常量</h3><p>下面是几个常量，代表各种角色的SALRY</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SALRY_MANAGER <span class="token operator">=</span> 100_000<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SALRY_PROGRAMMER <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SALRY_PM <span class="token operator">=</span> 88_888<span class="token punctuation">;</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> WORK_HOUR_MANAGER <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> WORK_HOUR_PROGRAMMER <span class="token operator">=</span> <span class="token number">12</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> WORK_HOUR_PM <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这种方法称作int 枚举棋式,int 枚举模式不具有类型安全性， 也几乎没有描述性可言。例如你将任何int值与SALRY比，或者可以SALRY传到WORK_HOUR等变量。<br>同时很难将int枚举常量转换成可打印的字符串。就算将这种常量打印出来，或者从调试器中将它显示出来，你所见到的也只是一个数字，这几乎没有什么用处。</p>
+<p>这种时候，换用枚举是个很好的选择</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> Position <span class="token punctuation">{</span>
+    <span class="token function">Manager</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> 100_000<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">Programmer</span><span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">PM</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> 88_888<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> workHour<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> salary<span class="token punctuation">;</span>
+
+    <span class="token function">Position</span><span class="token punctuation">(</span><span class="token keyword">int</span> workHour<span class="token punctuation">,</span> <span class="token keyword">int</span> salary<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>workHour <span class="token operator">=</span> workHour<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salary <span class="token operator">=</span> salary<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>枚举类型保证了编译时的类型安全。例如声明参数的类型为Position，它就能保证传到该参数上的任何非空的对象引用一定属于三个有效的Position值之一，而其他任何试图传递类型错误的值都会导致编译时错误，就像试图将某种枚举类型的表达式赋给另一种枚举类型的变量，或者试图利用==操作符比较不同枚举类型的值都会导致编译时错误。包含同名常量的多个枚举类型可以在一个系统中和平共处，因为每个类型都有自己的命名空间。你可以增加或者重新排列枚举类型中的常量，而无须重新编译它的客户端代码。除了完善int枚举模式的不足之外，枚举类型还允许添加任意的方法和域，并实现任意的接口。</p>
+<p><strong>每当需要一组固定常量．并且在编译时就知道其成员的时候，就应该使用枚举。</strong></p>
+<p>总而言之，与int常量相比，枚举类型的优势是不言而喻的。枚举的可读性更好，也更加安全，功能更加强大。许多枚举都不需要显式的构造器或者成员，但许多其他枚举则受益于属性与每个常量的关联以及其行为受该属性影响的方法。只有极少数的枚举受益于将多种行为与单个方法关联。在这种相对少见的情况下，特定于常量的方法要优先于启用自有值的枚举。如果多个（但非所有）枚举常量同时共享相同的行为，则要考虑策略枚举。</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">enum</span> Operation <span class="token punctuation">{</span>
+        PLUS<span class="token punctuation">,</span> MINUS<span class="token punctuation">,</span> TIMES<span class="token punctuation">,</span> DIVIDE<span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">switch</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">case</span> PLUS<span class="token operator">:</span>
+                    <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+                <span class="token keyword">case</span> MINUS<span class="token operator">:</span>
+                    <span class="token keyword">return</span> x <span class="token operator">-</span> y<span class="token punctuation">;</span>
+                <span class="token keyword">case</span> TIMES<span class="token operator">:</span>
+                    <span class="token keyword">return</span> x <span class="token operator">*</span> y<span class="token punctuation">;</span>
+                <span class="token keyword">case</span> DIVIDE<span class="token operator">:</span>
+                    <span class="token keyword">return</span> x <span class="token operator">/</span> y<span class="token punctuation">;</span>
+                <span class="token keyword">default</span><span class="token operator">:</span>
+                    <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"can not support"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>考虑这段代码，根据不同的操作符，选择不同的运算规则。这段代码能用，但是不太好看。如果没有throw语句，它就不能进行编译，虽然从技术角度来看代码的结束部分是可以执行到的，但是实际上是不可能执行到这行代码的。</p>
+<p>更糟糕的是，这段代码很脆弱。如果你添加了新的枚举常量，却忘记给switch添加相应的条件，枚举仍然可以编译，但是当你试图运用新的运算时，就会运行失败。</p>
+<p>幸运的是，有一种更好的方法可以将不同的行为与每个枚举常量关联起来：在枚举类<br>型中声明一个抽象的apply方法.这种方法被称作特定于常量的方法实现</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">enum</span> Operation <span class="token punctuation">{</span>
+        PLUS <span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> x <span class="token operator">+</span> y<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        MINUS <span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> x <span class="token operator">-</span> y<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        TIMES <span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> x <span class="token operator">*</span> y<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+        DIVIDE <span class="token punctuation">{</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">double</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> x <span class="token operator">/</span> y<span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">double</span> <span class="token function">apply</span><span class="token punctuation">(</span><span class="token keyword">double</span> x<span class="token punctuation">,</span> <span class="token keyword">double</span> y<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>如果给Operation 的第二种版本添加新的常量，你就不可能会忘记提供apply 方<br>法，因为该方法紧跟在每个常量声明之后。即使你真的忘记了，编译器也会提醒你，因为枚举类型中的抽象方法必须被它的所有常量中的具体方法所覆盖。</p>
+<hr>
+<h3 id="2-EnumSet和EnumMap"><a href="#2-EnumSet和EnumMap" class="headerlink" title="2. EnumSet和EnumMap"></a>2. EnumSet和EnumMap</h3><p>所有的枚举都有一个ordinal 方法，它返回每个枚举常量在类型中的数字位置。一般情况下，对普通程序员来说是不会使用ordinal()方法的，根据序数编写的程序虽然可以工作，但是维护起来就像一场噩梦，如果常量进行重新排序，你依赖序数的程序可能保持正常工作了。</p>
+<p>EnumSet和EnumMap的实现原理就和ordinal有关</p>
+<h4 id="EnumSet"><a href="#EnumSet" class="headerlink" title="EnumSet"></a>EnumSet</h4><pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token operator">&lt;</span>E <span class="token keyword">extends</span> <span class="token class-name">Enum</span><span class="token operator">&lt;</span>E<span class="token operator">>></span> EnumSet<span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token function">noneOf</span><span class="token punctuation">(</span>Class<span class="token operator">&lt;</span>E<span class="token operator">></span> elementType<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        Enum<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span><span class="token punctuation">[</span><span class="token punctuation">]</span> universe <span class="token operator">=</span> <span class="token function">getUniverse</span><span class="token punctuation">(</span>elementType<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>universe <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ClassCastException</span><span class="token punctuation">(</span>elementType <span class="token operator">+</span> <span class="token string">" not an enum"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>universe<span class="token punctuation">.</span>length <span class="token operator">&lt;=</span> <span class="token number">64</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RegularEnumSet</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>elementType<span class="token punctuation">,</span> universe<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">else</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">JumboEnumSet</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span>elementType<span class="token punctuation">,</span> universe<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上文是EnumSet的构造方式一种，可以看到EnumSet的实现方式有两种，RegularEnumSet和JumboEnumSet。枚举类型的枚举数量小于64时，采用RegularEnumSet（实现方式是long），否则使用JumboEnumSet（实现方式long[]）。</p>
+<p>这里分析下简单的RegularEnumSet。</p>
+<pre class="line-numbers language-java"><code class="language-java">
+    <span class="token comment" spellcheck="true">/**
+    * add一个枚举，实现是通过把1左移序数位，再跟原数|操作
+    * 比如添加第一个序数2的枚举，左移后   100，与0 | 操作后位 elements=100 
+    * 比如添加第二个序数4的枚举，左移后 10000，与100 |操作后位 elements=10100
+    * elements=10100 代表序数2和序数4添加到了Set中
+    */</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span>E e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">typeCheck</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">long</span> oldElements <span class="token operator">=</span> elements<span class="token punctuation">;</span>
+        elements <span class="token operator">|=</span> <span class="token punctuation">(</span>1L <span class="token operator">&lt;&lt;</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>Enum<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span><span class="token punctuation">)</span>e<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ordinal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> elements <span class="token operator">!=</span> oldElements<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+    * contains则先判断是否是这个枚举，不是直接返回false
+    * 判断序数2在不在，先将1左移2位变成 100,
+    * 再100 与 10100 &amp;操作变为 00100 !=0 ,说明存在，如果是序数位3判断，1000与10100 &amp; 操作00000 = 0 ，说明不存在。
+    */</span>
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">contains</span><span class="token punctuation">(</span>Object e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>e <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+        Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> eClass <span class="token operator">=</span> e<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>eClass <span class="token operator">!=</span> elementType <span class="token operator">&amp;&amp;</span> eClass<span class="token punctuation">.</span><span class="token function">getSuperclass</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> elementType<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token punctuation">(</span>elements <span class="token operator">&amp;</span> <span class="token punctuation">(</span>1L <span class="token operator">&lt;&lt;</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>Enum<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span><span class="token punctuation">)</span>e<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">ordinal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当序数大于64后，long不能装下整个枚举，而是long[]方式。</p>
+<h4 id="EnumMap"><a href="#EnumMap" class="headerlink" title="EnumMap"></a>EnumMap</h4><pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token function">EnumMap</span><span class="token punctuation">(</span>Class<span class="token operator">&lt;</span>K<span class="token operator">></span> var1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>keyType <span class="token operator">=</span> var1<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>keyUniverse <span class="token operator">=</span> <span class="token function">getKeyUniverse</span><span class="token punctuation">(</span>var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>vals <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token keyword">this</span><span class="token punctuation">.</span>keyUniverse<span class="token punctuation">.</span>length<span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>EnumMap的实现更为简单，直接通过一个Object[]实现，ordinal等于1则 Object[1] = value.</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token comment" spellcheck="true">/**
+    * 添加就是 取ordinal作为下标，然后 Object[ordinal] = value。maskNull和unmaskNull则是对null的处理，EnumMap支持null位Key
+    * 
+    */</span>
+    <span class="token keyword">public</span> V <span class="token function">put</span><span class="token punctuation">(</span>K key<span class="token punctuation">,</span> V value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">typeCheck</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">int</span> index <span class="token operator">=</span> key<span class="token punctuation">.</span><span class="token function">ordinal</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Object oldValue <span class="token operator">=</span> vals<span class="token punctuation">[</span>index<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        vals<span class="token punctuation">[</span>index<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">maskNull</span><span class="token punctuation">(</span>value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>oldValue <span class="token operator">==</span> null<span class="token punctuation">)</span>
+            size<span class="token operator">++</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">unmaskNull</span><span class="token punctuation">(</span>oldValue<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>总而言之， 正是因为枚举类型要用在集合中，所以没有理由用位域来表示它。EnumSet类集位域的简洁和性能优势。最好不要用序数来索引数组，而要使用EnumMap。应用程序的程序员在一般情况下都不使用Enurn.ordinal方法。</p>
+<hr>
+<h3 id="3-枚举常用写法和枚举策略模式"><a href="#3-枚举常用写法和枚举策略模式" class="headerlink" title="3. 枚举常用写法和枚举策略模式"></a>3. 枚举常用写法和枚举策略模式</h3><ol>
+<li>根据id反序列化枚举,valueOf(int id) </li>
+</ol>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> Position <span class="token punctuation">{</span>
+    <span class="token function">Manager</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> 100_000<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">Programmer</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">12</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token function">PM</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> 88_888<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> id<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> workHour<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> salary<span class="token punctuation">;</span>
+
+    <span class="token function">Position</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">,</span> <span class="token keyword">int</span> workHour<span class="token punctuation">,</span> <span class="token keyword">int</span> salary<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>id <span class="token operator">=</span> id<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>workHour <span class="token operator">=</span> workHour<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salary <span class="token operator">=</span> salary<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">static</span> Map<span class="token operator">&lt;</span>Integer<span class="token punctuation">,</span> Position<span class="token operator">></span> idParse <span class="token operator">=</span> Collections<span class="token punctuation">.</span><span class="token function">emptyMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">static</span> <span class="token punctuation">{</span>
+        ImmutableMap<span class="token punctuation">.</span>Builder<span class="token operator">&lt;</span>Integer<span class="token punctuation">,</span> Position<span class="token operator">></span> builder <span class="token operator">=</span> ImmutableMap<span class="token punctuation">.</span><span class="token function">builderWithExpectedSize</span><span class="token punctuation">(</span><span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span>Position position <span class="token operator">:</span> <span class="token function">values</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            builder<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>position<span class="token punctuation">.</span>id<span class="token punctuation">,</span> position<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        idParse <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> Optional<span class="token operator">&lt;</span>Position<span class="token operator">></span> <span class="token function">valueOf</span><span class="token punctuation">(</span><span class="token keyword">int</span> id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> Optional<span class="token punctuation">.</span><span class="token function">ofNullable</span><span class="token punctuation">(</span>idParse<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>id<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里利用了Enum的特性，Enum的构造函数是先于static代码块执行的。所以static中进行的操作，是有效的。返回值是Optional包裹的，因为id可能不存在于这个Enum，强制客户端处理null的情况。</p>
+<ol start="2">
+<li><p>枚举策略委托<br><code>`</code>java<br>public enum Position {<br> Manager(100_000, Allowance.Others) {</p>
+<pre><code> @Override
+ int money() {
+     return (salary + allowance.value) * 5;
+ }
+</code></pre><p> },<br> Programmer(1, Allowance.Programmer) {</p>
+<pre><code> @Override
+ int money() {
+     return salary + allowance.value;
+ }
+</code></pre><p> },<br> PM(88_888, Allowance.Others) {</p>
+<pre><code> @Override
+ int money() {
+     return (salary + allowance.value) * 2;
+ }
+</code></pre><p> };</p>
+<p> int salary;<br> Allowance allowance;</p>
+<p> Position(int salary, Allowance allowance) {</p>
+<pre><code> this.salary = salary;
+ this.allowance = allowance;
+</code></pre><p> }</p>
+<p> private enum Allowance {</p>
+<pre><code> Programmer(0),
+ Others(10_000);
+ int value;
+
+ Allowance(int value) {
+     this.value = value;
+ }
+</code></pre><p> }</p>
+<p> abstract int money();<br>}</p>
+</li>
+</ol>
+<p><code>`</code></p>
+<p>把Allowance津贴策略委托给了Position，再和salary挂钩，算出money。</p>
+<hr>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/06/22/EffectiveJava（5）枚举/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/06/22/EffectiveJava（5）枚举/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2019总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
