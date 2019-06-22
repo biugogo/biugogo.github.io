@@ -302,40 +302,50 @@
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这里利用了Enum的特性，Enum的构造函数是先于static代码块执行的。所以static中进行的操作，是有效的。返回值是Optional包裹的，因为id可能不存在于这个Enum，强制客户端处理null的情况。</p>
 <ol start="2">
-<li><p>枚举策略委托<br><code>`</code>java<br>public enum Position {<br> Manager(100_000, Allowance.Others) {</p>
-<pre><code> @Override
- int money() {
-     return (salary + allowance.value) * 5;
- }
-</code></pre><p> },<br> Programmer(1, Allowance.Programmer) {</p>
-<pre><code> @Override
- int money() {
-     return salary + allowance.value;
- }
-</code></pre><p> },<br> PM(88_888, Allowance.Others) {</p>
-<pre><code> @Override
- int money() {
-     return (salary + allowance.value) * 2;
- }
-</code></pre><p> };</p>
-<p> int salary;<br> Allowance allowance;</p>
-<p> Position(int salary, Allowance allowance) {</p>
-<pre><code> this.salary = salary;
- this.allowance = allowance;
-</code></pre><p> }</p>
-<p> private enum Allowance {</p>
-<pre><code> Programmer(0),
- Others(10_000);
- int value;
-
- Allowance(int value) {
-     this.value = value;
- }
-</code></pre><p> }</p>
-<p> abstract int money();<br>}</p>
-</li>
+<li>枚举策略委托</li>
 </ol>
-<p><code>`</code></p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> Position <span class="token punctuation">{</span>
+    <span class="token function">Manager</span><span class="token punctuation">(</span>100_000<span class="token punctuation">,</span> Allowance<span class="token punctuation">.</span>Others<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">int</span> <span class="token function">money</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token punctuation">(</span>salary <span class="token operator">+</span> allowance<span class="token punctuation">.</span>value<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">5</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token function">Programmer</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> Allowance<span class="token punctuation">.</span>Programmer<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">int</span> <span class="token function">money</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> salary <span class="token operator">+</span> allowance<span class="token punctuation">.</span>value<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token function">PM</span><span class="token punctuation">(</span>88_888<span class="token punctuation">,</span> Allowance<span class="token punctuation">.</span>Others<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token annotation punctuation">@Override</span>
+        <span class="token keyword">int</span> <span class="token function">money</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token punctuation">(</span>salary <span class="token operator">+</span> allowance<span class="token punctuation">.</span>value<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> salary<span class="token punctuation">;</span>
+    Allowance allowance<span class="token punctuation">;</span>
+
+    <span class="token function">Position</span><span class="token punctuation">(</span><span class="token keyword">int</span> salary<span class="token punctuation">,</span> Allowance allowance<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>salary <span class="token operator">=</span> salary<span class="token punctuation">;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>allowance <span class="token operator">=</span> allowance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">enum</span> Allowance <span class="token punctuation">{</span>
+        <span class="token function">Programmer</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        <span class="token function">Others</span><span class="token punctuation">(</span>10_000<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> value<span class="token punctuation">;</span>
+
+        <span class="token function">Allowance</span><span class="token punctuation">(</span><span class="token keyword">int</span> value<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>value <span class="token operator">=</span> value<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">abstract</span> <span class="token keyword">int</span> <span class="token function">money</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>把Allowance津贴策略委托给了Position，再和salary挂钩，算出money。</p>
 <hr>
 
