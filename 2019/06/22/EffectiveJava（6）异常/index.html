@@ -103,12 +103,245 @@
 </nav>
 
         <div id="main">
-            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/1557842817807.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
-                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>EffectiveJava(5)--异常</h2></a>
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/lol/1557842779295.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>EffectiveJava(6)--异常</h2></a>
             </div>
             <!-- Post -->
             <div class="typo" style="padding: 3rem;">
-                
+                <h1 id="EffectiveJava-6-–异常"><a href="#EffectiveJava-6-–异常" class="headerlink" title="EffectiveJava(6)–异常"></a>EffectiveJava(6)–异常</h1><p>–</p>
+<h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><ol>
+<li>异常使用大纲</li>
+<li>优先使用标准的异常</li>
+<li>抛出与抽象对应的异常</li>
+<li>使用切面捕捉异常</li>
+<li>业务异常与业务异常提速</li>
+</ol>
+<hr>
+<h2 id="1-异常使用大纲"><a href="#1-异常使用大纲" class="headerlink" title="1. 异常使用大纲"></a>1. 异常使用大纲</h2><p>Java提供了三种可抛出结构（throwable）：受检异常(exception),运行时异常run-time exception)和错误(error)。如果期望调用者能够适当地恢复， 对于这种情况就应该使用受检异常。通过抛出受检的异常强迫调用者在一个catch子句中处理该异常，或者将它传播出去。因此，方法中声明要抛出的每个受检异常，都是对API用户的一种潜在指示：与异常相关联的条件是调用这个方法的一种可能的结果。</p>
+<p>运行时异常和错误。在行为上两者是等同的：它们都是不需要也不应该被捕获的可抛出结构。如果程序抛出未受检的异常或者错误，往往就属于不可恢复的情形，继续执行下去有害无益。如果程序没有捕捉到这样的可抛出结构，将会导致当前线程中断，并出现适当的错误消息。</p>
+<p>用运行时异常来表明编程错误。大多数的运行时异常都表示前提违例。所谓前提违例是指API 的客户没有遵守API 规范建立的约定。例如，数组访问的约定指明了数组的下标值必须在零和数组长度减l 之间。ArraylndexOutOfBoundsException表明违反了这个前提。</p>
+<p>错误往往被JVN保留下来使用，以表明资源不足、约束失败，或者其他使程序无法继续执行的条件。</p>
+<p>你实现的所有未受检的抛出结构都应该是RuntimeException的子类。不仅不应该定义Error子类，甚至也不应该抛出AssertionError异常</p>
+<p>总而言之，对于可恢复的情况，要抛出受检异常；对于程序错误，要抛出运行时异常。不确定是否可恢复，则抛出未受检异常。不要定义任何既不是受检异常也不是运行时异常的抛出类型。要在受检异常上提供方法，以便协助恢复。</p>
+<hr>
+<h3 id="2-优先使用标准的异常"><a href="#2-优先使用标准的异常" class="headerlink" title="2. 优先使用标准的异常"></a>2. 优先使用标准的异常</h3><p>代码重用是值得提倡的，这是一条通用的规则，异常也不例外。Java提供了一组基本的未受检异常，它们满足了绝大多数API的异常抛出需求。重用标准的异常有多个好处。其中最主要的好处：</p>
+<ol>
+<li>它使API更易于学习和使用，因为它与程序员已经熟悉的习惯用法一致。</li>
+<li>对于用到这些API的程序而言，它们的可读性会更好，因为它们不会出现很多程序员不熟悉的异常。</li>
+<li>异常类越少，意味着内存占用就越小，装载这些类的时间开销也越少(最不重要的)</li>
+</ol>
+<p>下面是一些标准异常(加粗的是常用的)：</p>
+<ol>
+<li>ArithmeticException - 算术运算异常，如除数为0</li>
+<li>ArrayIndexOutOfBoundsException - 数组索引越界异常。当对数组的索引值为负数或大于等于数组大小时抛出。</li>
+<li>ArrayStoreException - 向数组中存放与声明类型不兼容对象异常 </li>
+<li><strong>ClassCastException</strong> - 类型强制转换异常。</li>
+<li>ClassNotFoundException - 找不到类异常。当应用试图通过反射构造类，而在遍历CLASSPAH之后找不到对应名称的class文件时，抛出该异常。</li>
+<li>CloneNotSupportedException - 不支持克隆异常。当没有实现Cloneable接口或者不支持克隆方法时,调用其clone()方法则抛出该异常。</li>
+<li>IllegalAccessException - 违法的访问异常。当应用试图通过反射方式创建某个类的实例、访问该类属性、调用该类方法，而当时又无法访问类的、属性的、方法的或构造方法的定义时抛出该异常。</li>
+<li><strong>IllegalArgumentException</strong> - 传递非法参数异常</li>
+<li>IllegalMonitorStateException - 违法的监控状态异常。当某个线程试图等待一个自己并不拥有的对象（O）的监控器或者通知其他线程等待该对象（O）的监控器时，抛出该异常。</li>
+<li>IllegalStateException - 违法的状态异常。当在Java环境和应用尚未处于某个方法的合法调用状态，而调用了该方法时，抛出该异常</li>
+<li>IllegalThreadStateException - 违法的线程状态异常。当县城尚未处于某个方法的合法调用状态，而调用了该方法时，抛出异常。</li>
+<li><strong>IndexOutOfBoundsException</strong> - 索引越界异常。当访问某个序列的索引值小于0或大于等于序列大小时，抛出该异常。</li>
+<li>InstantiationException - 当试图通过newInstance()方法创建某个类的实例，而该类是一个抽象类或接口时，抛出该异常。</li>
+<li><strong>InterruptedException</strong> - 当某个线程处于长时间的等待、休眠或其他暂停状态，而此时其他的线程通过Thread的interrupt方法终止该线程时抛出该异常。</li>
+<li><p>NegativeArraySizeException - 数组大小为负值异常。当使用负数大小值创建数组时抛出该异常。</p>
+</li>
+<li><p>NoSuchFieldException - 属性不存在异常。当访问某个类的不存在的属性时抛出该异常。</p>
+</li>
+<li><p>NoSuchMethodException - 方法不存在异常。当访问某个类的不存在的方法时抛出该异常。</p>
+</li>
+<li><p><strong>NullPointerException</strong> - 空指针异常。当应用试图在要求使用对象的地方使用了null时，抛出该异常。譬如：调用null对象的实例方法、访问null对象的属性、计算null对象的长度、使用throw语句抛出null等等。</p>
+</li>
+<li><p>NumberFormatException - 数字格式异常。当试图将一个String转换为指定的数字类型，而该字符串确不满足数字类型要求的格式时，抛出该异常。</p>
+</li>
+<li><p><strong>SecurityException</strong> - 安全异常</p>
+</li>
+<li>StringIndexOutOfBoundsException - 字符串索引越界异常。当使用索引值访问某个字符串中的字符，而该索引值小于0或大于等于序列大小时，抛出该异常。</li>
+<li>TypeNotPresentException - 类型不存在异常。当应用试图以某个类型名称的字符串表达方式访问该类型，但是根据给定的名称又找不到该类型是抛出该异常。该异常与ClassNotFoundException的区别在于该异常是unchecked（不被检查）异常，而ClassNotFoundException是checked（被检查）异常。</li>
+<li><strong>UnsupportedOperationException</strong> - 不支持的方法异常。指明请求的方法不被支持情况的异常。 </li>
+</ol>
+<hr>
+<h3 id="3-抛出与抽象对应的异常"><a href="#3-抛出与抽象对应的异常" class="headerlink" title="3. 抛出与抽象对应的异常"></a>3. 抛出与抽象对应的异常</h3><p>如果方法抛出的异常与它所执行的任务没有明显的联系，这种情形将会使人不知所措。当方法传递由低层抽象抛出的异常时，往往会发生这种情况。除了使人感到困惑之外，这也“污染”.具有实现细节的更高层的API。如果高层的实现在后续的发行版本中发生了变化，它所抛出的异常也可能会跟着发生变化，从而潜在地破坏现有的客户端程序。</p>
+<p><strong>更高层的实现应该捕获低层的异常，同时抛出可以按照高层抽象进行解释的异常。这种做法称为异常转译</strong>：</p>
+<pre class="line-numbers language-java"><code class="language-java">        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//throw 底层错误</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">LowerLevelException</span> e<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">throw</span>  <span class="token keyword">new</span> <span class="token class-name">HighLevelException</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>异常链对于调试低级异常导致高层异常的问题有非常大的帮助,大多数标准的异常都有支持链的构造器:</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token function">RuntimeException</span><span class="token punctuation">(</span>Throwable cause<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>cause<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>异常链对高层和低层异常都提供了最佳的功能：它允许抛出适当的高层异常，同时又能捕获低层的原因进行失败分析。</p>
+<hr>
+<h3 id="4-使用切面捕捉异常"><a href="#4-使用切面捕捉异常" class="headerlink" title="4. 使用切面捕捉异常"></a>4. 使用切面捕捉异常</h3><ol>
+<li>手写切面</li>
+</ol>
+<p>使用一个callable来捕捉异常</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ManualExceptionAdvice</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> Object <span class="token function">handle</span><span class="token punctuation">(</span>Callable<span class="token operator">&lt;</span>Object<span class="token operator">></span> task<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> task<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//handle Exception</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> Object <span class="token function">method</span><span class="token punctuation">(</span>String args1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>args1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> null<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> Object <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token function">method</span><span class="token punctuation">(</span><span class="token string">"1"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>Spring AOP捕捉异常</li>
+</ol>
+<p>使用切面捕捉异常很简单，继承ThrowsAdvice即可，甚至你可以通过重载处理不同的Exception.</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SpringExceptionAdvice</span> <span class="token keyword">implements</span> <span class="token class-name">ThrowsAdvice</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterThrowing</span><span class="token punctuation">(</span>Method m<span class="token punctuation">,</span> Object<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">,</span> Object target<span class="token punctuation">,</span> Exception ex<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Do something with all arguments</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">//可以重载</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MutilTypeExceptionAdvice</span> <span class="token keyword">implements</span> <span class="token class-name">ThrowsAdvice</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterThrowing</span><span class="token punctuation">(</span>AException ex<span class="token punctuation">)</span> <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Do something with AException</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterThrowing</span><span class="token punctuation">(</span>BException ex<span class="token punctuation">)</span> <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Do something with AException</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterThrowing</span><span class="token punctuation">(</span>CException ex<span class="token punctuation">)</span> <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Do something with AException</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">afterThrowing</span><span class="token punctuation">(</span>DException ex<span class="token punctuation">)</span> <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">// Do something with AException</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment" spellcheck="true">//或者使用Aroud来处理方法，捕捉它的Exception</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AroudAdvice</span> <span class="token keyword">implements</span> <span class="token class-name">MethodInterceptor</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Object <span class="token function">invoke</span><span class="token punctuation">(</span>MethodInvocation invocation<span class="token punctuation">)</span> <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span> invocation<span class="token punctuation">.</span><span class="token function">proceed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//handle exception</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="5-业务异常与业务异常提速"><a href="#5-业务异常与业务异常提速" class="headerlink" title="5. 业务异常与业务异常提速"></a>5. 业务异常与业务异常提速</h3><p>业务中，如果代码层次比较多，如果出现中断，需要一层一层的校验。下面是一个例子</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">test</span><span class="token punctuation">(</span>String paramA<span class="token punctuation">,</span> Long paramB<span class="token punctuation">,</span> Integer paramC<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>StringUtils<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span>paramA<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">checkB</span><span class="token punctuation">(</span>paramB<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>paramC <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token comment" spellcheck="true">//真正的业务代码</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">checkB</span><span class="token punctuation">(</span>Long paramB<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>condition<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> Boolean<span class="token punctuation">.</span>TRUE<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> Boolean<span class="token punctuation">.</span>FALSE<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>过多的if校验导致真正的业务方法很长，判断也比较冗余。可以尝试使用业务异常来中断。<br>下面是自己代码创建一个评论的例子</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">createReply</span><span class="token punctuation">(</span><span class="token keyword">long</span> momentId<span class="token punctuation">,</span> <span class="token keyword">long</span> comment<span class="token punctuation">,</span> Long fromUid<span class="token punctuation">,</span> Long toUid<span class="token punctuation">,</span> String content<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">try</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//速率限制</span>
+            <span class="token function">rateLimitChecker</span><span class="token punctuation">(</span>fromUid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//惩罚限制</span>
+            <span class="token function">punishChecker</span><span class="token punctuation">(</span>fromUid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//敏感词限制</span>
+            <span class="token function">sensitiveWordChecker</span><span class="token punctuation">(</span>content<span class="token punctuation">,</span> fromUid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//评论是否存在</span>
+            <span class="token function">commentValidChecker</span><span class="token punctuation">(</span>comment<span class="token punctuation">,</span> momentId<span class="token punctuation">,</span> fromUid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token comment" spellcheck="true">//真正的创建逻辑</span>
+        <span class="token punctuation">}</span><span class="token keyword">catch</span><span class="token punctuation">(</span>BizException ex<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">//handle 异常</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * 频次校验，通过异常来终止
+     */</span>
+    <span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">rateLimitChecker</span><span class="token punctuation">(</span>Long uid<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>rateLimiter<span class="token punctuation">.</span><span class="token function">acquireForComment</span><span class="token punctuation">(</span>uid<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">BizException</span><span class="token punctuation">(</span><span class="token string">"xxx"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//其余校验类似</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>当然，使用BizException业务异常来控制业务逻辑有一定的性能损失。但是我们可以通过优化业务异常来减少这种损失。</p>
+<p>我们知道，异常性能损耗很大部分是因为打印和获取堆栈所需要的时间，所以我们可以通过让业务异常不打印堆栈的方式来提升性能。使用全参数构造器构造业务Exception。</p>
+<pre class="line-numbers language-java"><code class="language-java">    <span class="token keyword">protected</span> <span class="token function">Exception</span><span class="token punctuation">(</span>String message<span class="token punctuation">,</span> Throwable cause<span class="token punctuation">,</span>
+                        <span class="token keyword">boolean</span> enableSuppression<span class="token punctuation">,</span>
+                        <span class="token keyword">boolean</span> writableStackTrace<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> cause<span class="token punctuation">,</span> enableSuppression<span class="token punctuation">,</span> writableStackTrace<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">protected</span> <span class="token function">RuntimeException</span><span class="token punctuation">(</span>String message<span class="token punctuation">,</span> Throwable cause<span class="token punctuation">,</span>
+                               <span class="token keyword">boolean</span> enableSuppression<span class="token punctuation">,</span>
+                               <span class="token keyword">boolean</span> writableStackTrace<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> cause<span class="token punctuation">,</span> enableSuppression<span class="token punctuation">,</span> writableStackTrace<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>message：异常的描述信息，也就是在打印栈追踪信息时异常类名后面紧跟着的描述字符串<br>cause：导致此异常发生的父异常，即追踪信息里的caused by<br>enableSuppress：关于异常挂起的参数，这里我们永远设为false即可<br>writableStackTrace：表示是否生成栈追踪信息，只要将此参数设为false, 则在构造异常对象时就不会调用fillInStackTrace。</p>
+<p>所以可以这样定义BizException</p>
+<pre class="line-numbers language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">BizException</span> <span class="token keyword">extends</span> <span class="token class-name">RuntimeException</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token function">BizException</span><span class="token punctuation">(</span>String message<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token function">BizException</span><span class="token punctuation">(</span>String message<span class="token punctuation">,</span> Throwable cause<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> cause<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">//ErrorCode可以是一个异常枚举，让异常消息复用和集中</span>
+    <span class="token keyword">public</span> <span class="token function">BizException</span><span class="token punctuation">(</span>ErrorCode code<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">(</span>code<span class="token punctuation">.</span><span class="token function">message</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> null<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>下面测试代码：</p>
+<pre class="line-numbers language-java"><code class="language-java">        <span class="token keyword">long</span> start <span class="token operator">=</span> System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10000</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">try</span> <span class="token punctuation">{</span>
+                System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>test<span class="token punctuation">.</span><span class="token function">method1</span><span class="token punctuation">(</span><span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>e<span class="token punctuation">.</span><span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"cost:"</span> <span class="token operator">+</span> <span class="token punctuation">(</span>System<span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> start<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>BizException:<br>不打印：12356900<br>打印message：95827300<br>打印堆栈：127270100</p>
+<p>RuntimeException<br>不打印：27327100<br>打印message：134160000<br>打印堆栈：1534584600</p>
+<p>可以看出，什么都不打印时，性能提升一倍~两倍。当然，打印堆栈耗时是占大多数时间的。</p>
+
             </div>
 
             <!-- Post Comments -->
