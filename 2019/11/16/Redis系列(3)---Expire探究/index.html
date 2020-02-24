@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842931503.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Redis系列（3）---Expire探究</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Redis系列（3）—Expire探究"><a href="#Redis系列（3）—Expire探究" class="headerlink" title="Redis系列（3）—Expire探究"></a>Redis系列（3）—Expire探究</h1><hr>
+<h3 id="Redis-Expire生命周期"><a href="#Redis-Expire生命周期" class="headerlink" title="Redis Expire生命周期"></a>Redis Expire生命周期</h3><ol>
+<li>对于Key设置的Expire，在删除Key或者复写Key时，会被清除（DEL,SET,GETSET）</li>
+<li>对于Key设置的Expire，在对Value操作时，不会被清除。（INCR,LPUSH,HSET）</li>
+<li>RENAME命令可以带会把旧Key的Expire带给新的命名。</li>
+<li>Key没有Expire这个状态，一旦过期将会被删除</li>
+</ol>
+<h3 id="命令返回值"><a href="#命令返回值" class="headerlink" title="命令返回值"></a>命令返回值</h3><ol>
+<li>Expire：1代表设置成功，0代表Key不存在</li>
+<li>ttl: -1代表没有过期时间，10代表还有10秒过期</li>
+</ol>
+<h3 id="Redis依赖系统时间"><a href="#Redis依赖系统时间" class="headerlink" title="Redis依赖系统时间"></a>Redis依赖系统时间</h3><p>Redis2.4中，可能有1秒左右误差，2.6之后，误差被控制在1毫秒之内。（2.6之前用的unix时间戳是秒，2.6改为了毫秒）。<br>redis服务器系统时间一定要准确，假如你修改了系统时间，会导致Expire系列命令失效（比如你设置一个Key ttl为1000秒，把服务器时间往前调2000秒，1000秒过后，这个Key不会被删除）</p>
+<h3 id="Redis过期算法"><a href="#Redis过期算法" class="headerlink" title="Redis过期算法"></a>Redis过期算法</h3><p>Redis过期分为主动过期和被动过期两种。<strong>被动过期</strong>：这个Key被请求到，redis检查它过期了就会删除它。<strong>主动过期</strong>：Redis定期随机扫描一些Key，并删除其中过期的。这种方式的细节：<br><br><br>Redis默认会运行以下程序1秒10次</p>
+<ol>
+<li>随机从redis抽取20个带有过期时间的Key</li>
+<li>删除其中过期的Key</li>
+<li>如果其中有超过1/4的Key被删除，循环step.1</li>
+</ol>
+<p>这个概率算法可以很容易算得redis中过期Key的数量的期望是每秒最大写入数据的1/4。</p>
+<h3 id="Expire的同步"><a href="#Expire的同步" class="headerlink" title="Expire的同步"></a>Expire的同步</h3><p>为了不牺牲主从（AOF）数据一致性，当一个Key过期，Redis的Slave（AOF）不会自己删除Key，而是等待Master节点删除过期Key，并把DEL命令同步给Slave（AOF）。所有的DEL操作发生在Master上。Slave上有完整的Expire信息，以便发生故障晋升为Master时，能够正确的进行过期操作。</p>
+<h3 id="Expire的内存消耗"><a href="#Expire的内存消耗" class="headerlink" title="Expire的内存消耗"></a>Expire的内存消耗</h3><p>为Key设置expire，会带来额外的内存消耗。</p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/11/16/Redis系列(3)---Expire探究/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/11/16/Redis系列(3)---Expire探究/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2020总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842931503.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Redis系列(6)---分布式锁</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Redis系列-6-—分布式锁"><a href="#Redis系列-6-—分布式锁" class="headerlink" title="Redis系列(6)—分布式锁"></a>Redis系列(6)—分布式锁</h1><h2 id="分布式锁应该有的特性"><a href="#分布式锁应该有的特性" class="headerlink" title="分布式锁应该有的特性"></a>分布式锁应该有的特性</h2><p>作为一个分布式锁，应该具有以下3个特性：</p>
+<ol>
+<li><strong>安全性</strong>：安全性也叫互斥性，任何时候，只有一个客户端能够拥有锁</li>
+<li><strong>无死锁</strong>：客户端最终一定可以获取锁，即使客户端在释放锁之前崩溃掉了</li>
+<li><strong>容错性</strong>：只要Redis大多数结点在运行，client可以持续的申请和释放锁</li>
+</ol>
+<h2 id="单例分布式锁"><a href="#单例分布式锁" class="headerlink" title="单例分布式锁"></a>单例分布式锁</h2><h3 id="常见的分布式锁实现"><a href="#常见的分布式锁实现" class="headerlink" title="常见的分布式锁实现"></a>常见的分布式锁实现</h3><p>一个常用的实现—<strong>单Redis实例实现</strong>：</p>
+<ol>
+<li><strong>申请锁时</strong>，使用以下命令：<pre class="line-numbers language-java"><code class="language-java"> SET resource_name my_random_value NX PX <span class="token number">30000</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><strong>释放锁时</strong>，使用以下Lua：<pre class="line-numbers language-java"><code class="language-java"> <span class="token keyword">if</span> redis<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"get"</span><span class="token punctuation">,</span>KEYS<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">==</span> ARGV<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> then
+     <span class="token keyword">return</span> redis<span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token string">"del"</span><span class="token punctuation">,</span>KEYS<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+ <span class="token keyword">else</span>
+     <span class="token keyword">return</span> <span class="token number">0</span>
+ end   
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+Java代码完整实现：<br><code>`</code>java<br>import org.slf4j.Logger;<br>import org.slf4j.LoggerFactory;<br>import redis.clients.jedis.Jedis;<br>import java.util.UUID;<br>import java.util.concurrent.Callable;<br>import java.util.concurrent.ThreadLocalRandom;<br>import java.util.concurrent.TimeUnit;<br>import java.util.function.Supplier;</li>
+</ol>
+<p>public class RedisLock {</p>
+<pre><code>private static final Logger LOG = LoggerFactory.getLogger(RedisLock.class);
+/**
+ * UNLOCK_LUA
+ */
+private final static String UNLOCK_LUA = &quot;&quot; +
+        &quot;if redis.call(\&quot;get\&quot;,KEYS[1]) == ARGV[1] &quot; +
+        &quot;then &quot; +
+        &quot;   return redis.call(\&quot;del\&quot;,KEYS[1]) &quot; +
+        &quot;else &quot; +
+        &quot;   return 0 &quot; +
+        &quot;end&quot;;
+// @formatter:on
+
+/**
+ * 等待锁时间
+ */
+private final static long WAIT_LOCK_TIME = 100;
+
+private final Supplier&lt;Jedis&gt; jedisSupplier;
+
+public RedisLock(Supplier&lt;Jedis&gt; jedisSupplier) {
+    this.jedisSupplier = jedisSupplier;
+}
+/**
+ * 等锁随机时间
+ */
+private long randomSleepingTime() {
+    return ThreadLocalRandom.current().nextLong(WAIT_LOCK_TIME);
+}
+
+/***
+ * 尝试获得分布式锁, 如果锁可用, 返回true
+ * @param lockKey   锁的键值
+ * @param value     锁的值,推荐使用随机字符.
+ * @param timeout   超时时间.单位:毫秒.
+ * @return true/false
+ */
+public boolean tryLock(String lockKey, String value, long timeout) {
+    try (Jedis jedis = jedisSupplier.get()) {
+        Object result = jedis.set(lockKey, value, &quot;NX&quot;, &quot;PX&quot;, timeout);
+        return &quot;OK&quot;.equalsIgnoreCase(result + &quot;&quot;);
+    }
+}
+
+/***
+ * 如果分布式锁不可用, 当前线程将继续请求, 直到锁可用.
+ * @param lockKey   锁的键值
+ * @param timeout   超时时间.单位:毫秒.
+ * @return 锁的值.
+ */
+public String lock(String lockKey, long timeout) {
+    String lockVal = UUID.randomUUID().toString();
+    for (; ; ) {
+        if (!tryLock(lockKey, lockVal, timeout)) {
+            try {
+                TimeUnit.MILLISECONDS.sleep(randomSleepingTime());
+            } catch (InterruptedException e) {
+                LOG.error(&quot;[RedisLock] sleep error.&quot;, e);
+            }
+        } else {
+            break;
+        }
+    }
+    return lockVal;
+}
+
+/***
+ * 释放锁.
+ * @param lockKey   锁的键值
+ * @param value     锁的值.必须要和上锁的值一致.
+ */
+public void unlock(String lockKey, String value) {
+    try (Jedis jedis = jedisSupplier.get()) {
+        jedis.eval(UNLOCK_LUA, 1, lockKey, value);
+    }
+}
+
+/**
+ * 查看是否有锁
+ * @param lockKey
+ * @return
+ */
+public boolean existLock(String lockKey) {
+    try (Jedis jedis = jedisSupplier.get()) {
+        return jedis.exists(lockKey);
+    }
+}
+
+public void runWithLock(String lockKey, Runnable runnable) {
+    String lockValue = null;
+    try {
+        lockValue = lock(lockKey, 3000);
+        runnable.run();
+    } finally {
+        if (lockValue != null) {
+            unlock(lockKey, lockValue);
+        }
+    }
+}
+
+public &lt;T&gt; T callWithLock(String lockKey, Callable&lt;T&gt; callable) throws Exception {
+    String lockValue = null;
+    try {
+        lockValue = lock(lockKey, 3000);
+        return callable.call();
+    } finally {
+        if (lockValue != null) {
+            unlock(lockKey, lockValue);
+        }
+    }
+}
+</code></pre><p>}</p>
+<p><code>`</code></p>
+<h3 id="常用实现的不足"><a href="#常用实现的不足" class="headerlink" title="常用实现的不足"></a>常用实现的不足</h3><ol>
+<li><strong>容错性不足</strong>：<br> 作为一个分布式锁，这个锁只能由单例Redis去实现。但是单例Redis实现，无法保证Redis挂掉后还能持续获得锁，容易出现单点故障导致整个系统崩溃。</li>
+<li><strong>滥用</strong><br> 前文说到，我们只能由单例Redis去实现，但是通常在生产环境我们使用sentinel模式来保证Redis的HA。所以我们错误的认为在sentinel模式下上述实现也是可用的。设想以下情景：<ul>
+<li>Client A重Master申请到了一个锁。</li>
+<li>在Master将锁同步给Slave之前，Master挂掉了。</li>
+<li>发生故障转移，Slave成为Master。</li>
+<li>Client B申请锁，此时从Slave晋升为Master的结点，很自然的没有锁信息，再给B一个锁。此时ClientA、ClinetB同时拥有了锁。不能保证互斥性。</li>
+</ul>
+</li>
+</ol>
+<p>这就有个很纠结的问题，要么放弃容错性，要么放弃绝对的互斥性。当然在大多数业务中，我们在sentinel模式下使用上述Redis锁都是可用的（反正我们生产业务是这么用的，当然与钱挂钩的重要业务还是慎重使用）</p>
+<h2 id="RedLock算法"><a href="#RedLock算法" class="headerlink" title="RedLock算法"></a>RedLock算法</h2><p>首先准备N个在不同机房，不同机器上Redis实例，保证他们的独立性。官方给出建议是，5个</p>
+<ol>
+<li>获取本地时间</li>
+<li>使用相同的Key和随机Value，尝试从N个Redis实例中申请锁。然后设置一个超时时间，作用是一旦未能成功获取到锁的情况下快速释放锁。例如申请一个10秒的锁，我们通常设置超时时间为5-50ms。这样可以避免客户端与一个已经故障的Master通信占用太长时间，通过快速失败的方式尽快的与集群中的其他节点完成锁操作。</li>
+<li>获取锁成功的标志是：获取到<strong>超过一半</strong>实例的锁，同时申请时长（申请时长=当前时间-step1的时间)小于锁超时时间（这里是10秒）。</li>
+<li>如果成功获得到锁，客户端持有锁的时间窗口=锁超时时间（这里是10秒）-申请时长。</li>
+<li>如果申请失败（没有获得到一半以上的实例的锁），我们需要释放申请到的所有锁来保证快速失败</li>
+</ol>
+<p>RedLock是否具备分布式锁的特性：</p>
+<ol>
+<li>RedLock安全性：如果我们获取到锁，那么我们一定拿到了一半以上的锁，并且在TTL-获取锁时长-时钟飘逸时间内，其他实例是不可能获取到锁的</li>
+<li>RedLock无死锁：我们获取锁，都会被最终释放。如果释放锁失败，ttl时间后，锁还是会变得可用。</li>
+<li>RedLock容错性：只要存在一半以上Redis实例,Client就有持续获取锁的能力。假如其中节点挂掉超过一半，整个系统无法获取锁。</li>
+</ol>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/12/10/Redis系列(6)---分布式锁/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/12/10/Redis系列(6)---分布式锁/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2020总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

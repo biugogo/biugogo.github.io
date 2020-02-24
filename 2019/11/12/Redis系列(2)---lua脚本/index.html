@@ -1,0 +1,294 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842931503.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Redis系列(2)---Lua脚本</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Redis系列-2-—Lua脚本"><a href="#Redis系列-2-—Lua脚本" class="headerlink" title="Redis系列(2)—Lua脚本"></a>Redis系列(2)—Lua脚本</h1><p>Redis 从2.6.0版本开始支持Lua脚本（5.1），并且默认加载了以下库：</p>
+<ol>
+<li>base</li>
+<li>table</li>
+<li>string</li>
+<li>math</li>
+<li>debug</li>
+<li>cjson (以非常快的速度处理JSON数据)</li>
+<li>cmsgpack</li>
+</ol>
+<h3 id="一个简单demo"><a href="#一个简单demo" class="headerlink" title="一个简单demo"></a>一个简单demo</h3><pre class="line-numbers language-Lua"><code class="language-Lua">eval "return {KEYS[1],KEYS[2],ARGV[1],ARGV[2]}" 2 key1 key2 first second
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol>
+<li>第一个参数–&gt;脚本本身</li>
+<li>第二个参数–&gt;脚本涉及redis的key的个数</li>
+<li>第三四个参数–&gt;脚本涉及的redis key（对应KEYS[1],KEYS[2]）</li>
+<li>第五六个参数–&gt;普通参数（对应ARGV[1],ARGV[2]）</li>
+</ol>
+<p>使用这样的设计，有一个重要的功能就是，确保Redis Cluster可以通过KEYS去hash，将请求发送到正确的集群节点。<br>在集群中使用Lua，必须确保所有涉及的key会被hash到同一个slot上，这样的Lua脚本是RedisCluster兼容的。虽然这不是强制的，比如你在非集群环境中使用Lua，可以不遵守此项规定。</p>
+<h3 id="Lua数据类型和Redis数据类型"><a href="#Lua数据类型和Redis数据类型" class="headerlink" title="Lua数据类型和Redis数据类型"></a>Lua数据类型和Redis数据类型</h3><p><img src="https://makefriends.bs2dl.yy.com/bm1574922532966.jpg" alt="redis与Lua数据转换"></p>
+<p>除了上述规则还有一些重要规则：</p>
+<ol>
+<li>Lua只有一种数字类型—number，所以float和integer在Lua没有区别，如果你想用Lua返回float类型，请用string代替。</li>
+<li>Lua的array没有nil，所以redis遇到数组中有nil将会停止转换</li>
+<li>Lua的table返回只会带value，不会含有key（想要kv可以用json）</li>
+</ol>
+<p>这些转换规则，在写Lua脚本的时候尤为注意。</p>
+<h3 id="脚本原子性"><a href="#脚本原子性" class="headerlink" title="脚本原子性"></a>脚本原子性</h3><p>Redis使用单个Lua解释器去运行所有脚本，并且Redis也保证脚本会以原子性(atomic)的方式执行：当某个脚本正在运行的时候，不会有其他脚本或Redis命令被执行。</p>
+<p><strong>脚本的运行开销非常少，但是执行一个运行缓慢的脚本并不是一个好主意，会阻塞其他客户端对redis的请求</strong></p>
+<h3 id="使用EVALSHA减少带宽"><a href="#使用EVALSHA减少带宽" class="headerlink" title="使用EVALSHA减少带宽"></a>使用EVALSHA减少带宽</h3><p>EVAL 命令要求你在每次执行脚本的时候都发送一次脚本主体(script body)，Redis 有一个内部的缓存机制，因此它不会每次都重新编译脚本。为了减少带宽的消耗，Redis实现了EVALSHA命令，它的作用和EVAL一样，都用于对脚本求值，但它接受的第一个参数不是脚本，而是脚本的SHA1校验和。<br><br><br>Redis保证所有被运行过的脚本都会被永久保存在脚本缓存当中。刷新脚本缓存的唯一办法是显式地调用SCRIPTFLUSH命令，清空运行过的所有脚本的缓存。缓存可以长时间储存而不产生内存问题的原因是，它们的体积非常小，而且数量也非常少，即使脚本在概念上类似于实现一个新命令，即使在一个大规模的程序里有成百上千的脚本，即使这些脚本会经常修改，即便如此，储存这些脚本的内存仍然是微不足道的。</p>
+<h3 id="SCRIPT命令"><a href="#SCRIPT命令" class="headerlink" title="SCRIPT命令"></a>SCRIPT命令</h3><ol>
+<li>SCRIPT FLUSH ：清除所有脚本缓存</li>
+<li>SCRIPT EXISTS ：根据给定的脚本校验和，检查指定的脚本是否存在于脚本缓存</li>
+<li>SCRIPT LOAD ：将一个脚本装入脚本缓存，但并不立即运行它</li>
+<li>SCRIPT KILL ：杀死当前正在运行的脚本</li>
+</ol>
+<h3 id="脚本数据同步"><a href="#脚本数据同步" class="headerlink" title="脚本数据同步"></a>脚本数据同步</h3><h4 id="Lua数据同步"><a href="#Lua数据同步" class="headerlink" title="Lua数据同步"></a>Lua数据同步</h4><p>Redis Lua数据同步有两种方式</p>
+<ol>
+<li><strong>whole scripts replication</strong> 脚本同步—从节点（或AOF）通过运行主上的脚本，来达到数据同步的作用。脚本同步的优点是，耗费更少的带宽和很少的CPU占用量（从网络上接收命令消耗资源比让CPU重跑一次脚本多）</li>
+<li><strong>scripts effects replication</strong> 脚本影响同步—Lua运行过程中，Redis收集所有对数据集的修改的命令，当脚本执行结束后，收集的命令将会被MULTI/EXEC事务包裹传递到从节点或者AOF。</li>
+</ol>
+<p>同步方式在各个版本的变化：</p>
+<ol>
+<li>Reids 3.2之前:只有 <strong>whole scripts replication</strong> 同步。</li>
+<li>Reids 3.2-5.0之间:支持 <strong>whole scripts replication</strong>(默认)和<strong>scripts effects replication</strong>。可以通过在脚本运行写命令之前显示调用以下命令开启：<pre><code>redis.replicate_commands()
+</code></pre></li>
+<li>Reids 5.0之后:<strong>scripts effects replication</strong>是不再需要显示开启，默认开启。</li>
+</ol>
+<h4 id="脚本编写规则"><a href="#脚本编写规则" class="headerlink" title="脚本编写规则"></a>脚本编写规则</h4><p>由于<strong>whole scripts replication</strong>的同步原理，Redis Lua需要遵循一些原则：</p>
+<ol>
+<li>Redis的写命令必须写入一个定量，而不是随机量。</li>
+<li>脚本执行的操作不能依赖于任何隐藏(非显式)数据（Lua 没有访问系统时间或者其他内部状态的命令）</li>
+<li>不能依赖于脚本在执行过程中或脚本在不同执行时期之间可能变更的状态（随机命令报错，如RANDOMKEY、SRANDMEMBER、TIME等）</li>
+<li>不能依赖于任何来自I/O设备的外部输入</li>
+<li>不应该尝试去访问外部系统(比如文件系统)，或者执行任何系统调用</li>
+<li>不允许创建全局变量（非loacl）。如果一个脚本需要在多次执行之间维持某种状态，它应该使用Redis key来进行状态保存。<br><br><br>Redis 3.2之前Lua不提供系统时间或者其他外部状态。同时，在Redis的执行随机命令（RANDOMKEY, SRANDMEMBER, TIME）后，写操作将会导致Redis Lua报错，但是如果Lua中没有进行写操作，这些命令是可以使用的。<br><br><br>在Redis4.0之后，可以使用SMEMBERS，SPOP等操作在Lua中，因为在Set在Lua中做了特殊处理（会对无序的Set进行固定排序操作）。但是在Redis5中又放弃了这项操作（因为Redis5改用了command复制）</li>
+</ol>
+<h4 id="选择性开启同步"><a href="#选择性开启同步" class="headerlink" title="选择性开启同步"></a>选择性开启同步</h4><p>在<strong>scripts effects replication</strong>模式下，我们可以使用一下命令选择性开启关闭同步。（这是一项专业要求很高的功能，使用不当会导致主从或者AOF之间数据不同步）</p>
+<pre><code>  redis.set_repl(redis.REPL_ALL) -- Replicate to AOF and replicas.
+  redis.set_repl(redis.REPL_AOF) -- Replicate only to AOF.
+  redis.set_repl(redis.REPL_REPLICA) -- Replicate only to replicas (Redis &gt;= 5)
+  redis.set_repl(redis.REPL_SLAVE) -- Used for backward compatibility, the same as REPL_REPLICA.
+  redis.set_repl(redis.REPL_NONE) -- Don&#39;t replicate at all.
+</code></pre><p>  一个例子</p>
+<pre><code>  redis.replicate_commands() -- Enable effects replication.
+  redis.call(&#39;set&#39;,&#39;A&#39;,&#39;1&#39;)
+  redis.set_repl(redis.REPL_NONE)
+  redis.call(&#39;set&#39;,&#39;B&#39;,&#39;2&#39;)
+  redis.set_repl(redis.REPL_ALL)
+  redis.call(&#39;set&#39;,&#39;C&#39;,&#39;3&#39;)
+</code></pre><p>  Run上面的脚本，只有A和C会在从节点和AOF中创建，B不会被同步。<br><br><br>适用场景：我们在脚本中求两个Set的交集，生成一个集合A，但是我们只想取集合A的子集B，然后把B同步给从节点和AOF子集，在主上删除A。这种情况下，A集合只是一个临时量，不需要从节点先创建再删除。这种场景尅使用选择性复制。</p>
+<h3 id="脚本超时"><a href="#脚本超时" class="headerlink" title="脚本超时"></a>脚本超时</h3><p>脚本执行最长时间限制默认是5秒，可以通过修改Lua-time-limit来改动。当一个脚本达到最大执行时间的时候，它并不会自动被Redis结束，因为Redis必须保证脚本执行的原子性，而中途停止脚本的运行意味着可能会留下未处理完的数据在数据集里面。所以脚本超时：</p>
+<ol>
+<li>Redis记录一个脚本正在超时运行</li>
+<li>Redis开始重新接受其他客户端的命令请求，但是只有SCRIPT KILL和SHUTDOWN NOSAVE两个命令会被处理，对于其他命令请求，Redis服务器只是简单地返回BUSY错误。</li>
+<li>可以使用SCRIPT KILL命令将一个仅执行只读命令的脚本杀死，因为只读命令并不修改数据</li>
+<li>如果脚本已经执行过写命令，那么唯一允许执行的操作就是SHUTDOWN NOSAVE,它通过停止服务器来阻止当前数据集写入磁盘.</li>
+</ol>
+<h3 id="一个使用Lua实现匹配的Demo"><a href="#一个使用Lua实现匹配的Demo" class="headerlink" title="一个使用Lua实现匹配的Demo"></a>一个使用Lua实现匹配的Demo</h3>
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/11/12/Redis系列(2)---lua脚本/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/11/12/Redis系列(2)---lua脚本/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2020总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842931503.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Redis系列(1)---管道Pipelining</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Redis系列-1-—管道Pipelining"><a href="#Redis系列-1-—管道Pipelining" class="headerlink" title="Redis系列(1)—管道Pipelining"></a>Redis系列(1)—管道Pipelining</h1><h3 id="RTT-Round-Trip-Time"><a href="#RTT-Round-Trip-Time" class="headerlink" title="RTT(Round Trip Time)"></a>RTT(Round Trip Time)</h3><p>Redis是一个基于TCP的服务，所以对于一次请求大致可以分为两个step:</p>
+<ol>
+<li>Client发送一个command给Redis Server,然后等待Server回包（通常会阻塞等待）。</li>
+<li>Server处理完command,返回response给Clinet.</li>
+</ol>
+<p>Client和Server之间的网络通信。在同机房时，会很快，但是当他们再不同机房时，通信的开销会变得很大。<br>当然，不管他们的网络通信延迟多少，command都会从Client传输到Server，在从Server取回回包。这个通信间隔我们称作RTT (Round Trip Time).当Clinet批量发送命令时，假设RTT为100ms（当然生产不会这么长），即使Server每秒可以出来单Client十万个请求，但是RTT存在，也只能处理10个。当我们连接本地（127.0.0.1）时，RTT也会在0.05ms左右，但是这还是很长，在你需要啊批量处理很多command时。</p>
+<h3 id="Pipelining"><a href="#Pipelining" class="headerlink" title="Pipelining"></a>Pipelining</h3><p>Redis解决RTT的方案是提供一个Pipelining管道，Client一次发送一批command给Server，Server按发送的顺序一次批量回包（灵感来源于POP3协议）.<br><br><br><em>注意:</em> <strong>当你用Pipelining发送命令时，redis将会强制在Server内存对你发送的命令进行排序和处理，所以使用Pipelining发送命令也不是一次发送越多越好。这会耗费Server的内存。官方建议是一次不超过10k</strong></p>
+<h3 id="Pipeinling带来的性能提升不只是减少了RTT"><a href="#Pipeinling带来的性能提升不只是减少了RTT" class="headerlink" title="Pipeinling带来的性能提升不只是减少了RTT"></a>Pipeinling带来的性能提升不只是减少了RTT</h3><p>Pipelining带来的提升，并不简单是减少了RTT。使用Pipelining，可以极大的提升Server的QPS。这是因为执行命令的开销很小，但是一次IO的消耗却很大。系统进行IO的read和write的调用时，意味着用户态到内核态的切换，这个上下文切换的消耗是十分巨大的。（跟业务相似，瓶颈再IO）。<br><br><br>使用Pipelining可以有效减少用户态到内核态的上下文切换（pipeing只进行一次read和一次wirte）.官方给出的数据，Pipelining基本可以提升10倍的性能。当一次发送80个command时，比不使用pipeining性能可以提升到10倍。<br><img src="https://redis.io/images/redisdoc/pipeline_iops.png" alt="来自官方的测试"><br><br></p>
+<p><em>当Client和Server在同一台机器上时，Client通过127.0.0.1连接到Server，我们写一个for循环让Client不停的请求。我们会发现这个过程也不是特别快。这同样涉及到一个系统，多进程之间切换的问题。一次请求，Client和Server就得执行一次进程切换。这样测试的数据是十分不准确的。</em> <strong>所以在基准测试中，一般需要避免Server和Client在同一台机器上。</strong></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/11/30/Redis系列(1)---管道/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/11/30/Redis系列(1)---管道/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2020总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE HTML>
+<html>
+
+<head><meta name="generator" content="Hexo 3.8.0">
+	<link rel="bookmark" type="image/x-icon" href="/img/logo_miccall.png">
+	 <link rel="shortcut icon" href="/img/logo_miccall.png">
+	
+			
+    <title>
+    Apollo's blog
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="/css/mic_main.css">
+    <link rel="stylesheet" href="/css/dropdownMenu.css">
+    
+    	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+	
+    <noscript>
+        <link rel="stylesheet" href="/css/noscript.css">
+    </noscript>
+
+			    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.scrollex.min.js"></script>
+    <script src="/js/jquery.scrolly.min.js"></script>
+    <script src="/js/skel.min.js"></script>
+    <script src="/js/util.js"></script>
+    <script src="/js/main.js"></script>
+	
+<link rel="stylesheet" href="/css/prism-okaidia.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+    
+		
+<!-- Layouts -->
+
+
+
+<!--  代码渲染  -->
+<link rel="stylesheet" href="/css/prism_coy.css">
+<link rel="stylesheet" href="/css/typo.css">
+<!-- 文章页 -->
+<body class="is-loading">
+    <!-- Wrapper 外包 s-->
+    <div id="wrapper" class="fade-in">
+        <!-- Intro 头部显示 s -->
+        <!-- Intro 头部显示 e -->
+        <!-- Header 头部logo start -->
+        <header id="header">
+    <a href="/" class="logo">Apollo</a>
+</header>
+        <!-- Nav 导航条 start -->
+        <nav id="nav" class="special">
+            <ul class="menu links">
+			<!-- Homepage  主页  --> 
+			<li>
+	            <a href="/" rel="nofollow">Home</a>
+	        </li>
+			<!-- categories_name  分类   --> 
+	        
+	        <li class="active">
+	            <a href="#s1">Memorandum</a>
+	                    <ul class="submenu">
+	                        <li>
+	                        <a class="category-link" href="/categories/Basic/">Basic</a></li><li><a class="category-link" href="/categories/DB/">DB</a></li><li><a class="category-link" href="/categories/Framework/">Framework</a></li><li><a class="category-link" href="/categories/Spring/">Spring</a></li><li><a class="category-link" href="/categories/装B专用/">装B专用</a>
+	                    </li></ul>
+	        </li>
+	        
+	        <!-- archives  归档   --> 
+	        
+	        
+		        <!-- Pages 自定义   -->
+		        
+		        <li>
+		            <a href="/about/" title="about Me">
+		                about Me
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/gallery/" title="gallery">
+		                gallery
+		            </a>
+		        </li>
+		        
+		        <li>
+		            <a href="/tag/" title="tag">
+		                tag
+		            </a>
+		        </li>
+		        
+
+
+            </ul>
+            <!-- icons 图标   -->
+			<ul class="icons">
+		            
+		                <li><a href="https://github.com/biugogo" class="icon fa-github"><span class="label">GitHub</span></a></li>
+		            
+		            
+		            
+		            
+			</ul>
+</nav>
+
+        <div id="main">
+            <div class="post_page_title_img" style="height: 25rem;background-image: url(/gallery/marvel/1557842931503.jpg);background-position: center; background-repeat:no-repeat; background-size:cover;-moz-background-size:cover;overflow:hidden;">
+                <a href="#" style="padding: 4rem 4rem 2rem 4rem ;"><h2>Redis系列(5)---内存管理策略</h2></a>
+            </div>
+            <!-- Post -->
+            <div class="typo" style="padding: 3rem;">
+                <h1 id="Redis系列-5-—内存管理策略"><a href="#Redis系列-5-—内存管理策略" class="headerlink" title="Redis系列(5)—内存管理策略"></a>Redis系列(5)—内存管理策略</h1><p>Redis占用的系统内存，可能会稍大于我们设置的maxmemory的大小。</p>
+<h3 id="1-关于redis的内存管理配置："><a href="#1-关于redis的内存管理配置：" class="headerlink" title="1.关于redis的内存管理配置："></a>1.关于redis的内存管理配置：</h3><ol>
+<li>当remove发生时，Redis不会立即释放内存给OS。这不是redis的锅，时因为动态内存分配函数malloc()的问题。不立即回收remove的key占用的内存，是因为大多数释放的内存，跟未释放的内存在一片区域，内存碎片化，释放时，需要整理内存（通过安全重启的方式）。</li>
+<li>因为内存碎片的存在，分配内存时，你需要考虑按照峰值内存分配同时也得考虑内存利用率不可能达到100%。</li>
+<li>内存分配器可以重用remove释放的内存，而不会去向OS申请新的内存（如果可重用内存足够）</li>
+</ol>
+<p><br><br>一份典型的Memory Info:</p>
+<pre class="line-numbers language-c"><code class="language-c">used_memory<span class="token punctuation">:</span><span class="token number">316355368</span>                   <span class="token operator">--</span>已经使用内存
+used_memory_human<span class="token punctuation">:</span><span class="token number">301</span><span class="token punctuation">.</span>70M               
+used_memory_rss<span class="token punctuation">:</span><span class="token number">374353920</span>               <span class="token operator">--</span>Redis进程占据操作系统的内存（单位是字节）
+used_memory_rss_human<span class="token punctuation">:</span><span class="token number">357</span><span class="token punctuation">.</span>01M
+used_memory_peak<span class="token punctuation">:</span><span class="token number">382487016</span>              <span class="token operator">--</span>内存峰值
+used_memory_peak_human<span class="token punctuation">:</span><span class="token number">364</span><span class="token punctuation">.</span>77M
+total_system_memory<span class="token punctuation">:</span><span class="token number">67523944448</span>         <span class="token operator">--</span>系统总内存
+total_system_memory_human<span class="token punctuation">:</span><span class="token number">62</span><span class="token punctuation">.</span>89G
+used_memory_lua<span class="token punctuation">:</span><span class="token number">61440</span>                   <span class="token operator">--</span>lua脚本占用内存
+used_memory_lua_human<span class="token punctuation">:</span><span class="token number">60</span><span class="token punctuation">.</span>00K
+maxmemory<span class="token punctuation">:</span><span class="token number">4294967296</span>                    <span class="token operator">--</span>设置的redis最大内存（<span class="token number">32</span>位系统最大可以设置3G，<span class="token number">64</span>位系统如果设置为<span class="token number">0</span>表示没有限制）
+maxmemory_human<span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">.</span>00G
+maxmemory_policy<span class="token punctuation">:</span>allkeys<span class="token operator">-</span>lru            <span class="token operator">--</span>key淘汰策略allkeys<span class="token operator">-</span>lru
+mem_fragmentation_ratio<span class="token punctuation">:</span><span class="token number">1.18</span>            <span class="token operator">--</span>内存碎片率（used_memory_rss <span class="token operator">/</span> used_memory），一般大于<span class="token number">1</span>，且该值越大，内存碎片比例越大
+mem_allocator<span class="token punctuation">:</span>jemalloc<span class="token number">-4.0</span><span class="token punctuation">.</span><span class="token number">3</span>            <span class="token operator">--</span>Redis使用的内存分配器，在编译时指定；可以是 libc 、jemalloc或者tcmalloc，默认是jemalloc
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="2-Redis内存淘汰策略"><a href="#2-Redis内存淘汰策略" class="headerlink" title="2.Redis内存淘汰策略"></a>2.Redis内存淘汰策略</h3><p>当写入key到达设定的阀值，Redis提供了不同的几种策略，供我们选择：</p>
+<ol>
+<li><strong>noeviction</strong>: 触发内存阈值的写入操作(del 等少数命令除外)直接返回一个错误。</li>
+<li><strong>allkeys-lru</strong>: 最近最少使用过期策略</li>
+<li><strong>volatile-lru</strong>: 最近做少使用过期策略，不过只淘汰带有ttl的key</li>
+<li><strong>allkeys-random</strong>: 随机过期策略</li>
+<li><strong>volatile-random</strong>: 随机过期策略，不过只淘汰带有ttl的key</li>
+<li><strong>volatile-ttl</strong>: 淘汰最快过期的key</li>
+</ol>
+<p>上述volatile淘汰策略中，如果没有带有ttl的key，Redis对外表现和noeviction一样。</p>
+<h3 id="3-Redis对于LRU算法的实现"><a href="#3-Redis对于LRU算法的实现" class="headerlink" title="3.Redis对于LRU算法的实现"></a>3.Redis对于LRU算法的实现</h3><p>Redis的LRU算法是一个近似LRU算法，如果实现一个标准的LRU算法（Hash+链表的方式），我们需要将所有KEY用一个链表装起来。这会消耗大量的内存。这对于节约内存到丧心病狂的Redis开发者来说，基本上是不可以接受的。所以Redis的LRU算法，是一个近似LRU算法。<br><br></p>
+<p>我们可以通过调整参数<strong>maxmemory-samples</strong>的大小，来实现进行LRU精度的修改。官方给出的实验结果：<br><img src="https://redis.io/images/redisdoc/lru_comparison.png" alt="Redis LRU实验图"></p>
+<ol>
+<li>亮灰色表示被排除的KEY</li>
+<li>灰色代表没有被排除的KEY</li>
+<li>绿色代表新增的KEY</li>
+</ol>
+<p>这个实验，首先先填充满Redis，然后再添加50%的新key，让Redis可以过期最近最少使用的Key。在标准的LRU算法中，最近最少使用的KEY全部被排除。在Redis 2.8中，少量的新增KEY被删除了。Redis 3.0后改进了LRU算法，发现新增的KEY不再被删除了，并且随着<strong>maxmemory-samples</strong>参数的增加，实验结果越发接近标准的LRU算法。</p>
+<h4 id="1-Redis-LRU算法实现（2-8）"><a href="#1-Redis-LRU算法实现（2-8）" class="headerlink" title="1.Redis LRU算法实现（2.8）:"></a>1.Redis LRU算法实现（2.8）:</h4><p>2.8中，Redis实现LRU算法的原理是，为每个Key设置一个24位的时钟标志。然后再LRU淘汰时，随机load一批Key，校验时钟标志（每次被访问会更新），然后淘汰掉这批随机Key里面最长未被访问的数据。如果使用传统LRU算法，我们不得不为每个Key增加两个指针，用来形成链表，两个指针就算在32位机器上，也会带来64位的消耗。</p>
+<ol>
+<li>首先是24位时钟标记的更新<br><code>`</code>C++<br>/*<em>24位</em>/<br>#define REDIS_LRU_BITS 24<br>unsigned lruclock:REDIS_LRU_BITS;</li>
+</ol>
+<p>/<strong>LRU最大时钟是24位能表示的最大数值 2的24次方秒，合194天左右</strong>/</p>
+<p>#define REDIS_LRU_CLOCK_MAX ((1&lt;&lt;REDIS_LRU_BITS)-1)<br> /<em> LRU时钟精度 1秒</em>/</p>
+<p>#define REDIS_LRU_CLOCK_RESOLUTION 1</p>
+<p>…..</p>
+<p>/**</p>
+<ul>
+<li>更新lru时钟，根据server.unixtime 交于 REDIS_LRU_CLOCK_MAX ，使lrulock在 0-REDIS_LRU_CLOCK_MAX之间循环增加<br>**/<br>void updateLRUClock(void) {<br> server.lruclock = (server.unixtime/REDIS_LRU_CLOCK_RESOLUTION) &REDIS_LRU_CLOCK_MAX;<br>}</li>
+</ul>
+<pre><code>updateLRUClock(void)会在Redis的serverCron()中循环调用，来达到根据server.unixtime系统时间让server.lruclock变化的目的。这个循环调用默认是100ms一次。
+
+2. LRU淘汰流程
+```C++
+            ......
+            /* volatile-lru and allkeys-lru policy(如果淘汰策略是REDIS_MAXMEMORY_ALLKEYS_LRU和REDIS_MAXMEMORY_VOLATILE_LRU )*/
+            else if (server.maxmemory_policy == REDIS_MAXMEMORY_ALLKEYS_LRU ||
+                server.maxmemory_policy == REDIS_MAXMEMORY_VOLATILE_LRU)
+            {/*这里就是我们配置的maxmemory_samples，值越大，随机取Key的次数越大， 样本越大，得到的最大过期Key越精确*/
+                for (k = 0; k &lt; server.maxmemory_samples; k++) {
+                    sds thiskey;
+                    long thisval;
+                    robj *o;
+                    /**随机取Key**/
+                    de = dictGetRandomKey(dict);
+                    thiskey = dictGetKey(de);
+                    /* When policy is volatile-lru we need an additional lookup
+                     * to locate the real key, as dict is set to db-&gt;expires. */
+                    if (server.maxmemory_policy == REDIS_MAXMEMORY_VOLATILE_LRU)
+                        de = dictFind(db-&gt;dict, thiskey);
+                    o = dictGetVal(de);
+                    /**得到key的时钟差值，越大代表最近最久未使用**/
+                    thisval = estimateObjectIdleTime(o);
+
+                    /* Higher idle time is better candidate for deletion */
+                    if (bestkey == NULL || thisval &gt; bestval) {
+                        bestkey = thiskey;
+                        bestval = thisval;
+                    }
+                }
+            }
+            ......
+</code></pre><p>通过循环maxmemory_samples次，随机取Key，早出一个最久未使用的Key进行淘汰。我们在看看estimateObjectIdleTime函数</p>
+<pre class="line-numbers language-C++"><code class="language-C++">unsigned long estimateObjectIdleTime(robj *o) {
+    if (server.lruclock >= o->lru) {
+        return (server.lruclock - o->lru) * REDIS_LRU_CLOCK_RESOLUTION;
+    } else {
+        return ((REDIS_LRU_CLOCK_MAX - o->lru) + server.lruclock) *
+                    REDIS_LRU_CLOCK_RESOLUTION;
+    }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>自己相减，求区间大小。这里server.lruclock可能会归零，所以多了一层else处理，可能会多加REDIS_LRU_CLOCK_MAX</p>
+<ol start="3">
+<li><p>当Key被访问时，更新Key的24位时钟值。注意的是，为了避免fork子进程后额外的内存消耗，当Redis处于bgsave或aof rewrite时，lru访问时间是不更新的</p>
+<pre class="line-numbers language-C++"><code class="language-C++">robj *lookupKey(redisDb *db, robj *key) {
+ dictEntry *de = dictFind(db->dict,key->ptr);
+ if (de) {
+     robj *val = dictGetVal(de);
+
+     /* Update the access time for the ageing algorithm.
+      * Don't do it if we have a saving child, as this will trigger
+      * a copy on write madness. */
+     if (server.rdb_child_pid == -1 && server.aof_child_pid == -1)
+         val->lru = server.lruclock;
+     return val;
+ } else {
+     return NULL;
+ }
+}
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+</ol>
+<h4 id="2-Redis-LRU算法实现（3-0后）："><a href="#2-Redis-LRU算法实现（3-0后）：" class="headerlink" title="2.Redis LRU算法实现（3.0后）："></a>2.Redis LRU算法实现（3.0后）：</h4><p>如果研究Redis 2.8的LRU算法，很容易发现问题：</p>
+<ol>
+<li>时钟频率只能到秒级别</li>
+<li>如果抽取的N个样本凑巧都是很新的Key，可能会淘汰掉较新的Key。违背LRU算法<br>这两点，导致2.8的LRU算法，不是很接近于真正LRU算法的结果。<br><br></li>
+</ol>
+<p><strong>Redis 3.0后 LRU算法的优化</strong>：</p>
+<ol>
+<li><p>LRU时钟的粒度从秒级提升为毫秒级</p>
+<pre class="line-numbers language-C++"><code class="language-C++"> /* Macro used to obtain the current LRU clock.
+  * If the current resolution is lower than the frequency we refresh the
+  * LRU clock (as it should be in production servers) we return the
+  * precomputed value, otherwise we need to resort to a system call. */
+ #define LRU_CLOCK() ((1000/server.hz <= lru_clock_resolution) ? server.lruclock : getlruclock()) unsigned int getlruclock(void) { return (mstime() & lru_clock_max; } <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></=></code></pre>
+<p> 提升LRU时钟的粒度，主要是为了在测试LRU算法性能时，能够在更短的时间内获取结果，更新LRU时钟的方法也有所变化，如果LRU时钟的时间粒度高于serverCron刷新的时间粒度，那么就主动获取    最新的时间，否则使用server缓存的时间。</p>
+</li>
+<li><p>使用新的API来获取LRU替换时的采样样本，在Redis 2.8中每次选取淘汰样本时，都是调用dictGetRandomKey来随机获取一个key，会根据maxmemory-samples配置的大小，多次调用。Redis 3.0中，会一次性取maxmemory-samples个Key</p>
+</li>
+<li><p>默认的LRU采样样本数从3提升为5</p>
+</li>
+<li><p>使用eviction pool来选取需要淘汰的key。这是<strong>最重要</strong>的改进。当选出需要淘汰的Key时，我们不再直接淘汰，而是把它加入一个池子中，然后淘汰掉池子中最长未使用的Key。样的选取淘汰key的方式的好处是：假设说新随机选取的key的访问时间可能比历史随机选取的key的访问时间还要新，但是在Redis 2.8中，新选取的key会被淘汰掉，这和LRU算法利用的访问局部性原理是相违背的，在Redis 3.0中，这种情况被避免了。</p>
+</li>
+</ol>
+<p>代码：</p>
+<pre class="line-numbers language-C++"><code class="language-C++">#define EVICTION_SAMPLES_ARRAY_SIZE 16
+void evictionPoolPopulate(dict *sampledict, dict *keydict, struct evictionPoolEntry *pool) {
+    int j, k, count;
+    dictEntry *_samples[EVICTION_SAMPLES_ARRAY_SIZE];
+    dictEntry **samples;
+
+    /* Try to use a static buffer: this function is a big hit...
+     * Note: it was actually measured that this helps. */
+    if (server.maxmemory_samples <= 0 eviction_samples_array_size) { samples="_samples;" } else count="dictGetSomeKeys(sampledict,samples,server.maxmemory_samples);" for (j="0;" j < count; j++) unsigned long idle; sds key; robj *o; dictentry *de; de="samples[j];" key="dictGetKey(de);" * if the dictionary we are sampling from is not main (but expires one) need to lookup again in obtain value object. (sampledict !="keydict)" key); o="dictGetVal(de);" idle="estimateObjectIdleTime(o);" insert element inside pool. first, find first empty bucket or populated that has an time smaller than our time. k="0;" while (k maxmemory_eviction_pool_size && pool[k].key pool[k].idle idle) k++; pool[maxmemory_eviction_pool_size-1].key can't worst have and there no buckets. continue; null) inserting into position. setup needed before insert. middle. now points greater (pool[maxmemory_eviction_pool_size-1].key="=" free space on right? at shifting all elements end right. memmove(pool+k+1,pool+k, sizeof(pool[0])*(maxmemory_eviction_pool_size-k-1)); k-1 k--; shift left of (included) left, so discard with sdsfree(pool[0].key); memmove(pool,pool+1,sizeof(pool[0])*k); (samples zfree(samples); <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></=></code></pre>
+<p>维护一个eviction pool带来的少量开销情况下，Redis 3.0后不再会淘汰掉新加入的Key，并且LRU算法的精确度又提升了一个等级。<br><img src="https://makefriends.bs2dl.yy.com/bm1576068317864.png" alt="LRU精确度提升"></p>
+
+            </div>
+
+            <!-- Post Comments -->
+            
+    <!-- 使用 DISQUS_CLICK -->
+<div id="disqus-comment">
+    <div id="disqus_thread"></div>
+
+<!-- add animation -->
+<style>
+	.disqus_click_btn {
+            line-height: 30px;
+            margin: 0;
+            min-width: 50px;
+            padding: 0 14px;
+            display: inline-block;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 0;
+            overflow: hidden;
+            will-change: box-shadow;
+            transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
+            outline: 0;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            vertical-align: middle;
+            border: 0;
+            background: rgba(158, 158, 158, .2);
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            color: #fff;
+            background-color: #7EC0EE;
+            text-shadow: 0
+        }
+</style>
+	
+<div class="btn_click_load" id="disqus_bt"> 
+    <button class="disqus_click_btn">点击查看评论</button>
+</div>
+
+<!--
+<script type="text/javascript">
+$('.btn_click_load').click(function() {
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'http-miccall-tech'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    document.getElementById('disqus_bt').style.display = "none";
+});
+</script>
+-->
+<script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'http://yoursite.com/2019/12/07/Redis系列(5)---内存管理策略/';  // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://yoursite.com/2019/12/07/Redis系列(5)---内存管理策略/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+</script>
+
+<script type="text/javascript">
+    $('.btn_click_load').click(function() {  //click to load comments
+        (function() { // DON'T EDIT BELOW THIS LINE
+            var d = document;
+            var s = d.createElement('script');
+            s.src = '//http-miccall-tech.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', + new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+        $('.btn_click_load').css('display','none');
+    });
+</script>
+</div>
+<style>
+    #disqus-comment{
+        background-color: #eee;
+        padding: 2pc;
+    }
+</style>
+
+
+        </div>
+        <!-- Copyright 版权 start -->
+                <div id="copyright">
+            <ul>
+                <li>&copy;Powered By <a href="https://hexo.io/zh-cn/" style="border-bottom: none;">hexo</a></li>
+                <li>Design: <a href="http://miccall.tech " style="border-bottom: none;">miccall</a></li>
+            </ul>
+            
+            	<span id="busuanzi_container_site_pv">2020总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+			
+        </div>
+    </div>
+</body>
+
+
+
+ 	
+</html>
